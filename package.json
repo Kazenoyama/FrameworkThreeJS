@@ -1,0 +1,23 @@
+{
+  "name": "frameworkthreejs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup": "npm install three && mkdir src\\css src\\js src\\models && echo 'this is my message' > src\\css\\style.css && echo '!' > index.html && echo > src\\css\\style.css && echo > src\\js\\main.js && npm run setupIndex && npm run write",
+    "write": "echo 'add your code' > src\\js\\main.js && (echo body { & type tab.txt & echo background-color: white; & echo })> src\\css\\style.css",
+    "setupIndex": "(echo ^<!DOCTYPE html^> & echo ^<html lang='en'^> & echo ^<head^> & type tab.txt & echo ^<meta charset='UTF-8'^> & type tab.txt & echo ^<meta name='viewport' content='width=device-width, initial-scale=1.0'^> & type tab.txt & echo ^<link rel='stylesheet' href='/src/css/style.css'^> & type tab.txt & echo ^<script src='/src/js/main.js'^>^</script^> & type tab.txt & echo ^<title^>Document^</title^> & echo ^</head^> & echo ^<body^> & type tab.txt & echo ^<canvas id='canvas' width='800' height='800'^>^</canvas^> & echo ^</body^> & echo ^</html^>) > index.html"
+  },
+  "keywords": [
+    "three.js",
+    "3D",
+    "web",
+    "application"
+  ],
+  "author": "Kishan Turpin <kishan.turpin@gmail.com>, Dylan Malaussena",
+  "license": "ISC",
+  "description": "This is a Three.js framework for creating 3D web application for TerraNumerica.",
+  "dependencies": {
+    "three": "^0.169.0"
+  }
+}
