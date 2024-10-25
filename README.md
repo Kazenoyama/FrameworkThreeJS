@@ -61,7 +61,3 @@ If you need to make further adjustments or configurations, consider the followin
     npm install
     ```
 
-### Example .gitignore
-
-Here’s an example of what a `.gitignore` file might look like:
-
