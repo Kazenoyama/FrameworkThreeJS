@@ -1,8 +1,14 @@
 window.onload = function() {
+  
   console.log("Page loaded");
   createHTMLStructure();
+  
 
   const navbar = document.getElementById("navbar0");
+  const canvas = document.getElementById("canvas2");
+  const container = document.getElementById("container0");
+  
+  
 
   // Crée un bouton "Click me!"
   create_button(navbar, {
@@ -22,8 +28,14 @@ window.onload = function() {
     { text: "Link 2", href: "#link2" },
     { text: "Link 3", href: "#link3" }
   ]);
-  create_modal();
 
+  create_modal();
+  style_any();
+  style_body_html(document.body);
+  style_container0(container);
+  style_navbar_children(navbar);
+  style_canvas(canvas);
+  style_modal(parametersModal);
 };
 
 // Affiche/masque le menu déroulant
@@ -174,11 +186,14 @@ function createHTMLStructure() {
   const container = document.createElement("div");
   container.className = "container";
   document.body.appendChild(container);
+  container.id = "container0";
 
   const navbar = document.createElement("div");
   navbar.className = "navbar";
   navbar.id = "navbar0";
   container.appendChild(navbar);
+  
+
 
   const logoLink = document.createElement("a");
   logoLink.href = "https://portail.terra-numerica.org/games";
@@ -193,8 +208,72 @@ function createHTMLStructure() {
   aboutLink.href = "#about";
   aboutLink.textContent = "About";
   navbar.appendChild(aboutLink);
+  
+  
 
   const canvas = document.createElement("canvas");
   canvas.id = "canvas2";
   container.appendChild(canvas);
+  
+}
+
+function style_navbar_children(navbar) {
+  const children = navbar.children;
+  for (let i = 0; i < children.length; i++) {
+    const element = children[i];
+    element.style.float = "left";
+    element.style.fontSize = "16px";
+    element.style.color = "white";
+    element.style.textAlign = "center";
+    element.style.padding = "14px 16px";
+    element.style.textDecoration = "none";
+    element.style.backgroundColor = "transparent";
+    }
+}
+
+
+//style modal 
+function style_modal(element) {
+  element.modal.style.display = "none";
+  element.modal.style.position = "fixed";
+  element.modal.style.zIndex = "1";
+  element.modal.style.paddingTop = "100px";
+  element.modal.style.left = "0";
+  element.modal.style.top = "0";
+  element.modal.style.width = "100%";
+  element.modal.style.height = "100%";
+  element.modal.style.overflow = "auto";
+  element.modal.style.backgroundColor = "rgb(0,0,0)";
+  element.modal.style.backgroundColor = "rgba(0,0,0,0.4)";
+}
+function style_canvas(element) {
+  element.style.width = "100%";
+  element.style.flexGrow = "1";
+  element.style.border = "3px solid red";
+}
+function style_body_html (element){
+  element.style.width = "100%";
+  element.style.height = "100%";
+  element.style.display = "flex";
+  element.style.justifyContent = "center";
+  element.style.alignItems = "center";
+
+}
+
+function style_container0(element) {
+  element.style.width = "100%";
+  element.style.height = "100%";
+  element.style.display = "flex";
+  element.style.flexDirection = "column";
+  console.log("container0");
+}
+
+function style_any (){
+  const elements = document.querySelectorAll('*');
+  for (let i = 0; i < elements.length; i++) {
+    elements[i].style.margin = "0";
+    elements[i].style.padding = "0";
+    elements[i].style.boxSizing = "border-box";
+  }
+  
 }
