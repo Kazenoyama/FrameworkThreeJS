@@ -148,6 +148,12 @@ class Framework {
         console.log("copy created from" + name + " with name " + copy.name);
     }
 
+    attachLight(scene, color,intensity ,object){
+        const directionalLight = new THREE.DirectionalLight(color, intensity);
+        directionalLight.position.set(object.position.x, object.position.y + object.scale.y + 2, object.position.z);
+        scene.add(directionalLight);
+    }
+
 
 }
 
