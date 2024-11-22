@@ -32,8 +32,14 @@ window.onload = function() {
   create_modal();
   style_any();
   style_body_html(document.body);
+  style_hover();
   style_container0(container);
+  style_navbar();
   style_navbar_children(navbar);
+  style_dropdown();
+  style_dropbtn();
+  style_dropdown_content();
+  style_dropdown_content_a();
   style_canvas(canvas);
   style_modal(parametersModal);
 };
@@ -43,12 +49,12 @@ function Deroulant() {
   document.getElementById("myDropdown").classList.toggle("show");
 }
 
-// Ferme le menu déroulant si l'utilisateur clique à l'extérieur
+// Ferme le menu déroulant si l"utilisateur clique à l"extérieur
 window.onclick = function(e) {
-  if (!e.target.matches('.dropbtn')) {
+  if (!e.target.matches(".dropbtn")) {
     const myDropdown = document.getElementById("myDropdown");
-    if (myDropdown && myDropdown.classList.contains('show')) {
-      myDropdown.classList.remove('show');
+    if (myDropdown && myDropdown.classList.contains("show")) {
+      myDropdown.classList.remove("show");
     }
   }
 };
@@ -63,7 +69,7 @@ function closeModal() {
   document.getElementById("parametersModal").style.display = "none";
 }
 
-// Ferme le modal si l'utilisateur clique en dehors de celui-ci
+// Ferme le modal si l"utilisateur clique en dehors de celui-ci
 window.onclick = function(event) {
   const modal = document.getElementById("parametersModal");
   if (event.target === modal) {
@@ -71,7 +77,11 @@ window.onclick = function(event) {
   }
 };
 
-// Crée le modal "Parameters"
+
+
+
+
+//----------------------------- fonction de creation notre HTML -------------------------------------------
 function create_modal() {
   const modal = document.createElement("div");
   modal.id = "parametersModal";
@@ -112,10 +122,12 @@ function create_dropdown({ parentId, buttonText, menuId }) {
   parent.appendChild(dropdownMenu);
 
   const dropdownButton = document.createElement("button");
-  dropdownButton.className = "dropbtn";
+   dropdownButton.className = "dropbtn"; 
   dropdownButton.textContent = buttonText;
+  dropdownButton.id = "dropbtn";
   dropdownButton.onclick = () => toggleDropdown(menuId); // Fonction générique pour afficher/masquer le menu
   dropdownMenu.appendChild(dropdownButton);
+  
 
   const dropdownContent = document.createElement("div");
   dropdownContent.className = "dropdown-content";
@@ -133,7 +145,7 @@ function create_dropdown_list(menuId, items) {
 
   items.forEach(item => {
     const link = document.createElement("a");
-    link.href = item.href || "#"; // Définit l'URL ou laisse vide si non spécifié
+    link.href = item.href || "#"; // Définit l"URL ou laisse vide si non spécifié
     link.textContent = item.text;
     link.onclick = item.onClick || null; // Associe la fonction si spécifiée
     dropdownContent.appendChild(link);
@@ -143,19 +155,19 @@ function create_dropdown_list(menuId, items) {
 // Fonction pour afficher/masquer le menu déroulant
 function toggleDropdown(menuId) {
   const dropdown = document.getElementById(menuId);
-  if (dropdown) {
+  if (dropdown) {                                      // rajoute ici le fait d'ouvrir le menu déroulant ?????????????
     dropdown.classList.toggle("show");
   }
 }
 
 
-// Ferme le menu déroulant si l'utilisateur clique en dehors
+// Ferme le menu déroulant si l"utilisateur clique en dehors
 window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
+  if (!event.target.matches(".dropbtn")) {
     const dropdowns = document.getElementsByClassName("dropdown-content");
     Array.from(dropdowns).forEach(dropdown => {
-      if (dropdown.classList.contains('show')) {
-        dropdown.classList.remove('show');
+      if (dropdown.classList.contains("show")) {
+        dropdown.classList.remove("show");
       }
     });
   }
@@ -166,6 +178,7 @@ window.onclick = function(event) {
 function create_button(container, { text = "Click me!", onClick = () => alert("Button clicked!"), position = "before", referenceElement = null, classes = [] }) {
   const button = document.createElement("button");
   button.textContent = text;
+  button.style.border = "none";
   button.classList.add("child", ...classes);
   button.onclick = onClick;
 
@@ -216,6 +229,12 @@ function createHTMLStructure() {
   container.appendChild(canvas);
   
 }
+// -----------------------------------------------------------------------------
+
+
+
+
+//-----------------------fonction de Style -------------------------------------------
 
 function style_navbar_children(navbar) {
   const children = navbar.children;
@@ -232,7 +251,7 @@ function style_navbar_children(navbar) {
 }
 
 
-//style modal 
+
 function style_modal(element) {
   element.modal.style.display = "none";
   element.modal.style.position = "fixed";
@@ -246,11 +265,13 @@ function style_modal(element) {
   element.modal.style.backgroundColor = "rgb(0,0,0)";
   element.modal.style.backgroundColor = "rgba(0,0,0,0.4)";
 }
+
 function style_canvas(element) {
   element.style.width = "100%";
   element.style.flexGrow = "1";
   element.style.border = "3px solid red";
 }
+
 function style_body_html (element){
   element.style.width = "100%";
   element.style.height = "100%";
@@ -269,7 +290,7 @@ function style_container0(element) {
 }
 
 function style_any (){
-  const elements = document.querySelectorAll('*');
+  const elements = document.querySelectorAll("*");
   for (let i = 0; i < elements.length; i++) {
     elements[i].style.margin = "0";
     elements[i].style.padding = "0";
@@ -277,3 +298,129 @@ function style_any (){
   }
   
 }
+
+function style_navbar(){
+  const navbar = document.getElementById("navbar0");
+  navbar.style.backgroundColor = "#333";
+  navbar.style.overflow = "visible";
+  navbar.style.fontFamily ="Arial, Helvetica, sans-serif";
+
+}
+
+function style_dropdown(){
+  const dropdown = document.getElementById("myDropdown");
+  dropdown.style.float = "left";
+  dropdown.style.overflow = "hidden";
+  dropdown.style.cursor = "pointer";
+  dropdown.style.fontSize = "16px";
+  dropdown.style.border = "none";
+  dropdown.style.outline = "none";
+  dropdown.style.color = "white";
+  dropdown.style.padding = "14px 16px";
+  dropdown.style.backgroundColor = "white";
+  dropdown.style.fontFamily = "inherit";
+  dropdown.style.margin = "0";
+
+
+}
+
+function style_dropbtn(){
+  const dropbtn = document.getElementById("dropbtn");
+  dropbtn.style.cursor = "pointer";
+  dropbtn.style.fontSize = "16px";
+  dropbtn.style.border = "none";
+  dropbtn.style.outline = "none";
+  dropbtn.style.color = "white";
+  dropbtn.style.padding = "none";
+  dropbtn.style.backgroundColor = "inherit";
+  dropbtn.style.fontFamily = "inherit";
+  dropbtn.style.margin = "0";
+
+}
+
+function style_hover() { // trouve pourquoi menu déroulant n'est pas comme les autres
+  const navbarLinks = document.querySelectorAll(".navbar a:not(.no_hover)");
+  navbarLinks.forEach(link => {
+    link.addEventListener("mouseover", () => {
+      link.style.backgroundColor = "red";
+    });
+    link.addEventListener("mouseout", () => {   // sert pour reset la couleur
+      link.style.backgroundColor ="inherit"; 
+    });
+  });
+  const dropdowns = document.querySelectorAll(".dropdown");
+  dropdowns.forEach(dropdown => {
+    const dropbtn = dropdown.querySelector(".dropbtn");
+    dropdown.addEventListener("mouseover", () => {
+      if (dropbtn) dropbtn.style.backgroundColor = "red";
+    });
+    dropdown.addEventListener("mouseout", () => {
+      if (dropbtn) dropbtn.style.backgroundColor = ""; 
+    });
+  });
+  const allButtons = document.querySelectorAll("button");
+  allButtons.forEach(button => {
+    button.addEventListener("mouseover", () => {
+      button.style.backgroundColor = "red";
+    });
+    button.addEventListener("mouseout", () => {
+      button.style.backgroundColor = "inherit"; 
+    });
+    button.addEventListener("focus", () => {
+      button.style.backgroundColor = "red";
+    });
+    button.addEventListener("blur", () => {
+      button.style.backgroundColor = "inherit"; 
+    });
+  });
+}
+
+
+function style_dropdown_content() {
+  const dropdownContents = document.querySelectorAll('.dropdown-content');
+
+  dropdownContents.forEach(dropdown => {
+    dropdown.style.display = 'none';
+    dropdown.style.position = 'absolute';
+    dropdown.style.backgroundColor = '#f9f9f9';
+    dropdown.style.minWidth = '160px';
+    dropdown.style.boxShadow = '0px 8px 16px 0px rgba(0,0,0,0.2)';
+    dropdown.style.zIndex = '1';
+  });
+}
+function style_dropdown_content_a() {
+  // Styles pour .dropdown-content a
+  const dropdownLinks = document.querySelectorAll('.dropdown-content a');
+  dropdownLinks.forEach(link => {
+    link.style.float = 'none';
+    link.style.color = 'black';
+    link.style.padding = '12px 16px';
+    link.style.textDecoration = 'none';
+    link.style.display = 'block';
+    link.style.textAlign = 'left';
+
+    // Hover effect: background-color change
+    link.addEventListener('mouseover', () => {
+      link.style.backgroundColor = "red";
+    });
+    link.addEventListener('mouseout', () => {
+      link.style.backgroundColor = "inherit"; // Reset
+    });
+  });
+
+  // Styles pour .dropdown-content .parameters_dropdown
+  const parametersDropdowns = document.querySelectorAll('.dropdown-content .parameters_dropdown');
+  parametersDropdowns.forEach(button => {
+    button.style.cursor = 'pointer';
+    button.style.color = 'black';
+    button.style.padding = '12px 16px';
+    button.style.textDecoration = 'none';
+    button.style.display = 'block';
+    button.style.textAlign = 'left';
+    button.style.backgroundColor = 'inherit';
+    button.style.fontSize = '16px';
+    button.style.border = 'none';
+    button.style.outline = 'none';
+  });
+}
+//------------------------------------------------------------
