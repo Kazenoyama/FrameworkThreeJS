@@ -1,80 +1,88 @@
-window.onload = function() {
-  
-  console.log("Page loaded");
-  createHTMLStructure();
-  
 
-  const navbar = document.getElementById("navbar0");
-  const canvas = document.getElementById("canvas2");
-  const container = document.getElementById("container0");
-  
-  
-  
+class Test{
+  constructor(){
+    console.log("Test class");
+    console.log("Page loaded");
+    createHTMLStructure();
+    
 
-  // Crée un bouton "Click me!"
-  create_button(navbar, {
-    text: "Click me!",
-    onClick: () => alert("Hello!"),
-    classes: ["a"] 
-  });
-  
-  create_dropdown({
-    parentId: "navbar0",
-    buttonText: "Menu déroulant",
-    menuId: "myDropdown"
-  });
+    const navbar = document.getElementById("navbar0");
+    const canvas = document.getElementById("canvas2");
+    const container = document.getElementById("container0");
+    
+    
+    
 
-  create_dropdown_list("myDropdown", [
-    { text: "Parameters", onClick: openModal },
-    { text: "Link 2", href: "#link2" },
-    { text: "Link 3", href: "#link3" }
-  ]);
+    // Crée un bouton "Click me!"
+    create_button(navbar, {
+      text: "Click me!",
+      onClick: () => alert("Hello!"),
+      classes: ["a"] 
+    });
+    
+    create_dropdown({
+      parentId: "navbar0",
+      buttonText: "Menu déroulant",
+      menuId: "myDropdown"
+    });
 
-  create_modal();
-  style_any();
-  style_body_html(document.body);
-  style_hover();
-  style_container0(container);
-  style_navbar();
-  style_navbar_children(navbar);
-  style_dropdown();
-  style_dropbtn();
-  style_dropdown_content();
-  style_dropdown_content_a();
-  style_dropdown_content_parameters();
-  style_modal(parametersModal);
-  style_modal_content();
-  
-  style_modal_content_button();
-  style_close();
-  
-  style_canvas(canvas);
-  
-};
+    create_dropdown_list("myDropdown", [
+      { text: "Parameters", onClick: openModal },
+      { text: "Link 2", href: "#link2" },
+      { text: "Link 3", href: "#link3" }
+    ]);
 
-// Affiche/masque le menu déroulant
-function Deroulant() {
-  document.getElementById("myDropdown").classList.toggle("show");
+    create_modal();
+    style_any();
+    style_body_html(document.body);
+    style_hover();
+    style_container0(container);
+    style_navbar();
+    style_navbar_children(navbar);
+    style_dropdown();
+    style_dropbtn();
+    style_dropdown_content();
+    style_dropdown_content_a();
+    style_dropdown_content_parameters();
+    style_modal(parametersModal);
+    style_modal_content();
+    
+    style_modal_content_button();
+    style_close();
+    
+    style_canvas(canvas)
+
+  }
+  Deroulant() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+  openModal(window) {
+    window.onclick = function(event) {
+      // Ferme le menu déroulant si l'utilisateur clique à l'extérieur
+      if (!event.target.matches('.dropbtn')) {
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        Array.from(dropdowns).forEach(dropdown => {
+          if (dropdown.classList.contains("show")) {
+            dropdown.classList.remove("show");
+            dropdown.style.display = "none"; // Masque le menu
+          }
+        });
+      }
+    
+      // Ferme le modal si l'utilisateur clique en dehors
+      const modal = document.getElementById("parametersModal");
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
 }
 
-window.onclick = function(event) {
-  // Ferme le menu déroulant si l'utilisateur clique à l'extérieur
-  if (!event.target.matches('.dropbtn')) {
-    const dropdowns = document.getElementsByClassName("dropdown-content");
-    Array.from(dropdowns).forEach(dropdown => {
-      if (dropdown.classList.contains("show")) {
-        dropdown.classList.remove("show");
-        dropdown.style.display = "none"; // Masque le menu
-      }
-    });
-  }
+}
 
-  // Ferme le modal si l'utilisateur clique en dehors
-  const modal = document.getElementById("parametersModal");
-  if (event.target === modal) {
-    modal.style.display = "none";
-  }
-};
+export default Test;
+
+
+
 
 // Ouvre le modal
 function openModal() {
