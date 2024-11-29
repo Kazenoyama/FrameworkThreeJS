@@ -9,6 +9,7 @@ window.onload = function() {
   const container = document.getElementById("container0");
   
   
+  
 
   // Crée un bouton "Click me!"
   create_button(navbar, {
@@ -40,8 +41,15 @@ window.onload = function() {
   style_dropbtn();
   style_dropdown_content();
   style_dropdown_content_a();
-  style_canvas(canvas);
+  style_dropdown_content_parameters();
   style_modal(parametersModal);
+  style_modal_content();
+  
+  style_modal_content_button();
+  style_close();
+  
+  style_canvas(canvas);
+  
 };
 
 // Affiche/masque le menu déroulant
@@ -49,13 +57,22 @@ function Deroulant() {
   document.getElementById("myDropdown").classList.toggle("show");
 }
 
-// Ferme le menu déroulant si l"utilisateur clique à l"extérieur
-window.onclick = function(e) {
-  if (!e.target.matches(".dropbtn")) {
-    const myDropdown = document.getElementById("myDropdown");
-    if (myDropdown && myDropdown.classList.contains("show")) {
-      myDropdown.classList.remove("show");
-    }
+window.onclick = function(event) {
+  // Ferme le menu déroulant si l'utilisateur clique à l'extérieur
+  if (!event.target.matches('.dropbtn')) {
+    const dropdowns = document.getElementsByClassName("dropdown-content");
+    Array.from(dropdowns).forEach(dropdown => {
+      if (dropdown.classList.contains("show")) {
+        dropdown.classList.remove("show");
+        dropdown.style.display = "none"; // Masque le menu
+      }
+    });
+  }
+
+  // Ferme le modal si l'utilisateur clique en dehors
+  const modal = document.getElementById("parametersModal");
+  if (event.target === modal) {
+    modal.style.display = "none";
   }
 };
 
@@ -76,6 +93,43 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 };
+
+
+let isDragging = false;
+let offsetX, offsetY, modal;
+// Commencer le drag
+function startDrag(event) {
+  isDragging = true;
+  modal = document.getElementById("parametersModal");
+
+  // Calculer l'offset par rapport à la souris
+  offsetX = event.clientX - modal.getBoundingClientRect().left;
+  offsetY = event.clientY - modal.getBoundingClientRect().top;
+
+  // Écouter les événements de déplacement et d'arrêt
+  document.addEventListener("mousemove", drag);
+  document.addEventListener("mouseup", stopDrag);
+}
+
+// Déplacer le modal
+function drag(event) {
+  if (!isDragging) return;
+
+  // Mettre à jour la position du modal
+  modal.style.left = `${event.clientX - offsetX}px`;
+  modal.style.top = `${event.clientY - offsetY}px`;
+  modal.style.transform = "none"; // Supprimer le transform initial
+}
+
+// Arrêter le drag
+function stopDrag() {
+  isDragging = false;
+  document.removeEventListener("mousemove", drag);
+  document.removeEventListener("mouseup", stopDrag);
+}
+
+
+
 
 
 
@@ -102,11 +156,25 @@ function create_modal() {
   modalTitle.textContent = "Parameters";
   modalContent.appendChild(modalTitle);
 
-  for (let i = 1; i <= 3; i++) {
-    const button = document.createElement("button");
-    button.textContent = `Button ${i}`;
-    modalContent.appendChild(button);
-  }
+  
+    
+    create_button(modalContent, {
+      text: "Click me!",
+      onClick: () => alert("Hello!"),
+      
+    });
+    create_button(modalContent, {
+      text: "Click me!",
+      onClick: () => alert("Hello!"),
+      
+    });
+    create_button(modalContent, {
+      text: "Click me!",
+      onClick: () => alert("Hello!"),
+      
+    });
+  
+  modalContent.addEventListener("mousedown", startDrag);
 }
 
 // Crée un menu déroulant générique
@@ -153,25 +221,36 @@ function create_dropdown_list(menuId, items) {
 }
 
 // Fonction pour afficher/masquer le menu déroulant
-function toggleDropdown(menuId) {
-  const dropdown = document.getElementById(menuId);
-  if (dropdown) {                                      // rajoute ici le fait d'ouvrir le menu déroulant ?????????????
-    dropdown.classList.toggle("show");
-  }
-}
-
-
-// Ferme le menu déroulant si l"utilisateur clique en dehors
-window.onclick = function(event) {
+// Gestionnaire unique pour tous les clics
+window.onclick = function (event) {
+  // Ferme le menu déroulant si l'utilisateur clique à l'extérieur
   if (!event.target.matches(".dropbtn")) {
     const dropdowns = document.getElementsByClassName("dropdown-content");
     Array.from(dropdowns).forEach(dropdown => {
       if (dropdown.classList.contains("show")) {
         dropdown.classList.remove("show");
+        dropdown.style.display = "none"; // Assure que le menu est masqué
       }
     });
   }
+
+  // Ferme le modal si l'utilisateur clique en dehors
+  const modal = document.getElementById("parametersModal");
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
 };
+
+// Fonction pour afficher/masquer le menu déroulant
+function toggleDropdown(menuId) {
+  const dropdown = document.getElementById(menuId);
+  if (dropdown) {
+    const isShown = dropdown.classList.contains("show");
+    dropdown.classList.toggle("show", !isShown); // Ajoute/retire la classe "show"
+    dropdown.style.display = isShown ? "none" : "block"; // Met à jour le style
+  }
+}
+
 
 
 // Fonction pour créer et insérer un bouton dans un conteneur
@@ -181,6 +260,7 @@ function create_button(container, { text = "Click me!", onClick = () => alert("B
   button.style.border = "none";
   button.classList.add("child", ...classes);
   button.onclick = onClick;
+  button.position = position;
 
   if (referenceElement && container.contains(referenceElement)) {
     if (position === "before") {
@@ -253,21 +333,24 @@ function style_navbar_children(navbar) {
 
 
 function style_modal(element) {
-  element.modal.style.display = "none";
-  element.modal.style.position = "fixed";
-  element.modal.style.zIndex = "1";
-  element.modal.style.paddingTop = "100px";
-  element.modal.style.left = "0";
-  element.modal.style.top = "0";
-  element.modal.style.width = "100%";
-  element.modal.style.height = "100%";
-  element.modal.style.overflow = "auto";
-  element.modal.style.backgroundColor = "rgb(0,0,0)";
-  element.modal.style.backgroundColor = "rgba(0,0,0,0.4)";
+  element.style.display = "none";
+  element.style.position=" fixed";
+  element.style.top=" 50%";
+  element.style.right=" 10%"; 
+  element.style.width="200px";
+  element.style.backgroundColor="white";
+  element.style.border="1px solid black";
+  element.style.boxShadow=" 0px 4px 6px rgba(0, 0, 0, 0.1)";
+  element.style.padding="15px";
+  element.style.zIndex="1000";
+  element.style.cursor="grab";
+  element.style.target.onMouseDown="startDrag(event)";
 }
+ 
 
 function style_canvas(element) {
   element.style.width = "100%";
+  element.style.height = "100%";
   element.style.flexGrow = "1";
   element.style.border = "3px solid red";
 }
@@ -358,7 +441,7 @@ function style_hover() { // trouve pourquoi menu déroulant n'est pas comme les 
       if (dropbtn) dropbtn.style.backgroundColor = ""; 
     });
   });
-  const allButtons = document.querySelectorAll("button");
+  const allButtons = document.querySelectorAll("button", "  .dropdown-content");
   allButtons.forEach(button => {
     button.addEventListener("mouseover", () => {
       button.style.backgroundColor = "red";
@@ -393,12 +476,12 @@ function style_dropdown_content_a() {
   const dropdownLinks = document.querySelectorAll('.dropdown-content a');
   dropdownLinks.forEach(link => {
     link.style.float = 'none';
-    link.style.color = 'black';
+    link.style.color = 'white';
     link.style.padding = '12px 16px';
     link.style.textDecoration = 'none';
     link.style.display = 'block';
     link.style.textAlign = 'left';
-
+    
     // Hover effect: background-color change
     link.addEventListener('mouseover', () => {
       link.style.backgroundColor = "red";
@@ -408,8 +491,14 @@ function style_dropdown_content_a() {
     });
   });
 
-  // Styles pour .dropdown-content .parameters_dropdown
-  const parametersDropdowns = document.querySelectorAll('.dropdown-content .parameters_dropdown');
+  
+
+  
+}
+function style_dropdown_content_parameters() {
+  
+  const parametersDropdowns = document.querySelectorAll('.dropdown-content');
+  
   parametersDropdowns.forEach(button => {
     button.style.cursor = 'pointer';
     button.style.color = 'black';
@@ -417,10 +506,51 @@ function style_dropdown_content_a() {
     button.style.textDecoration = 'none';
     button.style.display = 'block';
     button.style.textAlign = 'left';
-    button.style.backgroundColor = 'inherit';
+    button.style.backgroundColor = '#333';
     button.style.fontSize = '16px';
     button.style.border = 'none';
     button.style.outline = 'none';
+    button.style.display = 'none';
+    
+    
+  });
+}
+
+function style_modal_content() {
+  const modalContent = document.querySelectorAll('.modal-content');
+  modalContent.forEach(content => {
+    content.style.backgroundColor = 'white';
+    content.style.margin = '15% auto';
+    content.style.padding = '20px';
+    content.style.borderRadius = '8px';  
+    content.style.width = '300px';
+    content.style.textAlign = 'center';
+    content.style.position = 'relative';
+  });
+}
+function style_close() {
+  const closeButtons = document.querySelectorAll('.close');
+  closeButtons.forEach(button => {
+    button.style.color = 'black';
+    button.style.fontSize = '28px';
+    button.style.fontWeight = 'bold';
+    button.style.cursor = 'pointer';
+    button.style.right = '20px';
+    button.style.top='10px';
+    button.style.position = 'absolute';
+  });
+
+  
+
+}
+function style_modal_content_button() {
+  const modalContentButtons = document.querySelectorAll('.modal-content button');
+  modalContentButtons.forEach(button => {
+    button.style.display = 'block';
+    
+    button.style.padding = '14px 20px';
+    button.style.cursor = 'pointer';
+    button.style.margin = '10px auto';
   });
 }
 //------------------------------------------------------------
