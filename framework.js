@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import createScene from './createScene';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 class Framework {
@@ -45,6 +46,7 @@ class Framework {
         scene.children.forEach((object) => {
             
             if (object.isMesh) {
+                console.log('object is mesh');
                 object.visible = !this.isObjectFullyOccluded(object, scene, camera, cameraDistanceThreshold, raycaster, direction);
             }
         });
@@ -152,6 +154,21 @@ class Framework {
         const directionalLight = new THREE.DirectionalLight(color, intensity);
         directionalLight.position.set(object.position.x, object.position.y + object.scale.y + 2, object.position.z);
         scene.add(directionalLight);
+    }
+
+    loadTexture(path, repeat = 1){
+        const textureLoader = new THREE.TextureLoader();
+        const texture = textureLoader.load(path);
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set(repeat, repeat);
+        return texture; 
+    }
+
+    addScene(scene, textures, fw){
+        const cs = new createScene();
+        cs.createBox(scene, textures, fw);
+
     }
 
 
