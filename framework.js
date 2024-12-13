@@ -167,8 +167,8 @@ class Framework {
 
     addScene(scene, textures, fw){
         const cs = new createScene();
-        cs.createBox(scene, textures, fw);
-
+        let dimensions= {x : 250, y: 250};
+        cs.createBox(scene, textures, fw, dimensions);
     }
 
 
