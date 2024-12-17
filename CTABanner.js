@@ -1,62 +1,70 @@
 
 class CTABanner{
-  constructor(){
-    console.log("Test class");
-    console.log("Page loaded");
-    this.createHTMLStructure();
+  
+    // console.log("Test class");
+    // console.log("Page loaded");
+    // this.createHTMLStructure();
     
 
-    const navbar = document.getElementById("navbar0");
-    const canvas = document.getElementById("canvas2");
-    const container = document.getElementById("container0");
+    // const navbar = document.getElementById("navbar0");
+    // const canvas = document.getElementById("canvas2");
+    // const container = document.getElementById("container0");
     
     
-    // a   partir d'ici on peut ajouter des éléments dans notre HTML bouton / dropdown / modal ect..
+    // // a   partir d'ici on peut ajouter des éléments dans notre HTML bouton / dropdown / modal ect..
 
-    // Crée un bouton "Click me!"
-    this.create_button(navbar, {
-      text: "Click me!",
-      onClick: () => alert("Hello!"),
-      classes: ["a"] 
-    });
+    // // Crée un bouton "Click me!"
+    // this.create_button(navbar, {
+    //   text: "Click!",
+    //   onClick: () => alert("Hello!"),
+    //   classes: ["a"] 
+    // });
     
-    this.create_dropdown({
-      parentId: "navbar0",
-      buttonText: "Menu déroulant",
-      menuId: "myDropdown"
-    });
+    // this.create_dropdown({
+    //   parentId: "navbar0",
+    //   buttonText: "Menu déroulant",
+    //   menuId: "myDropdown"
+    // });
     
 
-    this.create_dropdown_list("myDropdown", [
-      { text: "Parameters", onClick: () => this.openModal()},
-      { text: "Link 2", href: "#link2" },
-      { text: "Link 3", href: "#link3" }
-    ]);
+    // this.create_dropdown_list("myDropdown", [
+    //   { text: "Parameters", onClick: () => this.openModal()},
+    //   { text: "Link 2", href: "#link2" },
+    //   { text: "Link 3", href: "#link3" }
+    // ]);
     
     
-    this.Open_dropdown(window);
-    this.create_modal(); 
-    this.style_any();
-    // this.style_body_html(document.body);  ça crée un problème si on l'ajoute donc on le désactive
-    this.style_hover();
-    this.style_container0(container);
-    this.style_navbar();
-    this.style_navbar_children(navbar);
-    this.style_dropdown();
-    this.style_dropbtn();
-    this.style_dropdown_content();
-    this.style_dropdown_content_a();
-    this.style_dropdown_content_parameters();
-    this.style_modal(document.getElementById("parametersModal"));
-    this.style_modal_content();
+    // this.Open_dropdown(window);
+    // this.create_modal(); 
+    // this.style_any();
+    // // this.style_body_html(document.body);  ça crée un problème si on l'ajoute donc on le désactive
+    // this.style_hover();
+    // this.style_container0(container);
+    // this.style_navbar();
+    // this.style_navbar_children(navbar);
+    // this.style_dropdown();
+    // this.style_dropbtn();
+    // this.style_dropdown_content();
+    // this.style_dropdown_content_a();
+    // this.style_dropdown_content_parameters();
+    // this.style_modal(document.getElementById("parametersModal"));
+    // this.style_modal_content();
     
-    this.style_modal_content_button();
-    this.style_close();
+    // this.style_modal_content_button();
+    // this.style_close();
     
     
     
     // this.style_canvas(canvas)
 
+  getNavbar() {
+    return document.getElementById("navbar0");
+  }
+  getCanvas() {
+    return document.getElementById("canvas2");
+  }
+  getContainer() {
+    return document.getElementById("container0");
   }
   Deroulant() {
     document.getElementById("myDropdown").classList.toggle("show");
@@ -121,7 +129,9 @@ drag(event) {
   document.removeEventListener("mousemove", this.drag.bind(this));
   document.removeEventListener("mouseup", this.stopDrag.bind(this));
 }
-
+getModal_content () {
+  return document.getElementById("modal-content");
+}
  
 //----------------------------- fonction de creation notre HTML -------------------------------------------
 
@@ -133,13 +143,14 @@ drag(event) {
     
       const modalContent = document.createElement("div");
       modalContent.className = "modal-content";
+      modalContent.id = "modal-content";
       modal.appendChild(modalContent);
       modalContent.addEventListener("mousedown", this.startDrag.bind(this));
     
       const closeModalSpan = document.createElement("span");
       closeModalSpan.className = "close";
       closeModalSpan.innerHTML = "&times;";
-      closeModalSpan.onclick = this.closeModal;
+      closeModalSpan.onclick = this.closeModal.bind(this);
       modalContent.appendChild(closeModalSpan);
     
       const modalTitle = document.createElement("h2");
@@ -148,21 +159,6 @@ drag(event) {
     
         // ici pour modifier ce que vous voulez afficher dans le modal (paramètres)
         
-        this.create_button(modalContent, { 
-          text: "Click me!",
-          onClick: () => alert("Hello!"),
-          
-        });
-        this.create_button(modalContent, {
-          text: "Click me!",
-          onClick: () => alert("Hello!"),
-          
-        });
-        this.create_button(modalContent, {
-          text: "Click me!",
-          onClick: () => alert("Hello!"),
-          
-        });
       
       modalContent.addEventListener("mousedown", this.startDrag.bind(this));
     }
