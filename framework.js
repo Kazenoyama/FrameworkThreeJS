@@ -19,7 +19,8 @@ class Framework {
         
         this.CTABannerParameter = {"Banner": Banner,"navbar": navbar, "container": container};
     }
-      /**
+
+    /**
      * Enables automatic resizing of the Three.js renderer and camera when the browser window is resized.
      * By default, resizing is enabled.
      *
@@ -159,12 +160,29 @@ class Framework {
         console.log("copy created from" + name + " with name " + copy.name);
     }
 
+    /**
+     * Attach a light to an object in the scene with a specified color and intensity.
+     * The light is positioned above the object, slightly offset in the y-direction.
+     * 
+     * @param {THREE.Scene} scene - The scene where the light will be added.
+     * @param {string} color - The color of the light, specified as a hexadecimal string.
+     * @param {number} intensity - The intensity of the light, typically between 0 and 1.
+     * @param {THREE.Object3D} object - The object to which the light will be attached.
+     */
     attachLight(scene, color,intensity ,object){
         const directionalLight = new THREE.DirectionalLight(color, intensity);
         directionalLight.position.set(object.position.x, object.position.y + object.scale.y + 2, object.position.z);
         scene.add(directionalLight);
     }
 
+    /**
+     * Load a texture from a specified path and apply it to a material with optional repeat.
+     * The texture is set to repeat in both the S and T directions by default.
+     * 
+     * @param {string} path - The path to the texture image file.
+     * @param {number} [repeat=1] - The number of times to repeat the texture in both directions.
+     * @returns {THREE.Texture} - The loaded texture object.
+     */
     loadTexture(path, repeat = 1){
         const textureLoader = new THREE.TextureLoader();
         const texture = textureLoader.load(path);
@@ -174,85 +192,65 @@ class Framework {
         return texture; 
     }
 
+    /**
+     * Create a simple scene with a box geometry and apply textures to its faces.
+     * The box is centered at the origin (0, 0, 0) and has dimensions specified by the 'dimensions' object.
+     * 
+     * @param {THREE.Scene} scene - The scene where the box will be added.
+     * @param {Array<THREE.Texture>} textures - An array of textures to apply to the box faces.
+     * @param {Framework} fw - The Framework object used to access the createScene method.
+     */
     addScene(scene, textures, fw){
         const cs = new createScene();
         let dimensions= {x : 250, y: 250};
         cs.createBox(scene, textures, fw, dimensions);
     }
 
-    addButtonToNavbar(){
-        console.log('addButtonToNavbar');
+    /**
+     * Add a button to the navbar with the specified text and onclick function.
+     * 
+     * @param {string} textButton - The text to display on the button.
+     * @param {Function} onclickFunction - The function to execute when the button is clicked.
+     * @param {boolean} [hover=true] - A boolean to enable or disable hover effects on the button. Defaults to true.
+     * @param {Array<string>} [classesOfTheButton=["a"]] - An array of classes to apply to the button element.
+     */
+    addButtonToNavbar(textButton = "click me", onclickFunction = () => alert("click"),hover = true, classesOfTheButton = ["a"]){
         const Banner = this.CTABannerParameter.Banner;
         const navbar = this.CTABannerParameter.navbar;
         const container = this.CTABannerParameter.container;
-        Banner.create_button(navbar, { text: "click em", onClick: () => alert("click"), classes: ["a"] });
+        Banner.create_button(navbar, { text: textButton, onClick: onclickFunction, classes: classesOfTheButton });
         Banner.style_any();
-        Banner.style_hover();
+        if (hover == true) {
+            Banner.style_hover(textButton);
+        }
+        
         Banner.style_navbar_children(navbar);
     }
 
-    previewCTABanner(){
-        console.log('previewCTABanner');
-        const Banner = new CTABanner();
-        Banner.createHTMLStructure();
-        const navbar = Banner.getNavbar();
-        const canvas = Banner.getCanvas();
-        const container = Banner.getContainer();
+    /**
+     * Add a dropdown menu to the navbar with the specified text and list of dropdown items.
+     * Each dropdown item is an object with a 'text' property and an 'onClick' function.
+     * 
+     * @param {string} textButton - The text to display on the dropdown button.
+     * @param {Array<{text: string, onClick: Function}>} dropdownList - An array of dropdown items.
+     */
+    addDropdownToNavbar(textButton = "DropDown", dropdownList = [{ text: "Parameters", onClick: () => alert("Hello!") }]){
+        const Banner = this.CTABannerParameter.Banner;
+        const navbar = this.CTABannerParameter.navbar;
+        const container = this.CTABannerParameter.container;
 
-        if (navbar) {
-            Banner.create_button(navbar, { text: "click em", onClick: () => alert("click"), classes: ["a"] });
-            Banner.create_dropdown({ parentId: "navbar0", buttonText: "menu déroulant", menuId: "myDropdown" });
-          }
-          
-          Banner.create_modal();
-          
-        //   Banner.create_dropdown_list("myDropdown", [
-        //       { text: "Parameters", onClick: () => Banner.openModal() },
-        //       { text: "Link 2", href: "#link2" },
-        //       { text: "Link 3", href: "#link3" }
-        //     ]);
-            
-            //const modalContent = Banner.getModal_content();
-            // if (modalContent) {
-            //   Banner.create_button(modalContent, {
-            //     text: "Click me!",
-            //     onClick: () => alert("Hello!"),
-            //   });
-            //   Banner.create_button(modalContent, {
-            //     text: "Click me!",
-            //     onClick: () => alert("Hello!"),
-                
-            //   });
-            //   Banner.create_button(modalContent, {
-            //     text: "Click me!",
-            //     onClick: () => alert("Hello!"),
-                
-            //   });
-            // }
-            
-            //Banner.Open_dropdown(window);
-            
-            Banner.style_any();
-            Banner.style_hover();
-            if (container) {
-              Banner.style_container0(container);
-            }
-            Banner.style_navbar();
-            if (navbar) {
-              Banner.style_navbar_children(navbar);
-            }
-            Banner.style_dropdown();
-            Banner.style_dropbtn();
-            Banner.style_dropdown_content();
-            Banner.style_dropdown_content_a();
-            Banner.style_dropdown_content_parameters();
-            Banner.style_modal(document.getElementById("parametersModal"));
-            Banner.style_modal_content();
-            Banner.style_modal_content_button();
-            Banner.style_close();
+        Banner.create_dropdown({ parentId: "navbar0", buttonText: textButton, menuId: textButton });
+        Banner.create_dropdown_list(textButton, dropdownList);
+
+        Banner.style_any();
+        Banner.style_hover(textButton);
+        Banner.style_navbar_children(navbar);
+        Banner.style_dropdown(textButton);
+        Banner.style_dropbtn(textButton);
+        Banner.style_dropdown_content();
+        Banner.style_dropdown_content_a();
+        Banner.style_dropdown_content_parameters();  
     }
-
-
 }
 
 export default Framework;

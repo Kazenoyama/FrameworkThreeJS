@@ -1,14 +1,24 @@
 import * as THREE from 'three';
-import Framework from './framework';
+import Framework from '../framework/framework.js';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
-import Table from './table';
-import CTABanner from './CTABanner';
+import Table from '../framework/table.js';
 
 
 
 const fw = new Framework();
-console.log(fw.CTABannerParameter);
-//fw.previewCTABanner();
+function printaMessage(){
+    console.log("Hello World");
+}
+
+// fw.addButtonToNavbar("Hello world", printaMessage);
+// fw.addButtonToNavbar("AAAAAA", printaMessage);
+
+
+
+fw.addButtonToNavbar("Button 1", printaMessage);
+fw.addButtonToNavbar("Button 2", printaMessage);
+fw.addDropdownToNavbar("DropDown 1",[{ text: "Premier boutton", onClick: () => alert("Hello!") },{ text: "Paarrraaa", onClick: () => alert("Hello!") }])
+fw.addDropdownToNavbar("DropDown 2",[{ text: "Parameters", onClick: () => alert("Hellozaeazsd!") },{ text: "P", onClick: () => alert("Hellosdqsdq!") }])
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);

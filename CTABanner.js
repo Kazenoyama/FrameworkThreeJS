@@ -1,7 +1,6 @@
 
 class CTABanner{
 
-  
   getNavbar() {
     return document.getElementById("navbar0");
   }
@@ -13,13 +12,14 @@ class CTABanner{
   getContainer() {
     return document.getElementById("container0");
   }
-  
+
   Deroulant() {
     document.getElementById("myDropdown").classList.toggle("show");
   }
 
-  openModal() {
-    const modal = document.getElementById("parametersModal");
+  openModal(modalId) {
+    console.log(`Opening modal with ID: ${modalId}`);
+    const modal = document.getElementById(modalId);
     if (modal) {
       modal.style.display = "block";
     } else {
@@ -27,21 +27,18 @@ class CTABanner{
     }
   }
 
-  closeModal() {
-    document.getElementById("parametersModal").style.display = "none";
-    window.onclick = function(event) {
-      const modal = document.getElementById("parametersModal");
-      if (event.target === modal) {
-        modal.style.display = "none";
-      }
-    };
+  closeModal(modalId) {
+    console.log(`Closing modal with ID: ${modalId}`);
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.style.display = "none";
+    }
   }
 
   isDragging = false;
   offsetX;
   offsetY;
   modal;
-
   // Commencer le drag
   startDrag(event) {
     this.isDragging = true;
@@ -62,7 +59,7 @@ class CTABanner{
 
     this.modal = document.getElementById("parametersModal");
     this.modal.style.left = `${event.clientX - this.offsetX}px`;
-      this.modal.style.top = `${event.clientY - this.offsetY}px`;
+    this.modal.style.top = `${event.clientY - this.offsetY}px`;
   }
 
   // Arrêter le drag
@@ -72,38 +69,39 @@ class CTABanner{
     document.removeEventListener("mouseup", this.stopDrag.bind(this));
   }
 
-  getModal_content () {
-    return document.getElementById("modal-content");
+  getModal_content(modalId) {
+    console.log(`Getting modal content with ID: ${modalId}`);
+    return document.getElementById(`${modalId}-content`);
   }
-  
+
   //----------------------------- fonction de creation notre HTML -------------------------------------------
 
-  create_modal() {
+  create_modal(modalId) {
+    console.log(`Creating modal with ID: ${modalId}`);
     const modal = document.createElement("div");
-    modal.id = "parametersModal";
+    modal.id = modalId;
     modal.className = "modal";
     document.body.appendChild(modal);
 
     const modalContent = document.createElement("div");
     modalContent.className = "modal-content";
-    modalContent.id = "modal-content";
+    modalContent.id = `${modalId}-content`;
+
     modal.appendChild(modalContent);
-    modalContent.addEventListener("mousedown", this.startDrag.bind(this));
 
     const closeModalSpan = document.createElement("span");
     closeModalSpan.className = "close";
     closeModalSpan.innerHTML = "&times;";
-    closeModalSpan.onclick = this.closeModal.bind(this);
+    closeModalSpan.onclick = () => this.closeModal(modalId);
     modalContent.appendChild(closeModalSpan);
 
     const modalTitle = document.createElement("h2");
     modalTitle.textContent = "Parameters";
     modalContent.appendChild(modalTitle);
 
-      // ici pour modifier ce que vous voulez afficher dans le modal (paramètres)
-      
-    
-    modalContent.addEventListener("mousedown", this.startDrag.bind(this));
+    this.style_modal(modal);
+    this.style_modal_content(modalContent);
+    this.style_close(closeModalSpan);
   }
 
   // Crée un menu déroulant générique
@@ -121,17 +119,22 @@ class CTABanner{
     const dropdownButton = document.createElement("button");
     dropdownButton.className = "dropbtn"; 
     dropdownButton.textContent = buttonText;
-    dropdownButton.id = "dropbtn";
-    dropdownButton.onclick = () => this.toggleDropdown(menuId); // Fonction générique pour afficher/masquer le menu
+    dropdownButton.id = `dropbtn-${menuId}`; 
+    dropdownButton.onclick = () => this.toggleDropdown(menuId); 
     dropdownMenu.appendChild(dropdownButton);
-    
 
     const dropdownContent = document.createElement("div");
     dropdownContent.className = "dropdown-content";
     dropdownContent.id = menuId;
     dropdownMenu.appendChild(dropdownContent);
-  }
 
+    this.style_dropdown(dropdownMenu);
+    this.style_dropbtn(dropdownButton); 
+    this.style_dropdown_content();
+    this.style_dropdown_content_a();
+    this.style_dropdown_content_parameters();
+    this.style_hover();
+  }
   // Ajoute des éléments dans le menu déroulant de manière générique
   create_dropdown_list(menuId, items) {
     const dropdownContent = document.getElementById(menuId);
@@ -147,29 +150,31 @@ class CTABanner{
       link.onclick = item.onClick || null; // Associe la fonction si spécifiée
       dropdownContent.appendChild(link);
     });
+    this.style_dropdown_content_a();
+    this.style_hover();
   }
 
   // Fonction pour afficher/masquer le menu déroulant
   // Gestionnaire unique pour tous les clics
   Open_dropdown(window) {                                   // voir si on doit les calls dans notre constructor 
-  window.onclick = function (event) {
-    // Ferme le menu déroulant si l'utilisateur clique à l'extérieur
-    if (!event.target.matches(".dropbtn")) {
-      const dropdowns = document.getElementsByClassName("dropdown-content");
-      Array.from(dropdowns).forEach(dropdown => {
-        if (dropdown.classList.contains("show")) {
-          dropdown.classList.remove("show");
-          dropdown.style.display = "none"; // Assure que le menu est masqué
-        }
-      });
-    }
+    window.onclick = function (event) {
+      // Ferme le menu déroulant si l'utilisateur clique à l'extérieur
+      if (!event.target.matches(".dropbtn")) {
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        Array.from(dropdowns).forEach(dropdown => {
+          if (dropdown.classList.contains("show")) {
+            dropdown.classList.remove("show");
+            dropdown.style.display = "none"; // Assure que le menu est masqué
+          }
+        });
+      }
 
-    // Ferme le modal si l'utilisateur clique en dehors
-    const modal = document.getElementById("parametersModal");
-    if (event.target === modal) {
-      modal.style.display = "none";
+      // Ferme le modal si l'utilisateur clique en dehors
+      const modal = document.getElementById("parametersModal");
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
     }
-  };
   }
 
   // Fonction pour afficher/masquer le menu déroulant
@@ -214,7 +219,7 @@ class CTABanner{
     navbar.id = "navbar0";
     container.appendChild(navbar);
     navbar.style.width = window.innerWidth;
-    
+
 
 
     const logoLink = document.createElement("a");
@@ -230,7 +235,7 @@ class CTABanner{
     // const aboutLink = document.createElement("a");
     // aboutLink.href = "#about";
     // aboutLink.textContent = "About";
-    // navbar.appendChild(aboutLink);  
+    // navbar.appendChild(aboutLink);
   }
 
   // -----------------------------------------------------------------------------
@@ -248,10 +253,16 @@ class CTABanner{
       element.style.padding = "14px 16px";
       element.style.textDecoration = "none";
       element.style.backgroundColor = "transparent";
-      }
+      
+    }
   }
 
   style_modal(element) {
+    if (!element) {
+      console.error("Modal element not found.");
+      return;
+    }
+
     element.style.display = "none";
     element.style.position=" fixed";
     element.style.top=" 50%";
@@ -279,10 +290,9 @@ class CTABanner{
     element.style.height = "100%";
     element.style.display = "flex";
     element.style.flexDirection = "column";
-    console.log("container0");
   }
 
-  style_any(){
+  style_any (){
     const elements = document.querySelectorAll("*");
     for (let i = 0; i < elements.length; i++) {
       elements[i].style.margin = "0";
@@ -296,36 +306,60 @@ class CTABanner{
     navbar.style.backgroundColor = "#333";
     navbar.style.overflow = "visible";
     navbar.style.fontFamily ="Arial, Helvetica, sans-serif";
-    navbar.style.textAlign = "center"; 
+    navbar.style.textAlign = "center";
   }
 
-  style_dropdown(){
-    const dropdown = document.getElementById("myDropdown");
-    dropdown.style.float = "left";
-    dropdown.style.overflow = "hidden";
-    dropdown.style.cursor = "pointer";
-    dropdown.style.fontSize = "16px";
-    dropdown.style.border = "none";
-    dropdown.style.outline = "none";
-    dropdown.style.color = "white";
-    dropdown.style.padding = "14px 16px";
-    dropdown.style.backgroundColor = "white";
-    dropdown.style.fontFamily = "inherit";
-    dropdown.style.margin = "0";
+  style_dropdown(elementOrId){
+    let element;
+      if (typeof elementOrId === 'string') {
+        element = document.getElementById(elementOrId);
+        //console.log("elementOrId :"+elementOrId)
+      } else {
+        element = elementOrId;
+      }
+
+      if (!element) {
+        console.error("Dropdown element not found.");
+        
+        return;
+      }
+    element.style.float = "left";
+    element.style.overflow = "hidden";
+    element.style.cursor = "pointer";
+    element.style.fontSize = "16px";
+    element.style.border = "none";
+    element.style.outline = "none";
+    element.style.color = "white";
+    element.style.padding = "14px 16px";
+    element.style.backgroundColor = "#333";
+    element.style.fontFamily = "inherit";
+    element.style.margin = "0";
   }
 
-  style_dropbtn(){
-    const dropbtn = document.getElementById("dropbtn");
-    dropbtn.style.cursor = "pointer";
-    dropbtn.style.fontSize = "16px";
-    dropbtn.style.border = "none";
-    dropbtn.style.outline = "none";
-    dropbtn.style.color = "white";
-    dropbtn.style.padding = "none";
-    dropbtn.style.backgroundColor = "inherit";
-    dropbtn.style.fontFamily = "inherit";
-    dropbtn.style.margin = "0";
-    dropbtn.style.textAlign = "center";
+  style_dropbtn(elementOrId) {
+    let element;
+    if (typeof elementOrId === 'string') {
+      element = document.getElementById(elementOrId);
+    } else {
+      element = elementOrId;
+    }
+
+    if (!element) {
+      console.error("Dropbtn element not found.");
+      console.error("Dropbtn id: " + elementOrId);
+      return;
+    }
+
+    element.style.cursor = "pointer";
+    element.style.fontSize = "16px";
+    element.style.border = "none";
+    element.style.outline = "none";
+    element.style.color = "white";
+    element.style.padding = "none";
+    element.style.backgroundColor = "#333";
+    element.style.fontFamily = "inherit";
+    element.style.margin = "0";
+    element.style.textAlign = "center";
   }
 
   style_hover() { // trouve pourquoi menu déroulant n'est pas comme les autres
@@ -371,10 +405,11 @@ class CTABanner{
     dropdownContents.forEach(dropdown => {
       dropdown.style.display = 'none';
       dropdown.style.position = 'absolute';
-      dropdown.style.backgroundColor = '#f9f9f9';
+      dropdown.style.backgroundColor = '#333';
       dropdown.style.minWidth = '160px';
       dropdown.style.boxShadow = '0px 8px 16px 0px rgba(0,0,0,0.2)';
       dropdown.style.zIndex = '1';
+      
     });
   }
 
@@ -388,23 +423,15 @@ class CTABanner{
       link.style.textDecoration = 'none';
       link.style.display = 'block';
       link.style.textAlign = 'left';
-      
-      // Hover effect: background-color change
-      link.addEventListener('mouseover', () => {
-        link.style.backgroundColor = "red";
-      });
-      link.addEventListener('mouseout', () => {
-        link.style.backgroundColor = "inherit"; // Reset
-      });
     });
   }
 
   style_dropdown_content_parameters() {
     const parametersDropdowns = document.querySelectorAll('.dropdown-content');
-    
+
     parametersDropdowns.forEach(button => {
       button.style.cursor = 'pointer';
-      button.style.color = 'black';
+      button.style.color = 'white';
       button.style.padding = '12px 16px';
       button.style.textDecoration = 'none';
       button.style.display = 'block';
@@ -456,6 +483,8 @@ class CTABanner{
   }
   //------------------------------------------------------------
     
+
 }
+
 
 export default CTABanner;
