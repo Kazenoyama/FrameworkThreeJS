@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import Table from '../framework/table.js';
 
 const fw = new Framework();
+
 function printaMessage(){
     console.log("Hello World");
 }
@@ -16,7 +17,7 @@ fw.addDropdownToNavbar("DropDown 2",[{ text: "Button DropDown 3", onClick: print
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight-80);
+renderer.setSize(fw.getWindowWidth(), fw.getWindowHeight());
 document.body.appendChild(renderer.domElement);
 
 camera.position.z = 60;
@@ -24,7 +25,7 @@ camera.position.y = 50;
 const camera2 = new OrbitControls(camera, renderer.domElement);
 camera2.update();
 
-fw.onResize(renderer, window, camera);
+
 
 const raycaster = new THREE.Raycaster();
 const direction = new THREE.Vector3(1, 0, 0);
@@ -47,6 +48,7 @@ let table = new Table(50,50);
 scene.add(table.getTable());
 
 fw.attachLight(scene, 'white', 1, table.getTable())
+fw.onResize(renderer, window, camera);
 
 function animate() {
     requestAnimationFrame(animate);

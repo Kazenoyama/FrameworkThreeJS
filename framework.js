@@ -17,7 +17,7 @@ class Framework {
         const container = Banner.getContainer();
         Banner.style_container0(container);
         
-        this.CTABannerParameter = {"Banner": Banner,"navbar": navbar, "container": container};
+        this.CTABannerParameter = {"Banner": Banner,"navbar": navbar, "container": container};    
     }
 
     /**
@@ -70,8 +70,10 @@ class Framework {
      */
     resize(renderer, window, camera){
         console.log('resize');
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(window.innerWidth, window.innerHeight - document.getElementById("navbar0").offsetHeight);
         camera.aspect = window.innerWidth / window.innerHeight;
+        let navbar = document.getElementById('navbar0');
+        navbar = navbar.style.width = window.innerWidth + 'px';
         camera.updateProjectionMatrix();
     }
     
@@ -250,6 +252,14 @@ class Framework {
         Banner.style_dropdown_content();
         Banner.style_dropdown_content_a();
         Banner.style_dropdown_content_parameters();  
+    }
+
+    getWindowWidth(){
+        return window.innerWidth;
+    }
+
+    getWindowHeight(){
+        return window.innerHeight - document.getElementById("navbar0").offsetHeight;
     }
 }
 
