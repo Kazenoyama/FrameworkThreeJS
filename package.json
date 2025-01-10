@@ -4,10 +4,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "setup": "npm install three && mkdir src\\css src\\js src\\models src\\textures src\\framework && echo 'this is my message' > src\\css\\style.css && echo '!' > index.html && echo > src\\css\\style.css && echo > src\\js\\main.js && npm run setupIndex && npm run write && npm run move",
-    "write": "echo 'add your code' > src\\js\\main.js && (echo body { & type tab.txt & echo background-color: white; & type tab.txt & echo margin : 0; & echo })> src\\css\\style.css",
-    "setupIndex": "(echo ^<!DOCTYPE html^> & echo ^<html lang='en'^> & echo ^<head^> & type tab.txt & echo ^<meta charset='UTF-8'^> & type tab.txt & echo ^<meta name='viewport' content='width=device-width, initial-scale=1.0'^> & type tab.txt & echo ^<link rel='stylesheet' href='/src/css/style.css'^> & type tab.txt & echo ^<script src='/src/js/main.js' type='module'^>^</script^> & type tab.txt & echo ^<script src='/src/framework/framework.js' type='module'^>^</script^> & type tab.txt & echo ^<script src='/src/framework/createScene.js' type='module'^>^</script^> & type tab.txt & echo ^<script src='/src/framework/table.js' type='module'^>^</script^> & type tab.txt & echo ^<script src='/src/framework/CTABanner.js' type='module'^>^</script^>  & type tab.txt & echo ^<title^>Document^</title^> & echo ^</head^> & echo ^<body^> & echo ^</body^> & echo ^</html^>) > index.html",
-    "move": "move framework.js src\\framework\\framework.js && move CTABanner.js src\\framework\\CTABanner.js && move createScene.js src\\framework\\createScene.js && move table.js src\\framework\\table.js && move roof.jpg src\\textures\\roof.jpg && move wall.jpg src\\textures\\wall.jpg && move wood_floor.jpg src\\textures\\wood_floor.jpg"
+    "setup": "npm run install_three && npm run setupDirectory && npm run addStyle && npm run move",
+    "install_three": "npm install three",
+    "setupDirectory": "mkdir src\\css src\\js src\\models src\\textures src\\framework",
+    "addStyle": " (echo body { & type tab.txt & echo background-color: white; & type tab.txt & echo margin : 0; & echo })> src\\css\\style.css",
+    "move": "move framework.js src\\framework\\framework.js && move CTABanner.js src\\framework\\CTABanner.js && move createScene.js src\\framework\\createScene.js && move table.js src\\framework\\table.js && move roof.jpg src\\textures\\roof.jpg && move wall.jpg src\\textures\\wall.jpg && move wood_floor.jpg src\\textures\\wood_floor.jpg && move main.js src\\js\\main.js",
+    "initialState": "move src\\framework\\framework.js framework.js && move src\\framework\\CTABanner.js CTABanner.js && move src\\framework\\createScene.js createScene.js && move src\\framework\\table.js table.js && move src\\textures\\roof.jpg roof.jpg && move src\\textures\\wall.jpg wall.jpg && move src\\textures\\wood_floor.jpg wood_floor.jpg && move src\\js\\main.js main.js && npm run delete",
+    "delete": "rmdir /s /q src && rmdir /s /q node_modules && del package-lock.json"
   },
   "keywords": [
     "three.js",
