@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import createScene from './createScene';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import CTABanner from '../framework/CTABanner';
+const Banner = new CTABanner();
 
 class Framework {
 
@@ -170,6 +172,126 @@ class Framework {
         let dimensions= {x : 250, y: 250};
         cs.createBox(scene, textures, fw, dimensions);
     }
+
+    CTAbannerCreate() {
+        console.log('CTAbanner');
+        
+        Banner.createHTMLStructure();
+      
+        const navbar = Banner.getNavbar();
+        const canvas = Banner.getCanvas();
+        const container = Banner.getContainer();
+      
+        if (navbar) {
+          Banner.create_button(navbar, { text: "click em", onClick: () => alert("click"), classes: ["a"] });
+          Banner.create_dropdown({ parentId: "navbar0", buttonText: "menu déroulant", menuId: "myDropdown" });
+        }
+      
+        Banner.create_modal("parametersModal1");
+      
+        Banner.create_dropdown_list("myDropdown", [
+          { text: "Parameters", onClick: () => Banner.openModal("parametersModal1") },
+          { text: "Link 2", href: "#link2" },
+          { text: "Link 3", href: "#link3" }
+        ]);
+      
+        const modalContent = Banner.getModal_content("parametersModal1");
+        if (modalContent) {
+          Banner.create_button(modalContent, {
+            text: "CLICK HERE!",
+            onClick: () => alert("Hello!"),
+          });
+          Banner.create_button(modalContent, {
+            text: "Click me!",
+            onClick: () => alert("Hello!"),
+          });
+          Banner.create_button(modalContent, {
+            text: "Click me!",
+            onClick: () => alert("Hello!"),
+          });
+        }
+      
+        Banner.Open_dropdown(window);
+      
+        Banner.style_any();
+        Banner.style_hover();
+        if (container) {
+          Banner.style_container0(container);
+        }
+        Banner.style_navbar();
+        if (navbar) {
+          Banner.style_navbar_children(navbar);
+        }
+        Banner.style_dropdown("myDropdown");
+        
+      
+        Banner.style_dropdown_content();
+        Banner.style_dropdown_content_a();
+        Banner.style_dropdown_content_parameters();
+        Banner.style_modal(document.getElementById("parametersModal"));
+        Banner.style_modal_content();
+        Banner.style_modal_content_button();
+        Banner.style_close();
+      }
+    create_button(parent, { text, onClick, classes = [] }) {
+        const button = Banner.create_button(parent, { text, onClick, classes });
+    const navbar = Banner.getNavbar();
+    if (navbar) {
+        Banner.style_navbar_children(navbar);
+        Banner.style_hover();
+    }
+    return button;
+    }
+
+
+    create_dropdown({ parentId, buttonText, menuId }) {
+        const dropdown = Banner.create_dropdown({ parentId, buttonText, menuId });
+        console.log('dropdown  '+menuId);
+       
+        const dropbtnId = `dropbtn-${menuId}`; // a voir si on peut enlever 
+        Banner.style_dropdown_content();
+        Banner.style_dropdown_content_a();
+        return dropdown;
+    }
+    create_modal(modalId){
+        console.log(`Framework: Creating modal with ID: ${modalId}`);
+         Banner.create_modal(modalId);
+    }
+    openModal(ModalId) {
+        console.log(`Framework: Opening modal with ID: ${ModalId}`);
+        Banner.openModal(ModalId);
+      }
+
+      getModal_content(modalId) {
+        console.log(`Framework: Getting modal content with ID: ${modalId}`);
+        return Banner.getModal_content(modalId);
+      }
+
+
+
+    create_dropdown_list(menuId, items) {
+        return Banner.create_dropdown_list(menuId, items);
+    }
+    toggleDropdown(menuId) {
+        return Banner.toggleDropdown(menuId);
+    }
+    Open_dropdown(window) {
+        return Banner.Open_dropdown(window);
+    }
+    create_modal() {
+        return Banner.create_modal();
+    }
+    getNavbar() {
+        return Banner.getNavbar();
+    }
+    getCanvas() {
+        return Banner.getCanvas();
+    }
+    getContainer() {
+        return Banner.getContainer();
+    }
+
+   
 
 
 }

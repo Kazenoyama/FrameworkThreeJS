@@ -70,31 +70,26 @@ class CTABanner{
     document.getElementById("myDropdown").classList.toggle("show");
   }
 
-// Ouvre le modal
 
   
-openModal() {
-  const modal = document.getElementById("parametersModal");
+openModal(modalId) {
+  console.log(`Opening modal with ID: ${modalId}`);
+  const modal = document.getElementById(modalId);
   if (modal) {
     modal.style.display = "block";
   } else {
     console.error("Modal not found.");
   }
-  
-
-
 }
 
 
-// Ferme le modal si l"utilisateur clique en dehors de celui-ci
-closeModal() {
-  document.getElementById("parametersModal").style.display = "none";
-window.onclick = function(event) {
-  const modal = document.getElementById("parametersModal");
-  if (event.target === modal) {
+
+closeModal(modalId) {
+  console.log(`Closing modal with ID: ${modalId}`);
+  const modal = document.getElementById(modalId);
+  if (modal) {
     modal.style.display = "none";
   }
-};
 }
 isDragging = false;
 offsetX;
@@ -129,39 +124,41 @@ drag(event) {
   document.removeEventListener("mousemove", this.drag.bind(this));
   document.removeEventListener("mouseup", this.stopDrag.bind(this));
 }
-getModal_content () {
-  return document.getElementById("modal-content");
+getModal_content(modalId) {
+  console.log(`Getting modal content with ID: ${modalId}`);
+  return document.getElementById(`${modalId}-content`);
 }
  
 //----------------------------- fonction de creation notre HTML -------------------------------------------
 
-    create_modal() {
-      const modal = document.createElement("div");
-      modal.id = "parametersModal";
-      modal.className = "modal";
-      document.body.appendChild(modal);
-    
-      const modalContent = document.createElement("div");
-      modalContent.className = "modal-content";
-      modalContent.id = "modal-content";
-      modal.appendChild(modalContent);
-      modalContent.addEventListener("mousedown", this.startDrag.bind(this));
-    
-      const closeModalSpan = document.createElement("span");
-      closeModalSpan.className = "close";
-      closeModalSpan.innerHTML = "&times;";
-      closeModalSpan.onclick = this.closeModal.bind(this);
-      modalContent.appendChild(closeModalSpan);
-    
-      const modalTitle = document.createElement("h2");
-      modalTitle.textContent = "Parameters";
-      modalContent.appendChild(modalTitle);
-    
-        // ici pour modifier ce que vous voulez afficher dans le modal (paramètres)
-        
-      
-      modalContent.addEventListener("mousedown", this.startDrag.bind(this));
-    }
+create_modal(modalId) {
+  console.log(`Creating modal with ID: ${modalId}`);
+  const modal = document.createElement("div");
+  modal.id = modalId;
+  modal.className = "modal";
+  document.body.appendChild(modal);
+
+  const modalContent = document.createElement("div");
+  modalContent.className = "modal-content";
+  modalContent.id = `${modalId}-content`;
+  
+  modal.appendChild(modalContent);
+
+  const closeModalSpan = document.createElement("span");
+  closeModalSpan.className = "close";
+  closeModalSpan.innerHTML = "&times;";
+  closeModalSpan.onclick = () => this.closeModal(modalId);
+  modalContent.appendChild(closeModalSpan);
+
+  const modalTitle = document.createElement("h2");
+  modalTitle.textContent = "Parameters";
+  modalContent.appendChild(modalTitle);
+
+  
+  this.style_modal(modal);
+  this.style_modal_content(modalContent);
+  this.style_close(closeModalSpan);
+}
 
     // Crée un menu déroulant générique
  create_dropdown({ parentId, buttonText, menuId }) {
@@ -179,7 +176,7 @@ getModal_content () {
    dropdownButton.className = "dropbtn"; 
   dropdownButton.textContent = buttonText;
   dropdownButton.id = "dropbtn";
-  dropdownButton.onclick = () => this.toggleDropdown(menuId); // Fonction générique pour afficher/masquer le menu
+  dropdownButton.onclick = () => this.toggleDropdown(menuId); 
   dropdownMenu.appendChild(dropdownButton);
   
 
@@ -188,6 +185,8 @@ getModal_content () {
   dropdownContent.id = menuId;
   dropdownMenu.appendChild(dropdownContent);
 }
+
+
 // Ajoute des éléments dans le menu déroulant de manière générique
 create_dropdown_list(menuId, items) {
   const dropdownContent = document.getElementById(menuId);
@@ -198,14 +197,14 @@ create_dropdown_list(menuId, items) {
 
   items.forEach(item => {
     const link = document.createElement("a");
-    link.href = item.href || "#"; // Définit l"URL ou laisse vide si non spécifié
+    link.href = item.href || "#"; 
     link.textContent = item.text;
     if (item.onClick) {
-      link.onclick = item.onClick.bind(this); // Associe la fonction si spécifiée
-      link.href = "javascript:void(0);"; // Prevent default link behavior if onClick is specified
+      link.onclick = item.onClick.bind(this);
     }
     
     dropdownContent.appendChild(link);
+   
   });
 }
 
@@ -310,17 +309,23 @@ create_dropdown({ parentId, buttonText, menuId }) {
   parent.appendChild(dropdownMenu);
 
   const dropdownButton = document.createElement("button");
-   dropdownButton.className = "dropbtn"; 
+  dropdownButton.className = "dropbtn"; 
   dropdownButton.textContent = buttonText;
-  dropdownButton.id = "dropbtn";
-  dropdownButton.onclick = () => this.toggleDropdown(menuId); // Fonction générique pour afficher/masquer le menu
+  dropdownButton.id = `dropbtn-${menuId}`; 
+  dropdownButton.onclick = () => this.toggleDropdown(menuId); 
   dropdownMenu.appendChild(dropdownButton);
-  
 
   const dropdownContent = document.createElement("div");
   dropdownContent.className = "dropdown-content";
   dropdownContent.id = menuId;
   dropdownMenu.appendChild(dropdownContent);
+
+  this.style_dropdown(dropdownMenu);
+  this.style_dropbtn(dropdownButton); 
+  this.style_dropdown_content();
+  this.style_dropdown_content_a();
+  this.style_dropdown_content_parameters();
+  this.style_hover();
 }
 // Ajoute des éléments dans le menu déroulant de manière générique
  create_dropdown_list(menuId, items) {
@@ -337,6 +342,8 @@ create_dropdown({ parentId, buttonText, menuId }) {
     link.onclick = item.onClick || null; // Associe la fonction si spécifiée
     dropdownContent.appendChild(link);
   });
+  this.style_dropdown_content_a();
+  this.style_hover();
 }
 
 // Fonction pour afficher/masquer le menu déroulant
@@ -458,6 +465,11 @@ create_button(container, { text = "Click me!", onClick = () => alert("Button cli
 }
 
  style_modal(element) {
+  if (!element) {
+    console.error("Modal element not found.");
+    return;
+  }
+
   element.style.display = "none";
   element.style.position=" fixed";
   element.style.top=" 50%";
@@ -514,34 +526,58 @@ create_button(container, { text = "Click me!", onClick = () => alert("Button cli
   navbar.style.textAlign = "center";
   
  }
- style_dropdown(){
-  const dropdown = document.getElementById("myDropdown");
-  dropdown.style.float = "left";
-  dropdown.style.overflow = "hidden";
-  dropdown.style.cursor = "pointer";
-  dropdown.style.fontSize = "16px";
-  dropdown.style.border = "none";
-  dropdown.style.outline = "none";
-  dropdown.style.color = "white";
-  dropdown.style.padding = "14px 16px";
-  dropdown.style.backgroundColor = "white";
-  dropdown.style.fontFamily = "inherit";
-  dropdown.style.margin = "0";
+ style_dropdown(elementOrId){
+  let element;
+    if (typeof elementOrId === 'string') {
+      element = document.getElementById(elementOrId);
+      console.log("elementOrId :"+elementOrId)
+    } else {
+      element = elementOrId;
+    }
+
+    if (!element) {
+      console.error("Dropdown element not found.");
+      
+      return;
+    }
+  element.style.float = "left";
+  element.style.overflow = "hidden";
+  element.style.cursor = "pointer";
+  element.style.fontSize = "16px";
+  element.style.border = "none";
+  element.style.outline = "none";
+  element.style.color = "white";
+  element.style.padding = "14px 16px";
+  element.style.backgroundColor = "#333";
+  element.style.fontFamily = "inherit";
+  element.style.margin = "0";
 
 
 }
- style_dropbtn(){
-  const dropbtn = document.getElementById("dropbtn");
-  dropbtn.style.cursor = "pointer";
-  dropbtn.style.fontSize = "16px";
-  dropbtn.style.border = "none";
-  dropbtn.style.outline = "none";
-  dropbtn.style.color = "white";
-  dropbtn.style.padding = "none";
-  dropbtn.style.backgroundColor = "inherit";
-  dropbtn.style.fontFamily = "inherit";
-  dropbtn.style.margin = "0";
-  dropbtn.style.textAlign = "center";
+style_dropbtn(elementOrId) {
+  let element;
+  if (typeof elementOrId === 'string') {
+    element = document.getElementById(elementOrId);
+  } else {
+    element = elementOrId;
+  }
+
+  if (!element) {
+    console.error("Dropbtn element not found.");
+    console.error("Dropbtn id: " + elementOrId);
+    return;
+  }
+
+  element.style.cursor = "pointer";
+  element.style.fontSize = "16px";
+  element.style.border = "none";
+  element.style.outline = "none";
+  element.style.color = "white";
+  element.style.padding = "none";
+  element.style.backgroundColor = "#333";
+  element.style.fontFamily = "inherit";
+  element.style.margin = "0";
+  element.style.textAlign = "center";
 }
  style_hover() { // trouve pourquoi menu déroulant n'est pas comme les autres
   const navbarLinks = document.querySelectorAll(".navbar a:not(.no_hover)");
@@ -586,10 +622,11 @@ create_button(container, { text = "Click me!", onClick = () => alert("Button cli
   dropdownContents.forEach(dropdown => {
     dropdown.style.display = 'none';
     dropdown.style.position = 'absolute';
-    dropdown.style.backgroundColor = '#f9f9f9';
+    dropdown.style.backgroundColor = '#333';
     dropdown.style.minWidth = '160px';
     dropdown.style.boxShadow = '0px 8px 16px 0px rgba(0,0,0,0.2)';
     dropdown.style.zIndex = '1';
+    
   });
 }
  style_dropdown_content_a() {
@@ -604,12 +641,12 @@ create_button(container, { text = "Click me!", onClick = () => alert("Button cli
     link.style.textAlign = 'left';
     
     // Hover effect: background-color change
-    link.addEventListener('mouseover', () => {
-      link.style.backgroundColor = "red";
-    });
-    link.addEventListener('mouseout', () => {
-      link.style.backgroundColor = "inherit"; // Reset
-    });
+    // link.addEventListener('mouseover', () => {
+    //   link.style.backgroundColor = "red";
+    // });
+    // link.addEventListener('mouseout', () => {
+    //   link.style.backgroundColor = "inherit"; // Reset           // A VOIR POURQUOI ON A PLUS BESSOIN (surement du on fait que hover dans create )
+    // });
   });
 
   
@@ -620,7 +657,7 @@ style_dropdown_content_parameters() {
   
   parametersDropdowns.forEach(button => {
     button.style.cursor = 'pointer';
-    button.style.color = 'black';
+    button.style.color = 'white';
     button.style.padding = '12px 16px';
     button.style.textDecoration = 'none';
     button.style.display = 'block';
