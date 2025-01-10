@@ -1,14 +1,24 @@
 import * as THREE from 'three';
 import createScene from './createScene';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import CTABanner from './CTABanner';
 
 class Framework {
+    CTABannerParameter;
 
     constructor(){
         console.log('Framework constructor');
-        this.boundResize = this.resize.bind(this); // Create a bound resize function
-    }
+        //this.boundResize = this.resize.bind(this); // Create a bound resize function
+        const Banner = new CTABanner();
 
+        Banner.createHTMLStructure();
+        const navbar = Banner.getNavbar();
+        Banner.style_navbar();
+        const container = Banner.getContainer();
+        Banner.style_container0(container);
+        
+        this.CTABannerParameter = {"Banner": Banner,"navbar": navbar, "container": container};
+    }
       /**
      * Enables automatic resizing of the Three.js renderer and camera when the browser window is resized.
      * By default, resizing is enabled.
@@ -29,7 +39,6 @@ class Framework {
         }
     }
 
-    
     /**
      * Updates the occlusion visibility of objects in the scene to optimize performance.
      * Objects that are far from the camera or completely occluded by other objects will be hidden.
@@ -169,6 +178,78 @@ class Framework {
         const cs = new createScene();
         let dimensions= {x : 250, y: 250};
         cs.createBox(scene, textures, fw, dimensions);
+    }
+
+    addButtonToNavbar(){
+        console.log('addButtonToNavbar');
+        const Banner = this.CTABannerParameter.Banner;
+        const navbar = this.CTABannerParameter.navbar;
+        const container = this.CTABannerParameter.container;
+        Banner.create_button(navbar, { text: "click em", onClick: () => alert("click"), classes: ["a"] });
+        Banner.style_any();
+        Banner.style_hover();
+        Banner.style_navbar_children(navbar);
+    }
+
+    previewCTABanner(){
+        console.log('previewCTABanner');
+        const Banner = new CTABanner();
+        Banner.createHTMLStructure();
+        const navbar = Banner.getNavbar();
+        const canvas = Banner.getCanvas();
+        const container = Banner.getContainer();
+
+        if (navbar) {
+            Banner.create_button(navbar, { text: "click em", onClick: () => alert("click"), classes: ["a"] });
+            Banner.create_dropdown({ parentId: "navbar0", buttonText: "menu déroulant", menuId: "myDropdown" });
+          }
+          
+          Banner.create_modal();
+          
+        //   Banner.create_dropdown_list("myDropdown", [
+        //       { text: "Parameters", onClick: () => Banner.openModal() },
+        //       { text: "Link 2", href: "#link2" },
+        //       { text: "Link 3", href: "#link3" }
+        //     ]);
+            
+            //const modalContent = Banner.getModal_content();
+            // if (modalContent) {
+            //   Banner.create_button(modalContent, {
+            //     text: "Click me!",
+            //     onClick: () => alert("Hello!"),
+            //   });
+            //   Banner.create_button(modalContent, {
+            //     text: "Click me!",
+            //     onClick: () => alert("Hello!"),
+                
+            //   });
+            //   Banner.create_button(modalContent, {
+            //     text: "Click me!",
+            //     onClick: () => alert("Hello!"),
+                
+            //   });
+            // }
+            
+            //Banner.Open_dropdown(window);
+            
+            Banner.style_any();
+            Banner.style_hover();
+            if (container) {
+              Banner.style_container0(container);
+            }
+            Banner.style_navbar();
+            if (navbar) {
+              Banner.style_navbar_children(navbar);
+            }
+            Banner.style_dropdown();
+            Banner.style_dropbtn();
+            Banner.style_dropdown_content();
+            Banner.style_dropdown_content_a();
+            Banner.style_dropdown_content_parameters();
+            Banner.style_modal(document.getElementById("parametersModal"));
+            Banner.style_modal_content();
+            Banner.style_modal_content_button();
+            Banner.style_close();
     }
 
 
