@@ -64,3 +64,4 @@ If you need to make further adjustments or configurations, consider the followin
 
 ## Documentation
 - [Changelog](CHANGELOG.md)
+- [Documentation](DOCUMENTATION.md)
