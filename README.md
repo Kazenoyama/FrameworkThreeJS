@@ -61,3 +61,6 @@ If you need to make further adjustments or configurations, consider the followin
     npm install
     ```
 
+
+## Documentation
+- [Changelog](CHANGELOG.md)
