@@ -4,6 +4,10 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import Table from '../framework/table.js';
 
 const fw = new Framework();
+const scene = fw.mainParameters["scene"];
+const camera = fw.mainParameters["camera"];
+const renderer = fw.mainParameters["renderer"];
+const camera2 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 function printaMessage(){
     console.log("Hello World");
@@ -13,18 +17,6 @@ fw.addButtonToNavbar("Button 1", printaMessage);
 fw.addButtonToNavbar("Button 2", printaMessage);
 fw.addDropdownToNavbar("DropDown 1",[{ text: "Button DropDown 1", onClick: printaMessage },{ text: "Button DropDown 2", onClick: () => alert("Hello!") }])
 fw.addDropdownToNavbar("DropDown 2",[{ text: "Button DropDown 3", onClick: printaMessage},{ text: "Button DropDown 4", onClick: () => alert("Hello World!") }])
-
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(fw.getWindowWidth(), fw.getWindowHeight());
-document.body.appendChild(renderer.domElement);
-
-camera.position.z = 60;
-camera.position.y = 50;
-const camera2 = new OrbitControls(camera, renderer.domElement);
-camera2.update();
-
 
 
 const raycaster = new THREE.Raycaster();
@@ -49,6 +41,20 @@ scene.add(table.getTable());
 
 fw.attachLight(scene, 'white', 1, table.getTable())
 fw.onResize(renderer, window, camera);
+
+await fw.loadModel("src/models/tree/scene.gltf", "tree", 1);
+
+for (let i = 0; i < 150; i++) {
+    await fw.create_copy("tree", 0.1)
+}
+
+fw.delete_model("tree")
+
+
+
+
+
+
 
 function animate() {
     requestAnimationFrame(animate);

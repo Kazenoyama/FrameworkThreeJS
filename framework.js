@@ -1,23 +1,48 @@
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import createScene from './createScene';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import CTABanner from './CTABanner';
+import { add, all } from 'three/tsl';
 
 class Framework {
     CTABannerParameter;
+    mainParameters;
+    pendingLoads = false;
+    pendingCopies = false;
+    numberPendingLoads = 0;
+    numberPendingCopies = 0;
 
     constructor(){
         console.log('Framework constructor');
-        //this.boundResize = this.resize.bind(this); // Create a bound resize function
+        
         const Banner = new CTABanner();
-
         Banner.createHTMLStructure();
         const navbar = Banner.getNavbar();
         Banner.style_navbar();
         const container = Banner.getContainer();
         Banner.style_container0(container);
         
-        this.CTABannerParameter = {"Banner": Banner,"navbar": navbar, "container": container};    
+        this.CTABannerParameter = {"Banner": Banner,"navbar": navbar, "container": container};
+        this.mainParameters = this.init();
+    }
+
+    init(){
+        console.log('init');
+        const scene = new THREE.Scene();
+        window.scene = scene;
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(this.getWindowWidth(), this.getWindowHeight());
+        document.body.appendChild(renderer.domElement);
+
+        camera.position.z = 60;
+        camera.position.y = 50;
+        const cameraOrbital = new OrbitControls(camera, renderer.domElement);
+        cameraOrbital.update();
+
+        return {"scene": scene, "camera": camera, "renderer": renderer, "cameraOrbital": cameraOrbital};
+
     }
 
     /**
@@ -122,9 +147,13 @@ class Framework {
      * @param {number} size - The scale factor to apply to the model after loading.
      * @param {number} [timeToWait=500] - The delay (in milliseconds) to wait after loading the model.
      */
-    async loadModel(scene, path, name, size, timeToWait=500) {
+    async loadModel(path, name, size, timeToWait=500) {
         const loader = new GLTFLoader();
+        let scene = window.scene;
+        this.pendingLoads = true;
+        this.numberPendingLoads++;
         let model3D;
+
         loader.load(path, function(gltf){
             gltf.scene.scale.set(size, size, size);
             gltf.scene.name = name;
@@ -132,9 +161,25 @@ class Framework {
             scene.add(model3D);
             scene.getObjectByName(name).position.set(0, 0, 0);
             scene.getObjectByName(name).visible = false;
-            console.log("model uploaded");
+            console.log("model uploaded : " + name);
         })
-        await new Promise(r => setTimeout(r, timeToWait));
+
+        let added = false;
+        while(!added){
+            // console.log("waiting for model to be added, pending load : " + this.numberPendingLoads);
+            for(let j = 0; j < scene.children.length; j++){
+                if(scene.children[j].name === name){
+                    added = true;
+                    this.numberPendingLoads--;    
+                    break;
+                }
+            }
+            if(!added) {await new Promise(r => setTimeout(r, 250));}
+        }
+
+        if (this.numberPendingLoads === 0) {
+            this.pendingLoads = false;
+        }
     }
 
     /**
@@ -146,11 +191,17 @@ class Framework {
      * @param {string} name - The name of the model to copy.
      * @param {number} [size=1] - The scale factor to apply to the copied model.
      */
-    create_copy(scene, name, size = 1) {
+    async create_copy(name, size = 1, timeToWait=100) {
+        let scene = window.scene;
         const copy = scene.getObjectByName(name).clone();
+
+        this.pendingCopies = true;
+        this.numberPendingCopies++;
+
         copy.position.set(0, 0, 0);
         copy.scale.set(size, size, size);
         copy.visible = true;
+
         let i=0
         for(let j=0; j<scene.children.length; j++) {
             if(scene.children[j].name.includes(name+"_copy")) {
@@ -159,7 +210,67 @@ class Framework {
         }
         copy.name = name + "_copy" + i;
         scene.add(copy);
-        console.log("copy created from" + name + " with name " + copy.name);
+
+        console.log("copy created from : " + name + " \nwith name : " + copy.name);
+        
+        // await new Promise(r => setTimeout(r, timeToWait));
+        let added = false;
+        while(!added){
+            // console.log("waiting for copy to be added, pending copy : " + this.numberPendingCopies);
+
+            for(let j = 0; j < scene.children.length; j++){
+                if(scene.children[j].name === copy.name){
+                    added = true;
+                    this.numberPendingCopies--;
+                    break;
+                }
+            }
+            if(!added){await new Promise(r => setTimeout(r, 250));}
+        }
+
+        if(this.numberPendingCopies === 0){
+            this.pendingCopies = false;
+        }
+        
+        return copy;
+    }
+
+    delete_copy(name){
+        while(this.pendingCopies || this.pendingLoads){
+            console.log("waiting for pending copies or loads");
+            SetTimeout(500);
+        }
+        let scene = window.scene;
+        scene.remove(scene.getObjectByName(name));
+        console.log("copy deleted : " + name);
+    }
+
+    async delete_model(name){
+        while(this.pendingCopies || this.pendingLoads){
+            console.log("waiting for pending copies or loads");
+            await new Promise(r => setTimeout(r, 250));
+        }
+
+        let scene = window.scene;
+        let alldeleted = false
+        let beginning = 0
+        while(!alldeleted){
+            if(beginning < scene.children.length){
+                for(let i = beginning; i < scene.children.length; i++){
+                    if(scene.children[i].name === name || scene.children[i].name.includes(name+"_copy")){
+                        scene.remove(scene.children[i]);
+                        beginning = i;
+                        break
+                    }
+                    else if(i === scene.children.length - 1){
+                        alldeleted = true;
+                    }
+                }
+            }
+            else{
+                alldeleted = true;
+            }
+        }
     }
 
     /**
@@ -261,6 +372,7 @@ class Framework {
     getWindowHeight(){
         return window.innerHeight - document.getElementById("navbar0").offsetHeight;
     }
+
 }
 
 export default Framework;
