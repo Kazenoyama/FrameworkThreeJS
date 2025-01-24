@@ -24,6 +24,8 @@
     - Function to add a precreated scene which is a box with a table at its center
     - Function to add a button on the navigation bar
     - Function to add a dropdown on the navigation bar
+    - Function to delete a particuliar copy of a model
+    - Function to delete a particuliar model
 
 ### Changed
 

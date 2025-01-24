@@ -3,16 +3,19 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import createScene from './createScene';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import CTABanner from './CTABanner';
-import { add, all } from 'three/tsl';
 
 class Framework {
-    CTABannerParameter;
-    mainParameters;
-    pendingLoads = false;
-    pendingCopies = false;
-    numberPendingLoads = 0;
-    numberPendingCopies = 0;
+    CTABannerParameter;         // Contains the following keys: Banner, navbar, container
+    mainParameters;             // Contains the following keys: scene, camera, renderer, cameraOrbital
+    pendingLoads = false;       // Boolean to check if there are pending loads
+    pendingCopies = false;      // Boolean to check if there are pending copies
+    numberPendingLoads = 0;     // Number of pending loads
+    numberPendingCopies = 0;    // Number of pending copies
 
+    /**
+     * Constructs a new Framework object with a default scene, camera, and renderer.
+     * To get the scene, camera, and renderer, use the mainParameters attribute.
+     */
     constructor(){
         console.log('Framework constructor');
         
@@ -24,30 +27,12 @@ class Framework {
         Banner.style_container0(container);
         
         this.CTABannerParameter = {"Banner": Banner,"navbar": navbar, "container": container};
-        this.mainParameters = this.init();
-    }
-
-    init(){
-        console.log('init');
-        const scene = new THREE.Scene();
-        window.scene = scene;
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(this.getWindowWidth(), this.getWindowHeight());
-        document.body.appendChild(renderer.domElement);
-
-        camera.position.z = 60;
-        camera.position.y = 50;
-        const cameraOrbital = new OrbitControls(camera, renderer.domElement);
-        cameraOrbital.update();
-
-        return {"scene": scene, "camera": camera, "renderer": renderer, "cameraOrbital": cameraOrbital};
-
+        this.mainParameters = this.#init();
     }
 
     /**
      * Enables automatic resizing of the Three.js renderer and camera when the browser window is resized.
-     * By default, resizing is enabled.
+     * By default, when calling this function, it enabled the automatic resizing of the window.
      *
      * @param {THREE.WebGLRenderer} renderer - The renderer responsible for rendering the scene.
      * @param {Window} window - The browser window containing the Three.js canvas.
@@ -60,88 +45,54 @@ class Framework {
             window.removeEventListener('resize', this.boundResize); // Use bound resize here
         } else {
             console.log('onResize enabled');
-            this.boundResize = this.resize.bind(this, renderer, window, camera); // Bind resize with parameters
+            this.boundResize = this.#resize.bind(this, renderer, window, camera); // Bind resize with parameters
             window.addEventListener('resize', this.boundResize); // Add the bound resize listener
         }
     }
-
+ 
     /**
      * Updates the occlusion visibility of objects in the scene to optimize performance.
      * Objects that are far from the camera or completely occluded by other objects will be hidden.
      * Only objects of type THREE.Mesh will be considered for occlusion visibility.
      * 
-     * @param {THREE.Scene} scene - The scene containing all objects to check for occlusion.
      * @param {THREE.Camera} camera - The camera position, from which the raycasting will start.
      * @param {number} cameraDistanceThreshold - The maximum distance at which to check for occlusion.
      *     Objects farther than this threshold will be hidden automatically.
      * @param {THREE.Raycaster} raycaster - The raycaster used for detecting intersections between objects.
      * @param {THREE.Vector3} direction - A reusable vector to specify the direction of the raycasting.
      */
-    updateOcclusionVisibility(scene, camera, cameraDistanceThreshold, raycaster, direction) {
+    updateOcclusionVisibility(camera, cameraDistanceThreshold, raycaster, direction) {
+        const scene = window.scene;
         scene.children.forEach((object) => {
             
             if (object.isMesh) {
                 console.log('object is mesh');
-                object.visible = !this.isObjectFullyOccluded(object, scene, camera, cameraDistanceThreshold, raycaster, direction);
+                object.visible = !this.#isObjectFullyOccluded(object, scene, camera, cameraDistanceThreshold, raycaster, direction);
             }
         });
     }
-
+ 
     /**
-     * This function is used in pair with onResize. Because we need the same code and parameter to remove the event listener.
-     * @param {*} renderer 
-     * @param {*} window 
-     * @param {*} camera 
+     * Attach a light to an object in the scene with a specified color and intensity.
+     * The light is positioned above the object, slightly offset in the y-direction.
+     * 
+     * @param {string} color - The color of the light, specified as a hexadecimal string.
+     * @param {number} intensity - The intensity of the light, typically between 0 and 1.
+     * @param {THREE.Object3D} object - The object to which the light will be attached.
      */
-    resize(renderer, window, camera){
-        console.log('resize');
-        renderer.setSize(window.innerWidth, window.innerHeight - document.getElementById("navbar0").offsetHeight);
-        camera.aspect = window.innerWidth / window.innerHeight;
-        let navbar = document.getElementById('navbar0');
-        navbar = navbar.style.width = window.innerWidth + 'px';
-        camera.updateProjectionMatrix();
+    attachLight(color,intensity ,object){
+        const scene = window.scene;
+        const directionalLight = new THREE.DirectionalLight(color, intensity);
+        directionalLight.position.set(object.position.x, object.position.y + object.scale.y + 2, object.position.z);
+        scene.add(directionalLight);
     }
-    
-    /**
-     * Used with updateOcclusionVisibility to determine if an object is fully occluded.
-     * @param {*} object 
-     * @param {*} scene 
-     * @param {*} camera 
-     * @param {*} cameraDistanceThreshold 
-     * @param {*} raycaster 
-     * @param {*} direction 
-     * @returns 
-     */
-    isObjectFullyOccluded(object, scene, camera, cameraDistanceThreshold, raycaster, direction) {
-        if (camera.position.distanceTo(object.position) > cameraDistanceThreshold) {
-            return true;
-        }
 
-        const boundingBox = new THREE.Box3().setFromObject(object);
-        const pointsToCheck = [
-            boundingBox.getCenter(new THREE.Vector3()),  // Center point
-            boundingBox.min,                             // Minimum corner
-            boundingBox.max,                             // Maximum corner
-        ];
-        
-        for (let point of pointsToCheck) {
-            direction.subVectors(point, camera.position).normalize();
-            raycaster.set(camera.position, direction);
-            const intersects = raycaster.intersectObjects(scene.children, true);
-
-            if (intersects.length > 0 && intersects[0].object === object) {
-                return false;
-            }
-        }
-
-        return true;  // All points are occluded
-    }
+// ---------------------- 3D Model functions ----------------------
 
     /**
      * Loads a 3D model from a specified path and adds it to the scene with a given name and size.
-     * The model is initially set to invisible after loading.
+     * The model is set to invisible after loading.
      * 
-     * @param {THREE.Scene} scene - The scene where the model will be added.
      * @param {string} path - The path to the GLTF model file.
      * @param {string} name - The name to assign to the loaded model.
      * @param {number} size - The scale factor to apply to the model after loading.
@@ -187,7 +138,6 @@ class Framework {
      * The copied model is positioned at the origin (0, 0, 0) and made visible.
      * The name of the copy is generated by appending "_copy" followed by an incrementing index.
      * 
-     * @param {THREE.Scene} scene - The scene containing the original model to copy.
      * @param {string} name - The name of the model to copy.
      * @param {number} [size=1] - The scale factor to apply to the copied model.
      */
@@ -235,16 +185,24 @@ class Framework {
         return copy;
     }
 
-    delete_copy(name){
+    /**
+     * Deletes a copy of a model in the scene with the specified name.
+     * @param {*} name  The name of the model to delete
+     */
+    async delete_copy(name){
         while(this.pendingCopies || this.pendingLoads){
             console.log("waiting for pending copies or loads");
-            SetTimeout(500);
+            await new Promise(r => setTimeout(r, 250));
         }
         let scene = window.scene;
         scene.remove(scene.getObjectByName(name));
         console.log("copy deleted : " + name);
     }
 
+    /**
+     * Deletes all copies of a model in the scene with the specified name with the original model.
+     * @param {*} name  The name of the model to delete
+     */
     async delete_model(name){
         while(this.pendingCopies || this.pendingLoads){
             console.log("waiting for pending copies or loads");
@@ -274,21 +232,6 @@ class Framework {
     }
 
     /**
-     * Attach a light to an object in the scene with a specified color and intensity.
-     * The light is positioned above the object, slightly offset in the y-direction.
-     * 
-     * @param {THREE.Scene} scene - The scene where the light will be added.
-     * @param {string} color - The color of the light, specified as a hexadecimal string.
-     * @param {number} intensity - The intensity of the light, typically between 0 and 1.
-     * @param {THREE.Object3D} object - The object to which the light will be attached.
-     */
-    attachLight(scene, color,intensity ,object){
-        const directionalLight = new THREE.DirectionalLight(color, intensity);
-        directionalLight.position.set(object.position.x, object.position.y + object.scale.y + 2, object.position.z);
-        scene.add(directionalLight);
-    }
-
-    /**
      * Load a texture from a specified path and apply it to a material with optional repeat.
      * The texture is set to repeat in both the S and T directions by default.
      * 
@@ -308,16 +251,23 @@ class Framework {
     /**
      * Create a simple scene with a box geometry and apply textures to its faces.
      * The box is centered at the origin (0, 0, 0) and has dimensions specified by the 'dimensions' object.
+     * To access to the top layer of the table, use the name you initilized the table with and .children[0].
      * 
-     * @param {THREE.Scene} scene - The scene where the box will be added.
      * @param {Array<THREE.Texture>} textures - An array of textures to apply to the box faces.
      * @param {Framework} fw - The Framework object used to access the createScene method.
+     * @param {Object} dimensions - An object containing the width, and depth of the table.
+     * @returns {THREE.Mesh} - The created box mesh object.
      */
-    addScene(scene, textures, fw){
+    addScene(textures, fw, {width, depth}){
         const cs = new createScene();
+        const scene = window.scene;
         let dimensions= {x : 250, y: 250};
         cs.createBox(scene, textures, fw, dimensions);
+        const table = cs.createTable(scene, fw, {width, depth});
+        return table;
     }
+
+// ---------------------- Navbar functions ----------------------
 
     /**
      * Add a button to the navbar with the specified text and onclick function.
@@ -365,12 +315,90 @@ class Framework {
         Banner.style_dropdown_content_parameters();  
     }
 
-    getWindowWidth(){
-        return window.innerWidth;
+    /**
+     * Get the width of the browser window.
+     * @returns {number} - The width of the browser window in pixels.
+     */
+    getWindowWidth(){return window.innerWidth;}
+
+    /**
+     * Get the height of the browser window.
+     * @returns {number} - The height of the browser window in pixels.
+     */
+    getWindowHeight(){return window.innerHeight - document.getElementById("navbar0").offsetHeight;}
+
+// ---------------------- Private functions ----------------------
+
+    /**
+     * Private function to initialize the scene, camera, renderer, and cameraOrbital.
+     * @returns {Object} - Returns an object containing the scene, camera, renderer, and cameraOrbital.
+     */
+    #init(){
+        console.log('init');
+        const scene = new THREE.Scene();
+        window.scene = scene;
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(this.getWindowWidth(), this.getWindowHeight());
+        document.body.appendChild(renderer.domElement);
+
+        camera.position.z = 60;
+        camera.position.y = 50;
+        const cameraOrbital = new OrbitControls(camera, renderer.domElement);
+        cameraOrbital.update();
+
+        return {"scene": scene, "camera": camera, "renderer": renderer, "cameraOrbital": cameraOrbital};
+
     }
 
-    getWindowHeight(){
-        return window.innerHeight - document.getElementById("navbar0").offsetHeight;
+    /**
+     * Private function to resize the renderer and camera when the browser window is resized.
+     * @param {*} renderer the renderer responsible for rendering the scene.
+     * @param {*} window the browser window containing the Three.js canvas.
+     * @param {*} camera the camera used to view the scene, typically a PerspectiveCamera.
+     */
+    #resize(renderer, window, camera){
+        console.log('resize');
+        renderer.setSize(window.innerWidth, window.innerHeight - document.getElementById("navbar0").offsetHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        let navbar = document.getElementById('navbar0');
+        navbar = navbar.style.width = window.innerWidth + 'px';
+        camera.updateProjectionMatrix();
+    }
+
+    /**
+     * Private function to check if an object is fully occluded by other objects in the scene.
+     * @param {*} object  The object to check for occlusion.
+     * @param {*} camera  The camera position, from which the raycasting will start.
+     * @param {*} cameraDistanceThreshold  The maximum distance at which to check for occlusion.
+     * @param {*} raycaster  The raycaster used for detecting intersections between objects.
+     * @param {*} direction  A reusable vector to specify the direction of the raycasting.
+     * @returns 
+     */
+    #isObjectFullyOccluded(object, camera, cameraDistanceThreshold, raycaster, direction) {
+        const scene = window.scene;
+        if (camera.position.distanceTo(object.position) > cameraDistanceThreshold) {
+            return true;
+        }
+
+        const boundingBox = new THREE.Box3().setFromObject(object);
+        const pointsToCheck = [
+            boundingBox.getCenter(new THREE.Vector3()),  // Center point
+            boundingBox.min,                             // Minimum corner
+            boundingBox.max,                             // Maximum corner
+        ];
+        
+        for (let point of pointsToCheck) {
+            direction.subVectors(point, camera.position).normalize();
+            raycaster.set(camera.position, direction);
+            const intersects = raycaster.intersectObjects(scene.children, true);
+
+            if (intersects.length > 0 && intersects[0].object === object) {
+                return false;
+            }
+        }
+
+        return true;  // All points are occluded
     }
 
 }
