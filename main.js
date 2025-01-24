@@ -42,13 +42,13 @@ scene.add(table.getTable());
 fw.attachLight(scene, 'white', 1, table.getTable())
 fw.onResize(renderer, window, camera);
 
-await fw.loadModel("src/models/tree/scene.gltf", "tree", 1);
+// await fw.loadModel("src/models/tree/scene.gltf", "tree", 1);
 
-for (let i = 0; i < 150; i++) {
-    await fw.create_copy("tree", 0.1)
-}
+// for (let i = 0; i < 150; i++) {
+//     await fw.create_copy("tree", 0.1)
+// }
 
-fw.delete_model("tree")
+// fw.delete_model("tree")
 
 
 
