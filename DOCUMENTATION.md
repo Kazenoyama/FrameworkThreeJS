@@ -211,6 +211,24 @@ Adds a dropdown menu to the navbar.
 
 ---
 
+### changeTextOfButton
+```javascript
+changeTextOfButton(buttonNumber, newText)
+```
+
+Change the text content of designated button in the order of left to right on the navigation bar. 1 is the left-most button and +infinity the right-most button.
+
+---
+
+### changeTextOfDropdown
+```javascript
+changeTextOfDropdown(dropdownNumber,dropBoxToChange, newText)
+```
+
+Change the text content of designated dropdown and sub button in the order of left to right on the navigation bar. 1 is the left-most button and +infinity the right-most button. For the sub button, it is between 0 and +infinity with 0 being the name of the dropDown and everything else are the order of up to down in the dropdown
+
+---
+
 ### **getWindowWidth**
 ```javascript
 getWindowWidth()

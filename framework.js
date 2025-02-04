@@ -321,6 +321,43 @@ class Framework {
     }
 
     /**
+     * Change the text which is displayed on the button at the specified index in the navbar.
+     * @param {Integer} buttonNumber The button which text will be changed. Value between 1 and +infinity
+     * @param {String} newText The text which will replace the current text of the button
+     */
+    changeTextOfButton(buttonNumber, newText){
+        var buttonToChange = document.getElementById("navbar0").children[buttonNumber];
+        buttonToChange.textContent = newText;
+    }
+
+    /**
+     * Change the text which is displayed on the dropdown button at the specified index in the navbar.
+     * @param {Integer} dropdownNumber The dropdown which text will be changed. Value between 1 and +infinity
+     * @param {Integer} dropBoxToChange The dropbox which text will be changed. Value between 0 and the number of button in the drop down.
+     * @param {String} newText The text which will replace the current text of the dropdown
+     */
+    changeTextOfDropdown(dropdownNumber,dropBoxToChange, newText){
+        var dropDown = document.getElementById("navbar0").children[dropdownNumber];
+        if(dropDown.children[1].length <= dropBoxToChange){
+            console.log("The button is out of range");
+            return;
+        }
+        else{
+            if(dropBoxToChange == 0) {
+                var dropBox = dropDown.children[dropBoxToChange];
+                dropBox.textContent = newText;
+            }
+            else{
+                var dropBox = dropDown.children[1].children[dropBoxToChange-1];
+                dropBox.textContent = newText;
+            }
+        }
+
+
+        
+    }
+
+    /**
      * Get the width of the browser window.
      * @returns {number} - The width of the browser window in pixels.
      */

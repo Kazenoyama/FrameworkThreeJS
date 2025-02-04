@@ -1,9 +1,14 @@
 ## [v1.1.0]
 ### Added
-- ```create_copy(name, scale, counter, timer)``` :  Add the counter attribut which is an ``Integer``. If not included, by default it will be 0 and each time the function is call for the same model, it will create a copy with incrementing index. If counter is provided at the call, it will use the integer provided to add to the name of the copy and check if it already exist. If not it will add the new copy to the scene, else it will return and do nothing.
+- ``` changeTextOfButton(buttonNumber, newText)``` : Function to change the text content of a button in the navbar
+
+- ``` changeTextOfDropdown(dropdownNumber,dropBoxToChange, newText) ``` : Function to change the text content of a dropdown in the navbar and its children
 
 ### Changed
+- ```create_copy(name, scale, counter, timer)``` :  Add the counter attribut which is an ``Integer``. If not included, by default it will be 0 and each time the function is call for the same model, it will create a copy with incrementing index. If counter is provided at the call, it will use the integer provided to add to the name of the copy and check if it already exist. If not it will add the new copy to the scene, else it will return and do nothing.
+
 - Directory tree included a folder with the framework and a folder where new project are implemented called ``` src ```.
+
 ### Removed
 - Remove `cameraOrbital` of the `mainParameters` of the framework.
 
