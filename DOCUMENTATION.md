@@ -125,13 +125,16 @@ await framework.loadModel('scene.glb', 'MyModel', 1);
 
 ### **create_copy**
 ```javascript
-create_copy(name, size = 1)
+create_copy(name, size = 1, counter = 0, timeToWait = 100)
 ```
-Creates a copy of an existing model in the scene.
+Creates a copy of an existing model in the scene with incrementing name : name_copy0, name_copy1, name_copy2,(...) .
+If counter is provided, it will add the integer given and replace the index by this integer. It will check if the name already exist and if it is, it will do nothing, else it will create the copy with the name associated.
 
 #### Parameters:
 - **name**: `string` - Name of the model to copy.
-- **size**: `number` (default: `1`) - Scale factor for the copy.
+- **size**: `float` (default: `1`) - Scale factor for the copy.
+- **counter**: `integer` (default: `0`) - Integer to add to the name of the copy.
+- **TimeToWait**: `integer` (default: `100`) - Time to wait for the model to be loaded if it is not an async model.
 
 ---
 
