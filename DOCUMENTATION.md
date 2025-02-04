@@ -13,7 +13,7 @@ The `Framework` class initializes a CTA (Call to Action) banner, manages the ren
 constructor()
 ```
 Initializes the Framework class, creating and styling the CTA banner and setting up necessary parameters.
-Parameters are `mainParameter` containing the `scene`, `camera`, `renderer`, `cameraOrbital`
+Parameters are `mainParameter` containing the `scene`, `camera`, `renderer`.
 
 ### Example: 
 ```javascript
@@ -21,7 +21,6 @@ const fw = new Framework()
 const scene = fw.mainParameters["scene"];
 const camera = fw.mainParameters["camera"];
 const renderer = fw.mainParameters["renderer"];
-const camera2 = fw.mainParameters["cameraOrbital"];
 ```
 
 ---

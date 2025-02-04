@@ -330,8 +330,8 @@ class Framework {
 // ---------------------- Private functions ----------------------
 
     /**
-     * Private function to initialize the scene, camera, renderer, and cameraOrbital.
-     * @returns {Object} - Returns an object containing the scene, camera, renderer, and cameraOrbital.
+     * Private function to initialize the scene, camera and renderer.
+     * @returns {Object} - Returns an object containing the scene, camera and renderer.
      */
     #init(){
         console.log('init');
@@ -347,7 +347,7 @@ class Framework {
         const cameraOrbital = new OrbitControls(camera, renderer.domElement);
         cameraOrbital.update();
 
-        return {"scene": scene, "camera": camera, "renderer": renderer, "cameraOrbital": cameraOrbital};
+        return {"scene": scene, "camera": camera, "renderer": renderer};
 
     }
 

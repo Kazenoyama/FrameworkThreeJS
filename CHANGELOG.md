@@ -5,6 +5,7 @@
 - Directory tree included a folder with the framework and a folder where new project are implemented called ``` src ```.
 
 ### Removed
+- Remove `cameraOrbital` of the `mainParameters` of the framework.
 
 ### Deprecated
 
