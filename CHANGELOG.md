@@ -1,7 +1,8 @@
-## [v1.0.1]
+## [v1.1.0]
 ### Added
 
 ### Changed
+- Directory tree included a folder with the framework and a folder where new project are implemented called ``` src ```.
 
 ### Removed
 
