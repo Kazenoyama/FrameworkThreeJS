@@ -23,8 +23,7 @@ fw.changeTextOfButton(1,'hello');
 const raycaster = new THREE.Raycaster();
 const direction = new THREE.Vector3(1, 0, 0);
 
-const textures = ["framework/textures/wood_floor.jpg", "framework/textures/wall.jpg", "framework/textures/roof.jpg"];
-const table = fw.addScene(textures, fw, {width: 50, depth: 50});
+const table = fw.addScene(50, 50);
 
 fw.onResize(renderer, window, camera);
 

@@ -154,12 +154,11 @@ To access to the top layer of the table, use the name you initilized the table w
 
 ### Parameters
 
-*   `textures` **[Array][43]\<THREE.Texture>** An array of textures to apply to the box faces.
-*   `fw` **Framework** The Framework object used to access the createScene method.
-*   `dimensions` **[Object][44]** An object containing the width, and depth of the table.
-
-    *   `dimensions.width` &#x20;
-    *   `dimensions.depth` &#x20;
+*   `width` **[number][41]** The width of the table.
+*   `depth` **[number][41]** The depth of the table.
+*   `floor` **[string][42]** The path to the texture image file for the floor. By default, it is a wood floor. (optional, default `"framework/textures/wood_floor.jpg"`)
+*   `wall` **[string][42]** The path to the texture image file for the walls. By default, it is a brick wall. (optional, default `"framework/textures/wall.jpg"`)
+*   `ceiling` **[string][42]** The path to the texture image file for the ceiling. By default, it is a wood ceiling. (optional, default `"framework/textures/roof.jpg"`)
 
 Returns **THREE.Mesh** The created box mesh object.
 
@@ -170,9 +169,9 @@ Add a button to the navbar with the specified text and onclick function.
 ### Parameters
 
 *   `textButton` **[string][42]** The text to display on the button. (optional, default `"click me"`)
-*   `onclickFunction` **[Function][45]** The function to execute when the button is clicked. (optional, default `()=>alert("click")`)
+*   `onclickFunction` **[Function][43]** The function to execute when the button is clicked. (optional, default `()=>alert("click")`)
 *   `hover` **[boolean][40]** A boolean to enable or disable hover effects on the button. Defaults to true. (optional, default `true`)
-*   `classesOfTheButton` **[Array][43]<[string][42]>** An array of classes to apply to the button element. (optional, default `["a"]`)
+*   `classesOfTheButton` **[Array][44]<[string][42]>** An array of classes to apply to the button element. (optional, default `["a"]`)
 
 ## addDropdownToNavbar
 
@@ -182,7 +181,7 @@ Each dropdown item is an object with a 'text' property and an 'onClick' function
 ### Parameters
 
 *   `textButton` **[string][42]** The text to display on the dropdown button. (optional, default `"DropDown"`)
-*   `dropdownList` **[Array][43]<{text: [string][42], onClick: [Function][45]}>** An array of dropdown items. (optional, default `[{text:"Parameters",onClick:()=>alert("Hello!")}]`)
+*   `dropdownList` **[Array][44]<{text: [string][42], onClick: [Function][43]}>** An array of dropdown items. (optional, default `[{text:"Parameters",onClick:()=>alert("Hello!")}]`)
 
 ## changeTextOfButton
 
@@ -219,7 +218,7 @@ Returns **[number][41]** The height of the browser window in pixels.
 
 Private function to initialize the scene, camera and renderer.
 
-Returns **[Object][44]** Returns an object containing the scene, camera and renderer.
+Returns **[Object][45]** Returns an object containing the scene, camera and renderer.
 
 ## resize
 
@@ -339,8 +338,8 @@ Returns **THREE.Group** The table
 
 [42]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[43]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[43]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
-[44]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[44]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[45]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[45]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object

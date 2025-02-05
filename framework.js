@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import createScene from './createScene';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import CTABanner from './CTABanner';
+import { ceil } from 'three/tsl';
 
 class Framework {
     CTABannerParameter;         // Contains the following keys: Banner, navbar, container
@@ -320,17 +321,20 @@ class Framework {
      * The box is centered at the origin (0, 0, 0) and has dimensions specified by the 'dimensions' object.
      * To access to the top layer of the table, use the name you initilized the table with and .children[0].
      * 
-     * @param {Array<THREE.Texture>} textures - An array of textures to apply to the box faces.
-     * @param {Framework} fw - The Framework object used to access the createScene method.
-     * @param {Object} dimensions - An object containing the width, and depth of the table.
+     * @param {number} width - The width of the table.
+     * @param {number} depth - The depth of the table.
+     * @param {string} floor - The path to the texture image file for the floor. By default, it is a wood floor.
+     * @param {string} wall - The path to the texture image file for the walls. By default, it is a brick wall.
+     * @param {string} ceiling - The path to the texture image file for the ceiling. By default, it is a wood ceiling.
      * @returns {THREE.Mesh} - The created box mesh object.
      */
-    addScene(textures, fw, {width, depth}){
+    addScene(width, depth, floor = "framework/textures/wood_floor.jpg",wall = "framework/textures/wall.jpg", ceiling = "framework/textures/roof.jpg"){
         const cs = new createScene();
         const scene = window.scene;
         let dimensions= {x : 250, y: 250};
-        cs.createBox(scene, textures, fw, dimensions);
-        const table = cs.createTable(scene, fw, {width, depth});
+        var textures = [floor, wall, ceiling];
+        cs.createBox(scene, textures, this, dimensions);
+        const table = cs.createTable(scene, this, {width, depth});
         return table;
     }
 

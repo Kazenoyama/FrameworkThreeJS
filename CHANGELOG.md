@@ -15,6 +15,8 @@
 
 - Directory tree included a folder with the framework and a folder where new project are implemented called ``` src ```.
 
+- ```addScene(width, depth, floor = "framework/textures/wood_floor.jpg",wall = "framework/textures/wall.jpg", ceiling = "framework/textures/roof.jpg")``` : Remove the list of textures to a more forced way of doing it. Now you need to give three textures separatly and if you want you can use the textures from the frameworks if you don't specifies new textures.
+
 ### Removed
 - Remove `cameraOrbital` of the `mainParameters` of the framework.
 
