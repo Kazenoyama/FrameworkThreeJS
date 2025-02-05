@@ -4,6 +4,12 @@
 
 - ``` changeTextOfDropdown(dropdownNumber,dropBoxToChange, newText) ``` : Function to change the text content of a dropdown in the navbar and its children
 
+- ```npm run updateDoc``` : Call in the terminal to update the `DOCUMENTATION.md` file with last change in the framework.js
+
+- ```startLoadingScreen``` : Function to call the loading screen of the framework.
+
+- ```removeLoadingScreen``` : Function to remove the loading screen from the page.
+
 ### Changed
 - ```create_copy(name, scale, counter, timer)``` :  Add the counter attribut which is an ``Integer``. If not included, by default it will be 0 and each time the function is call for the same model, it will create a copy with incrementing index. If counter is provided at the call, it will use the integer provided to add to the name of the copy and check if it already exist. If not it will add the new copy to the scene, else it will return and do nothing.
 

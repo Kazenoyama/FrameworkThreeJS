@@ -87,6 +87,68 @@ class Framework {
         scene.add(directionalLight);
     }
 
+    /**
+     * Begin the loading screen when we want to wait for model to be loaded.
+     */
+    startLoadingScreen(){
+        const loadingScreen = document.createElement('div');
+        loadingScreen.id = 'loading-screen';
+        loadingScreen.style.position = 'fixed';
+        loadingScreen.style.top = '0';
+        loadingScreen.style.left = '0';
+        loadingScreen.style.width = '100%';
+        loadingScreen.style.height = '100%';
+        loadingScreen.style.backgroundColor = '#000';
+        loadingScreen.style.color = '#fff';
+        loadingScreen.style.display = 'flex';
+        loadingScreen.style.justifyContent = 'center';
+        loadingScreen.style.alignItems = 'center';
+        loadingScreen.style.zIndex = '1000';
+        loadingScreen.image = document.createElement('img');
+        loadingScreen.image.src = 'https://terra-numerica.org/files/2020/10/cropped-favicon-rond.png';
+        loadingScreen.image.style.width = '100px';
+        loadingScreen.appendChild(loadingScreen.image);
+        loadingScreen.innerHTML += '<h1><pre>  Loading</pre></h1>';
+
+        var pos = 115;
+        for(let i = 0; i < 4; i++){
+            const loadingDot = document.createElement('div');
+            loadingDot.style.width = '10px';
+            loadingDot.style.height = '10px';
+            loadingDot.style.backgroundColor = '#fff';
+            loadingDot.style.borderRadius = '50%';
+            loadingDot.style.position = 'absolute';
+            loadingDot.style.left = window.innerWidth / 2 + pos + 20 * i + 'px';
+            loadingDot.style.top = window.innerHeight / 2 - 4 + 'px';
+            loadingDot.style.animation = 'bounce 2s infinite';
+            loadingDot.style.animationDelay = 0.15 * i + 's';
+            loadingScreen.appendChild(loadingDot);
+        }
+
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+            }
+        `;
+        document.head.appendChild(style);
+
+        document.body.appendChild(loadingScreen);
+    }
+
+    /**
+     * Remove the loading screen.
+     */
+    removeLoadingScreen(){
+        const loadingScreen = document.getElementById('loading-screen');
+        loadingScreen.remove();
+    }
+
 // ---------------------- 3D Model functions ----------------------
 
     /**
