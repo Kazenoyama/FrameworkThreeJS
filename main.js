@@ -13,12 +13,14 @@ function printaMessage(){
 fw.startLoadingScreen();
 fw.removeLoadingScreen();
 
-fw.addButtonToNavbar("Button 1", printaMessage);
-fw.addButtonToNavbar("Button 2", printaMessage);
-fw.addDropdownToNavbar("DropDown 1",[{ text: "Button DropDown 1", onClick: printaMessage },{ text: "Button DropDown 2", onClick: () => alert("Hello!") }])
-fw.addDropdownToNavbar("DropDown 2",[{ text: "Button DropDown 3", onClick: printaMessage},{ text: "Button DropDown 4", onClick: () => alert("Hello World!") }])
+var button1 = fw.addButtonToNavbar("Button 1", printaMessage);
+var button2 = fw.addButtonToNavbar("Button 2", printaMessage);
+var button3 = fw.addDropdownToNavbar("DropDown 1",[{ text: "Button DropDown 1", onClick: printaMessage },{ text: "Button DropDown 2", onClick: () => alert("Hello!") }])
+var button4 = fw.addDropdownToNavbar("DropDown 2",[{ text: "Button DropDown 3", onClick: printaMessage},{ text: "Button DropDown 4", onClick: () => alert("Hello World!") }])
 
-fw.changeTextOfButton(1,'hello');
+// button1.textContent = "Button 1 is changed";
+// button3.children[0].textContent = "DropDown 1 is changed";
+// button3.children[1].children[0].textContent = "Sub section 1 is changed";
 
 const raycaster = new THREE.Raycaster();
 const direction = new THREE.Vector3(1, 0, 0);

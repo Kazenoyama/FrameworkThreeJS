@@ -83,9 +83,13 @@ The light is positioned above the object, slightly offset in the y-direction.
 *   `intensity` **[number][41]** The intensity of the light, typically between 0 and 1.
 *   `object` **THREE.Object3D** The object to which the light will be attached.
 
+Returns **THREE.DirectionalLight** The created light object.
+
 ## startLoadingScreen
 
 Begin the loading screen when we want to wait for model to be loaded.
+
+Returns **[HTMLElement][43]** The created loading screen element.
 
 ## removeLoadingScreen
 
@@ -94,7 +98,7 @@ Remove the loading screen.
 ## loadModel
 
 Loads a 3D model from a specified path and adds it to the scene with a given name and size.
-The model is set to invisible after loading.
+The model is set to invisible after loading. To get back the model, use .then() to give the model to a variable you have already defined.
 
 ### Parameters
 
@@ -102,6 +106,8 @@ The model is set to invisible after loading.
 *   `name` **[string][42]** The name to assign to the loaded model.
 *   `size` **[number][41]** The scale factor to apply to the model after loading.
 *   `timeToWait` **[number][41]** The delay (in milliseconds) to wait after loading the model. (optional, default `500`)
+
+Returns **THREE.Object3D** The loaded model object.
 
 ## create\_copy
 
@@ -124,7 +130,9 @@ Deletes a copy of a model in the scene with the specified name.
 
 ### Parameters
 
-*   `name` **any** The name of the model to delete
+*   `name` **[String][42]** The name of the model to delete
+
+Returns **[Boolean][40]** Returns true if the copy was deleted, false otherwise.
 
 ## delete\_model
 
@@ -133,6 +141,8 @@ Deletes all copies of a model in the scene with the specified name with the orig
 ### Parameters
 
 *   `name` **any** The name of the model to delete
+
+Returns **[Boolean][40]** Returns true if the copies were deleted, false otherwise.
 
 ## loadTexture
 
@@ -169,9 +179,11 @@ Add a button to the navbar with the specified text and onclick function.
 ### Parameters
 
 *   `textButton` **[string][42]** The text to display on the button. (optional, default `"click me"`)
-*   `onclickFunction` **[Function][43]** The function to execute when the button is clicked. (optional, default `()=>alert("click")`)
+*   `onclickFunction` **[Function][44]** The function to execute when the button is clicked. (optional, default `()=>alert("click")`)
 *   `hover` **[boolean][40]** A boolean to enable or disable hover effects on the button. Defaults to true. (optional, default `true`)
-*   `classesOfTheButton` **[Array][44]<[string][42]>** An array of classes to apply to the button element. (optional, default `["a"]`)
+*   `classesOfTheButton` **[Array][45]<[string][42]>** An array of classes to apply to the button element. (optional, default `["a"]`)
+
+Returns **[HTMLElement][43]** The created button element.
 
 ## addDropdownToNavbar
 
@@ -181,7 +193,9 @@ Each dropdown item is an object with a 'text' property and an 'onClick' function
 ### Parameters
 
 *   `textButton` **[string][42]** The text to display on the dropdown button. (optional, default `"DropDown"`)
-*   `dropdownList` **[Array][44]<{text: [string][42], onClick: [Function][43]}>** An array of dropdown items. (optional, default `[{text:"Parameters",onClick:()=>alert("Hello!")}]`)
+*   `dropdownList` **[Array][45]<{text: [string][42], onClick: [Function][44]}>** An array of dropdown items. (optional, default `[{text:"Parameters",onClick:()=>alert("Hello!")}]`)
+
+Returns **[HTMLElement][43]** The created dropdown button element.
 
 ## changeTextOfButton
 
@@ -218,7 +232,7 @@ Returns **[number][41]** The height of the browser window in pixels.
 
 Private function to initialize the scene, camera and renderer.
 
-Returns **[Object][45]** Returns an object containing the scene, camera and renderer.
+Returns **[Object][46]** Returns an object containing the scene, camera and renderer.
 
 ## resize
 
@@ -241,6 +255,8 @@ Private function to check if an object is fully occluded by other objects in the
 *   `cameraDistanceThreshold` **any** The maximum distance at which to check for occlusion.
 *   `raycaster` **any** The raycaster used for detecting intersections between objects.
 *   `direction` **any** A reusable vector to specify the direction of the raycasting.
+
+Returns **[boolean][40]** Returns true if the object is fully occluded, false otherwise.
 
 ## createTable
 
@@ -338,8 +354,10 @@ Returns **THREE.Group** The table
 
 [42]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[43]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[43]: https://developer.mozilla.org/docs/Web/HTML/Element
 
-[44]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[44]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
-[45]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[45]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+
+[46]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object

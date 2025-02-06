@@ -80,16 +80,19 @@ class Framework {
      * @param {string} color - The color of the light, specified as a hexadecimal string.
      * @param {number} intensity - The intensity of the light, typically between 0 and 1.
      * @param {THREE.Object3D} object - The object to which the light will be attached.
+     * @returns {THREE.DirectionalLight} - The created light object.
      */
     attachLight(color,intensity ,object){
         const scene = window.scene;
         const directionalLight = new THREE.DirectionalLight(color, intensity);
         directionalLight.position.set(object.position.x, object.position.y + object.scale.y + 2, object.position.z);
         scene.add(directionalLight);
+        return directionalLight;
     }
 
     /**
      * Begin the loading screen when we want to wait for model to be loaded.
+     * @returns {HTMLElement} - The created loading screen element.
      */
     startLoadingScreen(){
         const loadingScreen = document.createElement('div');
@@ -140,6 +143,8 @@ class Framework {
         document.head.appendChild(style);
 
         document.body.appendChild(loadingScreen);
+
+        return loadingScreen;
     }
 
     /**
@@ -154,47 +159,51 @@ class Framework {
 
     /**
      * Loads a 3D model from a specified path and adds it to the scene with a given name and size.
-     * The model is set to invisible after loading.
+     * The model is set to invisible after loading. To get back the model, use .then() to give the model to a variable you have already defined.
      * 
      * @param {string} path - The path to the GLTF model file.
      * @param {string} name - The name to assign to the loaded model.
      * @param {number} size - The scale factor to apply to the model after loading.
      * @param {number} [timeToWait=500] - The delay (in milliseconds) to wait after loading the model.
+     * @returns {THREE.Object3D} - The loaded model object.
      */
-    async loadModel(path, name, size, timeToWait=500) {
+    async loadModel(path, name, size, timeToWait = 500) {
         const loader = new GLTFLoader();
         let scene = window.scene;
         this.pendingLoads = true;
         this.numberPendingLoads++;
-        let model3D;
-
-        loader.load(path, function(gltf){
-            gltf.scene.scale.set(size, size, size);
-            gltf.scene.name = name;
-            model3D = gltf.scene;
-            scene.add(model3D);
-            scene.getObjectByName(name).position.set(0, 0, 0);
-            scene.getObjectByName(name).visible = false;
-            console.log("model uploaded : " + name);
-        })
+    
+        let model3D = await new Promise((resolve, reject) => {
+            loader.load(path, (gltf) => {
+                gltf.scene.scale.set(size, size, size);
+                gltf.scene.name = name;
+                scene.add(gltf.scene);
+                gltf.scene.position.set(0, 0, 0);
+                gltf.scene.visible = false;
+                console.log("Model uploaded: " + name);
+                resolve(gltf.scene);
+            }, undefined, reject);
+        });
 
         let added = false;
-        while(!added){
-            // console.log("waiting for model to be added, pending load : " + this.numberPendingLoads);
-            for(let j = 0; j < scene.children.length; j++){
-                if(scene.children[j].name === name){
+        while (!added) {
+            for (let j = 0; j < scene.children.length; j++) {
+                if (scene.children[j].name === name) {
                     added = true;
-                    this.numberPendingLoads--;    
+                    this.numberPendingLoads--;
                     break;
                 }
             }
-            if(!added) {await new Promise(r => setTimeout(r, 250));}
+            if (!added) await new Promise((r) => setTimeout(r, 250));
         }
-
+    
         if (this.numberPendingLoads === 0) {
             this.pendingLoads = false;
         }
+    
+        return model3D;
     }
+    
 
     /**
      * Creates a copy of an existing model in the scene, using the specified name and size.
@@ -255,7 +264,8 @@ class Framework {
 
     /**
      * Deletes a copy of a model in the scene with the specified name.
-     * @param {*} name  The name of the model to delete
+     * @param {String} name  The name of the model to delete
+     * @returns {Boolean} - Returns true if the copy was deleted, false otherwise.
      */
     async delete_copy(name){
         while(this.pendingCopies || this.pendingLoads){
@@ -265,11 +275,13 @@ class Framework {
         let scene = window.scene;
         scene.remove(scene.getObjectByName(name));
         console.log("copy deleted : " + name);
+        return scene.getObjectByName(name) === undefined
     }
 
     /**
      * Deletes all copies of a model in the scene with the specified name with the original model.
      * @param {*} name  The name of the model to delete
+     * @returns {Boolean} - Returns true if the copies were deleted, false otherwise.
      */
     async delete_model(name){
         while(this.pendingCopies || this.pendingLoads){
@@ -297,6 +309,8 @@ class Framework {
                 alldeleted = true;
             }
         }
+        console.log("model deleted : " + name);
+        return scene.getObjectByName(name) === undefined
     }
 
     /**
@@ -347,6 +361,7 @@ class Framework {
      * @param {Function} onclickFunction - The function to execute when the button is clicked.
      * @param {boolean} [hover=true] - A boolean to enable or disable hover effects on the button. Defaults to true.
      * @param {Array<string>} [classesOfTheButton=["a"]] - An array of classes to apply to the button element.
+     * @returns {HTMLElement} - The created button element.
      */
     addButtonToNavbar(textButton = "click me", onclickFunction = () => alert("click"),hover = true, classesOfTheButton = ["a"]){
         const Banner = this.CTABannerParameter.Banner;
@@ -359,6 +374,8 @@ class Framework {
         }
         
         Banner.style_navbar_children(navbar);
+        var buttonToChange = document.getElementById("navbar0").children[document.getElementById("navbar0").children.length - 1];
+        return buttonToChange;
     }
 
     /**
@@ -367,6 +384,7 @@ class Framework {
      * 
      * @param {string} textButton - The text to display on the dropdown button.
      * @param {Array<{text: string, onClick: Function}>} dropdownList - An array of dropdown items.
+     * @returns {HTMLElement} - The created dropdown button element.
      */
     addDropdownToNavbar(textButton = "DropDown", dropdownList = [{ text: "Parameters", onClick: () => alert("Hello!") }]){
         const Banner = this.CTABannerParameter.Banner;
@@ -384,6 +402,9 @@ class Framework {
         Banner.style_dropdown_content();
         Banner.style_dropdown_content_a();
         Banner.style_dropdown_content_parameters();  
+
+        var buttonToChange = document.getElementById("navbar0").children[document.getElementById("navbar0").children.length - 1];
+        return buttonToChange;
     }
 
     /**
@@ -481,7 +502,7 @@ class Framework {
      * @param {*} cameraDistanceThreshold  The maximum distance at which to check for occlusion.
      * @param {*} raycaster  The raycaster used for detecting intersections between objects.
      * @param {*} direction  A reusable vector to specify the direction of the raycasting.
-     * @returns 
+     * @returns {boolean} - Returns true if the object is fully occluded, false otherwise.
      */
     #isObjectFullyOccluded(object, camera, cameraDistanceThreshold, raycaster, direction) {
         const scene = window.scene;
