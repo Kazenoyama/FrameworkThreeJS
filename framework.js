@@ -490,6 +490,7 @@ class Framework {
         console.log('resize');
         renderer.setSize(window.innerWidth, window.innerHeight - document.getElementById("navbar0").offsetHeight);
         camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
         let navbar = document.getElementById('navbar0');
         navbar = navbar.style.width = window.innerWidth + 'px';
         camera.updateProjectionMatrix();

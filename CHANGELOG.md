@@ -23,6 +23,7 @@
 ### Deprecated
 
 ### Fixed
+- When the window resize and we use the function `onResize`, we have the correct aspect of object.
 
 # --------------------------------------------------------------------
 
