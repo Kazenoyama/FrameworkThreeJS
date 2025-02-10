@@ -335,21 +335,41 @@ class Framework {
      * The box is centered at the origin (0, 0, 0) and has dimensions specified by the 'dimensions' object.
      * To access to the top layer of the table, use the name you initilized the table with and .children[0].
      * 
-     * @param {number} width - The width of the table.
-     * @param {number} depth - The depth of the table.
+     * @param {Integer} width - The width of the table.
+     * @param {Integer} depth - The depth of the table.
+     * @param {Integer} YoffSet - The Y offset of the table.
+     * @param {Integer} widthSpace - The width of the space between the table and the wall.
+     * @param {Integer} heightSpace - The height of the space between the table and the ceiling.
      * @param {string} floor - The path to the texture image file for the floor. By default, it is a wood floor.
      * @param {string} wall - The path to the texture image file for the walls. By default, it is a brick wall.
      * @param {string} ceiling - The path to the texture image file for the ceiling. By default, it is a wood ceiling.
      * @returns {THREE.Mesh} - The created box mesh object.
      */
-    addScene(width, depth, floor = "framework/textures/wood_floor.jpg",wall = "framework/textures/wall.jpg", ceiling = "framework/textures/roof.jpg"){
+    addSimpleSceneWithTable(width, depth, YoffSet = -10,widthSpace = 250 , heightSpace = 250 ,  floor = "framework/textures/wood_floor.jpg",wall = "framework/textures/wall.jpg", ceiling = "framework/textures/roof.jpg"){
         const cs = new createScene();
         const scene = window.scene;
-        let dimensions= {x : 250, y: 250};
+        let dimensions= {x : widthSpace, y: heightSpace};
         var textures = [floor, wall, ceiling];
-        cs.createBox(scene, textures, this, dimensions);
+        cs.createBox(scene, textures, this, dimensions, YoffSet);
         const table = cs.createTable(scene, this, {width, depth});
         return table;
+    }
+
+    /**
+     * Add a scene with a box geometry and apply textures to its faces. The floor is at YoffSet beginning at (0,0,0).
+     * @param {Integer} width - The width of the box. 
+     * @param {Integer} height - The height of the box.
+     * @param {Integer} YoffSet - The Y offset of the box.
+     * @param {String} floor - The path to the texture image file for the floor. By default, it is a wood floor. 
+     * @param {String} wall - The path to the texture image file for the walls. By default, it is a brick wall.
+     * @param {String} ceiling - The path to the texture image file for the ceiling. By default, it is a wood ceiling. 
+     */
+    addSimpleSceneWithoutTable(width = 300, height = 250, YoffSet = -10, floor = "framework/textures/wood_floor.jpg",wall = "framework/textures/wall.jpg", ceiling = "framework/textures/roof.jpg"){
+        const cs = new createScene();
+        const scene = window.scene;
+        let dimensions= {x : width, y: height};
+        var textures = [floor, wall, ceiling];
+        cs.createBox(scene, textures, this, dimensions, YoffSet);
     }
 
 // ---------------------- Navbar functions ----------------------

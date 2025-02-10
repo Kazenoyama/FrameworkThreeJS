@@ -17,6 +17,8 @@
 
 - ```addScene(width, depth, floor = "framework/textures/wood_floor.jpg",wall = "framework/textures/wall.jpg", ceiling = "framework/textures/roof.jpg")``` : Remove the list of textures to a more forced way of doing it. Now you need to give three textures separatly and if you want you can use the textures from the frameworks if you don't specifies new textures.
 
+- `addScene()` -- > `addSimpleSceneWithTable(width, depth, YoffSet = -10,widthSpace = 250 , heightSpace = 250 ,  floor = "path",wall = "path", ceiling = "path")` and `addSimpleSceneWithoutTable(width = 300, height = 250, YoffSet = -10, floor = "path",wall = "path", ceiling = "path")` : Divide the the addScene into two seperate function. One with a table and one whitout it. Add the Yoffset to the function to be able to move the room created vertically.
+
 ### Removed
 - Remove `cameraOrbital` of the `mainParameters` of the framework.
 

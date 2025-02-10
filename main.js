@@ -25,8 +25,8 @@ var button4 = fw.addDropdownToNavbar("DropDown 2",[{ text: "Button DropDown 3", 
 const raycaster = new THREE.Raycaster();
 const direction = new THREE.Vector3(1, 0, 0);
 
-const table = fw.addScene(50, 50);
-
+// const table = fw.addSimpleSceneWithTable(50, 50);
+fw.addSimpleSceneWithoutTable();
 fw.onResize(renderer, window, camera);
 
 function animate() {
