@@ -13,7 +13,7 @@
     "delete": "rmdir /s /q src && rmdir /s /q node_modules && rmdir /s /q framework && del package-lock.json",
     "updateDoc": "documentation build framework.js -f md -o DOCUMENTATION.md",
     "moveDocumentation" : "move DOCUMENTATION.md framework\\DOCUMENTATION.md && move .gitignore framework\\.gitignore && move CHANGELOG.md framework\\CHANGELOG.md && move README.md framework\\README.md && move tab.txt framework\\tab.txt && move package.json framework\\package.json",
-    "deploy" : "npm run setupDirectory && npm run addStyle && npm run move && "
+    "deploy" : "npm run setupDirectory && npm run addStyle && npm run move && npm run moveDocumentation "
   },
   "keywords": [
     "three.js",
