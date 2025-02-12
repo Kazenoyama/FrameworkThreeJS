@@ -3,8 +3,10 @@ import Framework from '../../framework/js/framework.js';
 
 const fw = new Framework();
 const scene = fw.mainParameters.scene;
-const camera = fw.mainParameters.camera;
+// const camera = fw.mainParameters.camera;
 const renderer = fw.mainParameters.renderer;
+await fw.addSceneFromJson("src/models/test.json");
+const camera = fw.mainParameters.camera;
 
 function printaMessage(){
     console.log("Hello World");
@@ -26,7 +28,8 @@ const raycaster = new THREE.Raycaster();
 const direction = new THREE.Vector3(1, 0, 0);
 
 // const table = fw.addSimpleSceneWithTable(50, 50);
-fw.addSimpleSceneWithoutTable();
+// fw.addSimpleSceneWithoutTable();
+
 fw.onResize(renderer, window, camera);
 
 function animate() {

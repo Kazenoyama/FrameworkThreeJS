@@ -3,7 +3,6 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import createScene from './createScene';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import CTABanner from './CTABanner';
-import { ceil } from 'three/tsl';
 
 class Framework {
     CTABannerParameter;         // Contains the following keys: Banner, navbar, container
@@ -370,6 +369,33 @@ class Framework {
         let dimensions= {x : width, y: height};
         var textures = [floor, wall, ceiling];
         cs.createBox(scene, textures, this, dimensions, YoffSet);
+    }
+
+    /**Function to add a scene from an existing json file
+     * @param {String} path - The path to the json file
+     */
+    async addSceneFromJson(path){
+        const loader = new THREE.ObjectLoader();
+        const scene = window.scene;
+        var camera;
+        await new Promise((resolve, reject) => {
+            loader.load(path, function (obj) {
+            scene.add(obj);
+            console.log("Scene was added from json file");
+            if(obj.getObjectByProperty("type", "PerspectiveCamera") != undefined){
+                camera = obj.getObjectByProperty("type", "PerspectiveCamera");
+            }
+            else if(obj.getObjectByProperty("type", "OrthographicCamera") != undefined){
+                camera = obj.getObjectByProperty("type", "OrthographicCamera");
+            }
+            resolve();
+            }, undefined, reject);
+        });
+        if(camera != undefined){
+        this.mainParameters.camera = camera;}
+        // this.mainParameters.scene = loadedScene.getObjectByName("scene");
+
+
     }
 
 // ---------------------- Navbar functions ----------------------
