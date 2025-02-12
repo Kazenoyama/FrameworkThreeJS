@@ -398,6 +398,8 @@ class Framework {
 
     }
 
+    /**Function to check if we intersect */
+
 // ---------------------- Navbar functions ----------------------
 
     /**
