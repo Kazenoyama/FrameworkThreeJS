@@ -1,3 +1,25 @@
+## [v1.2.0]
+### Added
+- Add default parameters to every compatible function.
+- `loadModel(...)` registered the size of the object to give it to it's copy if not specified.
+
+### Changed
+- `onResize({renderer, window, camera, enabled} = {})` : `renderer`, `window` and `camera` have been made optional.
+- `attachLight(object, {color , intensity, name} = {})` : `color`, `intensity` and `name` have been made optional.
+- `async loadModel(path, name, {size, timeToWait, visible} = {})` : `size`, `timeToWait` and `visible` have been made optional.
+- `loadTexture(path, {repeatHorizontal, repeatVertical, repeat} = {})` : `repeatHorizontal`, `repeatVertical` and `repeat` have been made optional.
+- `addSimpleSceneWithTable({width, depth, YoffSet, widthSpace, heightSpace, floor, wall, ceiling} = {})` : every parameters have been made optional.
+- `addSimpleSceneWithoutTable({width, height, YoffSet, floor, wall, ceiling} = {})` : every parameters have been made optional.
+
+### Removed
+- For method like `loadModel`, `create_copy`, `delete_model`, the restriction of putting `await` before the call is removed
+
+### Deprecated
+
+### Fixed
+
+# --------------------------------------------------------------------
+
 ## [v1.1.0]
 ### Added
 - ``` changeTextOfButton(buttonNumber, newText)``` : Function to change the text content of a button in the navbar

@@ -29,23 +29,21 @@
     *   [Parameters][25]
 *   [addButtonToNavbar][26]
     *   [Parameters][27]
-*   [addButtonToNavbar][28]
+*   [addDropdownToNavbar][28]
     *   [Parameters][29]
-*   [addDropdownToNavbar][30]
+*   [changeTextOfButton][30]
     *   [Parameters][31]
-*   [changeTextOfButton][32]
+*   [changeTextOfDropdown][32]
     *   [Parameters][33]
-*   [changeTextOfDropdown][34]
-    *   [Parameters][35]
-*   [getWindowWidth][36]
-*   [getWindowHeight][37]
-*   [init][38]
-*   [resize][39]
+*   [getWindowWidth][34]
+*   [getWindowHeight][35]
+*   [init][36]
+*   [resize][37]
+    *   [Parameters][38]
+*   [isObjectFullyOccluded][39]
     *   [Parameters][40]
-*   [isObjectFullyOccluded][41]
+*   [createTable][41]
     *   [Parameters][42]
-*   [createTable][43]
-    *   [Parameters][44]
 
 ## constructor
 
@@ -54,15 +52,21 @@ To get the scene, camera, and renderer, use the mainParameters attribute.
 
 ## onResize
 
-Enables automatic resizing of the Three.js renderer and camera when the browser window is resized.
-By default, when calling this function, it enabled the automatic resizing of the window.
+Function to enable or disable the resizing and centered of the application.
+It helps to keep all object at there place and with the right size when the window is resized.
 
 ### Parameters
 
+*   `$0` **[Object][43]**  (optional, default `{}`)
+
+    *   `$0.renderer` &#x20;
+    *   `$0.window` &#x20;
+    *   `$0.camera` &#x20;
+    *   `$0.enabled` &#x20;
 *   `renderer` **THREE.WebGLRenderer** The renderer responsible for rendering the scene.
-*   `window` **[Window][45]** The browser window containing the Three.js canvas.
+*   `window` **[Window][44]** The browser window containing the Three.js canvas.
 *   `camera` **THREE.PerspectiveCamera** The camera used to view the scene, typically a PerspectiveCamera.
-*   `enabled` **[boolean][46]** A boolean to enable or disable automatic resizing. Defaults to true. (optional, default `true`)
+*   `enabled` **[boolean][45]** A boolean to enable or disable the resizing. Defaults to true.
 
 ## updateOcclusionVisibility
 
@@ -73,21 +77,26 @@ Only objects of type THREE.Mesh will be considered for occlusion visibility.
 ### Parameters
 
 *   `camera` **THREE.Camera** The camera position, from which the raycasting will start.
-*   `cameraDistanceThreshold` **[number][47]** The maximum distance at which to check for occlusion.
+*   `cameraDistanceThreshold` **[number][46]** The maximum distance at which to check for occlusion.
     Objects farther than this threshold will be hidden automatically.
 *   `raycaster` **THREE.Raycaster** The raycaster used for detecting intersections between objects.
 *   `direction` **THREE.Vector3** A reusable vector to specify the direction of the raycasting.
 
 ## attachLight
 
-Attach a light to an object in the scene with a specified color and intensity.
+Attach a light to an object in the scene with the specified color and intensity.
 The light is positioned above the object, slightly offset in the y-direction.
 
 ### Parameters
 
-*   `color` **[string][48]** The color of the light, specified as a hexadecimal string.
-*   `intensity` **[number][47]** The intensity of the light, typically between 0 and 1.
 *   `object` **THREE.Object3D** The object to which the light will be attached.
+*   `$1` **[Object][43]**  (optional, default `{}`)
+
+    *   `$1.color` &#x20;
+    *   `$1.intensity` &#x20;
+    *   `$1.name` &#x20;
+*   `color` **[string][47]** The color of the light, specified as a hexadecimal string.
+*   `intensity` **[number][46]** The intensity of the light, typically between 0 and 1.
 
 Returns **THREE.DirectionalLight** The created light object.
 
@@ -95,7 +104,7 @@ Returns **THREE.DirectionalLight** The created light object.
 
 Begin the loading screen when we want to wait for model to be loaded.
 
-Returns **[HTMLElement][49]** The created loading screen element.
+Returns **[HTMLElement][48]** The created loading screen element.
 
 ## removeLoadingScreen
 
@@ -108,10 +117,15 @@ The model is set to invisible after loading. To get back the model, use .then() 
 
 ### Parameters
 
-*   `path` **[string][48]** The path to the GLTF model file.
-*   `name` **[string][48]** The name to assign to the loaded model.
-*   `size` **[number][47]** The scale factor to apply to the model after loading.
-*   `timeToWait` **[number][47]** The delay (in milliseconds) to wait after loading the model. (optional, default `500`)
+*   `path` **[string][47]** The path to the GLTF model file.
+*   `name` **[string][47]** The name to assign to the loaded model.
+*   `$2` **[Object][43]**  (optional, default `{}`)
+
+    *   `$2.size` &#x20;
+    *   `$2.timeToWait` &#x20;
+    *   `$2.visible` &#x20;
+*   `size` **[number][46]** The scale factor to apply to the model after loading.
+*   `timeToWait` **[number][46]** The delay (in milliseconds) to wait after loading the model.
 
 Returns **THREE.Object3D** The loaded model object.
 
@@ -123,10 +137,16 @@ The name of the copy is generated by appending "\_copy" followed by an increment
 
 ### Parameters
 
-*   `name` **[string][48]** The name of the model to copy.
-*   `size` **[number][47]** The scale factor to apply to the copied model. (optional, default `1`)
-*   `counter` **[number][47]** It can add a number to append to the copied model name. If nothing is given, it will resume its own naming. (optional, default `0`)
-*   `timeToWait` **[number][47]** The delay (in milliseconds) to wait after creating the copy. (optional, default `100`)
+*   `name` **[string][47]** The name of the model to copy.
+*   `$1` **[Object][43]**  (optional, default `{}`)
+
+    *   `$1.size` &#x20;
+    *   `$1.counter` &#x20;
+    *   `$1.timeToWait` &#x20;
+    *   `$1.position` &#x20;
+*   `size` **[number][46]** The scale factor to apply to the copied model. (optional, default `1`)
+*   `counter` **[number][46]** It can add a number to append to the copied model name. If nothing is given, it will resume its own naming. (optional, default `0`)
+*   `timeToWait` **[number][46]** The delay (in milliseconds) to wait after creating the copy. (optional, default `100`)
 
 Returns **THREE.Object3D** The created copy object.
 
@@ -136,9 +156,9 @@ Deletes a copy of a model in the scene with the specified name.
 
 ### Parameters
 
-*   `name` **[String][48]** The name of the model to delete
+*   `name` **[String][47]** The name of the model to delete
 
-Returns **[Boolean][46]** Returns true if the copy was deleted, false otherwise.
+Returns **[Boolean][45]** Returns true if the copy was deleted, false otherwise.
 
 ## delete\_model
 
@@ -148,7 +168,7 @@ Deletes all copies of a model in the scene with the specified name with the orig
 
 *   `name` **any** The name of the model to delete
 
-Returns **[Boolean][46]** Returns true if the copies were deleted, false otherwise.
+Returns **[Boolean][45]** Returns true if the copies were deleted, false otherwise.
 
 ## loadTexture
 
@@ -157,8 +177,12 @@ The texture is set to repeat in both the S and T directions by default.
 
 ### Parameters
 
-*   `path` **[string][48]** The path to the texture image file.
-*   `repeat` **[number][47]** The number of times to repeat the texture in both directions. (optional, default `1`)
+*   `path` **[string][47]** The path to the texture image file.
+*   `repeat` **[number][46]** The number of times to repeat the texture in both directions. (optional, default `1`)
+
+    *   `repeat.repeatHorizontal` &#x20;
+    *   `repeat.repeatVertical` &#x20;
+    *   `repeat.repeat` &#x20;
 
 Returns **THREE.Texture** The loaded texture object.
 
@@ -170,14 +194,24 @@ To access to the top layer of the table, use the name you initilized the table w
 
 ### Parameters
 
+*   `$0` **[Object][43]**  (optional, default `{}`)
+
+    *   `$0.width` &#x20;
+    *   `$0.depth` &#x20;
+    *   `$0.YoffSet` &#x20;
+    *   `$0.widthSpace` &#x20;
+    *   `$0.heightSpace` &#x20;
+    *   `$0.floor` &#x20;
+    *   `$0.wall` &#x20;
+    *   `$0.ceiling` &#x20;
 *   `width` **Integer** The width of the table.
 *   `depth` **Integer** The depth of the table.
-*   `YoffSet` **Integer** The Y offset of the table. (optional, default `-10`)
-*   `widthSpace` **Integer** The width of the space between the table and the wall. (optional, default `250`)
-*   `heightSpace` **Integer** The height of the space between the table and the ceiling. (optional, default `250`)
-*   `floor` **[string][48]** The path to the texture image file for the floor. By default, it is a wood floor. (optional, default `"framework/textures/wood_floor.jpg"`)
-*   `wall` **[string][48]** The path to the texture image file for the walls. By default, it is a brick wall. (optional, default `"framework/textures/wall.jpg"`)
-*   `ceiling` **[string][48]** The path to the texture image file for the ceiling. By default, it is a wood ceiling. (optional, default `"framework/textures/roof.jpg"`)
+*   `YoffSet` **Integer** The Y offset of the table.
+*   `widthSpace` **Integer** The width of the space between the table and the wall.
+*   `heightSpace` **Integer** The height of the space between the table and the ceiling.
+*   `floor` **[string][47]** The path to the texture image file for the floor. By default, it is a wood floor.
+*   `wall` **[string][47]** The path to the texture image file for the walls. By default, it is a brick wall.
+*   `ceiling` **[string][47]** The path to the texture image file for the ceiling. By default, it is a wood ceiling.
 
 Returns **THREE.Mesh** The created box mesh object.
 
@@ -187,12 +221,20 @@ Add a scene with a box geometry and apply textures to its faces. The floor is at
 
 ### Parameters
 
-*   `width` **Integer** The width of the box. (optional, default `300`)
-*   `height` **Integer** The height of the box. (optional, default `250`)
-*   `YoffSet` **Integer** The Y offset of the box. (optional, default `-10`)
-*   `floor` **[String][48]** The path to the texture image file for the floor. By default, it is a wood floor. (optional, default `"framework/textures/wood_floor.jpg"`)
-*   `wall` **[String][48]** The path to the texture image file for the walls. By default, it is a brick wall. (optional, default `"framework/textures/wall.jpg"`)
-*   `ceiling` **[String][48]** The path to the texture image file for the ceiling. By default, it is a wood ceiling. (optional, default `"framework/textures/roof.jpg"`)
+*   `$0` **[Object][43]**  (optional, default `{}`)
+
+    *   `$0.width` &#x20;
+    *   `$0.height` &#x20;
+    *   `$0.YoffSet` &#x20;
+    *   `$0.floor` &#x20;
+    *   `$0.wall` &#x20;
+    *   `$0.ceiling` &#x20;
+*   `width` **Integer** The width of the box.
+*   `height` **Integer** The height of the box.
+*   `YoffSet` **Integer** The Y offset of the box.
+*   `floor` **[String][47]** The path to the texture image file for the floor. By default, it is a wood floor.
+*   `wall` **[String][47]** The path to the texture image file for the walls. By default, it is a brick wall.
+*   `ceiling` **[String][47]** The path to the texture image file for the ceiling. By default, it is a wood ceiling.
 
 ## addSceneFromJson
 
@@ -200,18 +242,7 @@ Function to add a scene from an existing json file
 
 ### Parameters
 
-*   `path` **[String][48]** The path to the json file
-
-## addButtonToNavbar
-
-Function to check if we intersect
-
-### Parameters
-
-*   `textButton`   (optional, default `"click me"`)
-*   `onclickFunction`   (optional, default `()=>alert("click")`)
-*   `hover`   (optional, default `true`)
-*   `classesOfTheButton`   (optional, default `["a"]`)
+*   `path` **[String][47]** The path to the json file
 
 ## addButtonToNavbar
 
@@ -219,12 +250,18 @@ Add a button to the navbar with the specified text and onclick function.
 
 ### Parameters
 
-*   `textButton` **[string][48]** The text to display on the button. (optional, default `"click me"`)
-*   `onclickFunction` **[Function][50]** The function to execute when the button is clicked. (optional, default `()=>alert("click")`)
-*   `hover` **[boolean][46]** A boolean to enable or disable hover effects on the button. Defaults to true. (optional, default `true`)
-*   `classesOfTheButton` **[Array][51]<[string][48]>** An array of classes to apply to the button element. (optional, default `["a"]`)
+*   `$0` **[Object][43]**  (optional, default `{}`)
 
-Returns **[HTMLElement][49]** The created button element.
+    *   `$0.textButton`   (optional, default `"click me"`)
+    *   `$0.onclickFunction`   (optional, default `()=>alert("click")`)
+    *   `$0.hover`   (optional, default `true`)
+    *   `$0.classesOfTheButton`   (optional, default `["a"]`)
+*   `textButton` **[string][47]** The text to display on the button.
+*   `onclickFunction` **[Function][49]** The function to execute when the button is clicked.
+*   `hover` **[boolean][45]** A boolean to enable or disable hover effects on the button. Defaults to true. (optional, default `true`)
+*   `classesOfTheButton` **[Array][50]<[string][47]>** An array of classes to apply to the button element. (optional, default `["a"]`)
+
+Returns **[HTMLElement][48]** The created button element.
 
 ## addDropdownToNavbar
 
@@ -233,10 +270,10 @@ Each dropdown item is an object with a 'text' property and an 'onClick' function
 
 ### Parameters
 
-*   `textButton` **[string][48]** The text to display on the dropdown button. (optional, default `"DropDown"`)
-*   `dropdownList` **[Array][51]<{text: [string][48], onClick: [Function][50]}>** An array of dropdown items. (optional, default `[{text:"Parameters",onClick:()=>alert("Hello!")}]`)
+*   `textButton` **[string][47]** The text to display on the dropdown button. (optional, default `"DropDown"`)
+*   `dropdownList` **[Array][50]<{text: [string][47], onClick: [Function][49]}>** An array of dropdown items. (optional, default `[{text:"Parameters",onClick:()=>alert("Hello!")}]`)
 
-Returns **[HTMLElement][49]** The created dropdown button element.
+Returns **[HTMLElement][48]** The created dropdown button element.
 
 ## changeTextOfButton
 
@@ -245,7 +282,7 @@ Change the text which is displayed on the button at the specified index in the n
 ### Parameters
 
 *   `buttonNumber` **Integer** The button which text will be changed. Value between 1 and +infinity
-*   `newText` **[String][48]** The text which will replace the current text of the button
+*   `newText` **[String][47]** The text which will replace the current text of the button
 
 ## changeTextOfDropdown
 
@@ -255,25 +292,25 @@ Change the text which is displayed on the dropdown button at the specified index
 
 *   `dropdownNumber` **Integer** The dropdown which text will be changed. Value between 1 and +infinity
 *   `dropBoxToChange` **Integer** The dropbox which text will be changed. Value between 0 and the number of button in the drop down.
-*   `newText` **[String][48]** The text which will replace the current text of the dropdown
+*   `newText` **[String][47]** The text which will replace the current text of the dropdown
 
 ## getWindowWidth
 
 Get the width of the browser window.
 
-Returns **[number][47]** The width of the browser window in pixels.
+Returns **[number][46]** The width of the browser window in pixels.
 
 ## getWindowHeight
 
 Get the height of the browser window.
 
-Returns **[number][47]** The height of the browser window in pixels.
+Returns **[number][46]** The height of the browser window in pixels.
 
 ## init
 
 Private function to initialize the scene, camera and renderer.
 
-Returns **[Object][52]** Returns an object containing the scene, camera and renderer.
+Returns **[Object][43]** Returns an object containing the scene, camera and renderer.
 
 ## resize
 
@@ -297,7 +334,7 @@ Private function to check if an object is fully occluded by other objects in the
 *   `raycaster` **any** The raycaster used for detecting intersections between objects.
 *   `direction` **any** A reusable vector to specify the direction of the raycasting.
 
-Returns **[boolean][46]** Returns true if the object is fully occluded, false otherwise.
+Returns **[boolean][45]** Returns true if the object is fully occluded, false otherwise.
 
 ## createTable
 
@@ -365,52 +402,48 @@ Returns **THREE.Group** The table
 
 [27]: #parameters-11
 
-[28]: #addbuttontonavbar-1
+[28]: #adddropdowntonavbar
 
 [29]: #parameters-12
 
-[30]: #adddropdowntonavbar
+[30]: #changetextofbutton
 
 [31]: #parameters-13
 
-[32]: #changetextofbutton
+[32]: #changetextofdropdown
 
 [33]: #parameters-14
 
-[34]: #changetextofdropdown
+[34]: #getwindowwidth
 
-[35]: #parameters-15
+[35]: #getwindowheight
 
-[36]: #getwindowwidth
+[36]: #init
 
-[37]: #getwindowheight
+[37]: #resize
 
-[38]: #init
+[38]: #parameters-15
 
-[39]: #resize
+[39]: #isobjectfullyoccluded
 
 [40]: #parameters-16
 
-[41]: #isobjectfullyoccluded
+[41]: #createtable
 
 [42]: #parameters-17
 
-[43]: #createtable
+[43]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[44]: #parameters-18
+[44]: https://developer.mozilla.org/docs/Web/API/Window
 
-[45]: https://developer.mozilla.org/docs/Web/API/Window
+[45]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[46]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[46]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[47]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[47]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[48]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[48]: https://developer.mozilla.org/docs/Web/HTML/Element
 
-[49]: https://developer.mozilla.org/docs/Web/HTML/Element
+[49]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
-[50]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
-
-[51]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
-
-[52]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[50]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
