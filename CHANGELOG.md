@@ -12,6 +12,8 @@
 
 - ```addSceneFromJson ``` : Function to load an existing Json file containing a scene and use it.
 
+- `npm run deploy` : Script to move eveything in a folder call framework and oly leave the index.html and package.json at the root folder.
+
 ### Changed
 - ```create_copy(name, scale, counter, timer)``` :  Add the counter attribut which is an ``Integer``. If not included, by default it will be 0 and each time the function is call for the same model, it will create a copy with incrementing index. If counter is provided at the call, it will use the integer provided to add to the name of the copy and check if it already exist. If not it will add the new copy to the scene, else it will return and do nothing.
 
