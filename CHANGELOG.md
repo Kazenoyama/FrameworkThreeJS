@@ -1,13 +1,35 @@
-## [v1.0.1]
+## [v1.1.0]
 ### Added
+- ``` changeTextOfButton(buttonNumber, newText)``` : Function to change the text content of a button in the navbar
+
+- ``` changeTextOfDropdown(dropdownNumber,dropBoxToChange, newText) ``` : Function to change the text content of a dropdown in the navbar and its children
+
+- ```npm run updateDoc``` : Call in the terminal to update the `DOCUMENTATION.md` file with last change in the framework.js
+
+- ```startLoadingScreen``` : Function to call the loading screen of the framework.
+
+- ```removeLoadingScreen``` : Function to remove the loading screen from the page
+
+- ```addSceneFromJson ``` : Function to load an existing Json file containing a scene and use it.
+
+- `npm run deploy` : Script to move eveything in a folder call framework and oly leave the index.html and package.json at the root folder.
 
 ### Changed
+- ```create_copy(name, scale, counter, timer)``` :  Add the counter attribut which is an ``Integer``. If not included, by default it will be 0 and each time the function is call for the same model, it will create a copy with incrementing index. If counter is provided at the call, it will use the integer provided to add to the name of the copy and check if it already exist. If not it will add the new copy to the scene, else it will return and do nothing.
+
+- Directory tree included a folder with the framework and a folder where new project are implemented called ``` src ```.
+
+- ```addScene(width, depth, floor = "framework/textures/wood_floor.jpg",wall = "framework/textures/wall.jpg", ceiling = "framework/textures/roof.jpg")``` : Remove the list of textures to a more forced way of doing it. Now you need to give three textures separatly and if you want you can use the textures from the frameworks if you don't specifies new textures.
+
+- `addScene()` -- > `addSimpleSceneWithTable(width, depth, YoffSet = -10,widthSpace = 250 , heightSpace = 250 ,  floor = "path",wall = "path", ceiling = "path")` and `addSimpleSceneWithoutTable(width = 300, height = 250, YoffSet = -10, floor = "path",wall = "path", ceiling = "path")` : Divide the the addScene into two seperate function. One with a table and one whitout it. Add the Yoffset to the function to be able to move the room created vertically.
 
 ### Removed
+- Remove `cameraOrbital` of the `mainParameters` of the framework.
 
 ### Deprecated
 
 ### Fixed
+- When the window resize and we use the function `onResize`, we have the correct aspect of object.
 
 # --------------------------------------------------------------------
 

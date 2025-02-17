@@ -79,69 +79,143 @@ class Framework {
      * @param {string} color - The color of the light, specified as a hexadecimal string.
      * @param {number} intensity - The intensity of the light, typically between 0 and 1.
      * @param {THREE.Object3D} object - The object to which the light will be attached.
+     * @returns {THREE.DirectionalLight} - The created light object.
      */
     attachLight(color,intensity ,object){
         const scene = window.scene;
         const directionalLight = new THREE.DirectionalLight(color, intensity);
         directionalLight.position.set(object.position.x, object.position.y + object.scale.y + 2, object.position.z);
         scene.add(directionalLight);
+        return directionalLight;
+    }
+
+    /**
+     * Begin the loading screen when we want to wait for model to be loaded.
+     * @returns {HTMLElement} - The created loading screen element.
+     */
+    startLoadingScreen(){
+        const loadingScreen = document.createElement('div');
+        loadingScreen.id = 'loading-screen';
+        loadingScreen.style.position = 'fixed';
+        loadingScreen.style.top = '0';
+        loadingScreen.style.left = '0';
+        loadingScreen.style.width = '100%';
+        loadingScreen.style.height = '100%';
+        loadingScreen.style.backgroundColor = '#000';
+        loadingScreen.style.color = '#fff';
+        loadingScreen.style.display = 'flex';
+        loadingScreen.style.justifyContent = 'center';
+        loadingScreen.style.alignItems = 'center';
+        loadingScreen.style.zIndex = '1000';
+        loadingScreen.image = document.createElement('img');
+        loadingScreen.image.src = 'https://terra-numerica.org/files/2020/10/cropped-favicon-rond.png';
+        loadingScreen.image.style.width = '100px';
+        loadingScreen.appendChild(loadingScreen.image);
+        loadingScreen.innerHTML += '<h1><pre>  Loading</pre></h1>';
+
+        var pos = 115;
+        for(let i = 0; i < 4; i++){
+            const loadingDot = document.createElement('div');
+            loadingDot.style.width = '10px';
+            loadingDot.style.height = '10px';
+            loadingDot.style.backgroundColor = '#fff';
+            loadingDot.style.borderRadius = '50%';
+            loadingDot.style.position = 'absolute';
+            loadingDot.style.left = window.innerWidth / 2 + pos + 20 * i + 'px';
+            loadingDot.style.top = window.innerHeight / 2 - 4 + 'px';
+            loadingDot.style.animation = 'bounce 2s infinite';
+            loadingDot.style.animationDelay = 0.15 * i + 's';
+            loadingScreen.appendChild(loadingDot);
+        }
+
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+            }
+        `;
+        document.head.appendChild(style);
+
+        document.body.appendChild(loadingScreen);
+
+        return loadingScreen;
+    }
+
+    /**
+     * Remove the loading screen.
+     */
+    removeLoadingScreen(){
+        const loadingScreen = document.getElementById('loading-screen');
+        loadingScreen.remove();
     }
 
 // ---------------------- 3D Model functions ----------------------
 
     /**
      * Loads a 3D model from a specified path and adds it to the scene with a given name and size.
-     * The model is set to invisible after loading.
+     * The model is set to invisible after loading. To get back the model, use .then() to give the model to a variable you have already defined.
      * 
      * @param {string} path - The path to the GLTF model file.
      * @param {string} name - The name to assign to the loaded model.
      * @param {number} size - The scale factor to apply to the model after loading.
      * @param {number} [timeToWait=500] - The delay (in milliseconds) to wait after loading the model.
+     * @returns {THREE.Object3D} - The loaded model object.
      */
-    async loadModel(path, name, size, timeToWait=500) {
+    async loadModel(path, name, size, timeToWait = 500) {
         const loader = new GLTFLoader();
         let scene = window.scene;
         this.pendingLoads = true;
         this.numberPendingLoads++;
-        let model3D;
-
-        loader.load(path, function(gltf){
-            gltf.scene.scale.set(size, size, size);
-            gltf.scene.name = name;
-            model3D = gltf.scene;
-            scene.add(model3D);
-            scene.getObjectByName(name).position.set(0, 0, 0);
-            scene.getObjectByName(name).visible = false;
-            console.log("model uploaded : " + name);
-        })
+    
+        let model3D = await new Promise((resolve, reject) => {
+            loader.load(path, (gltf) => {
+                gltf.scene.scale.set(size, size, size);
+                gltf.scene.name = name;
+                scene.add(gltf.scene);
+                gltf.scene.position.set(0, 0, 0);
+                gltf.scene.visible = false;
+                console.log("Model uploaded: " + name);
+                resolve(gltf.scene);
+            }, undefined, reject);
+        });
 
         let added = false;
-        while(!added){
-            // console.log("waiting for model to be added, pending load : " + this.numberPendingLoads);
-            for(let j = 0; j < scene.children.length; j++){
-                if(scene.children[j].name === name){
+        while (!added) {
+            for (let j = 0; j < scene.children.length; j++) {
+                if (scene.children[j].name === name) {
                     added = true;
-                    this.numberPendingLoads--;    
+                    this.numberPendingLoads--;
                     break;
                 }
             }
-            if(!added) {await new Promise(r => setTimeout(r, 250));}
+            if (!added) await new Promise((r) => setTimeout(r, 250));
         }
-
+    
         if (this.numberPendingLoads === 0) {
             this.pendingLoads = false;
         }
+    
+        return model3D;
     }
+    
 
     /**
      * Creates a copy of an existing model in the scene, using the specified name and size.
      * The copied model is positioned at the origin (0, 0, 0) and made visible.
-     * The name of the copy is generated by appending "_copy" followed by an incrementing index.
+     * The name of the copy is generated by appending "_copy" followed by an incrementing index or an index given when the function is call.
      * 
      * @param {string} name - The name of the model to copy.
      * @param {number} [size=1] - The scale factor to apply to the copied model.
+     * @param {number} [counter=0] - It can add a number to append to the copied model name. If nothing is given, it will resume its own naming.
+     * @param {number} [timeToWait=100] - The delay (in milliseconds) to wait after creating the copy.
+     * @returns {THREE.Object3D} - The created copy object.
      */
-    async create_copy(name, size = 1, timeToWait=100) {
+    async create_copy(name, size = 1, counter = 0, timeToWait=100) {
         let scene = window.scene;
         const copy = scene.getObjectByName(name).clone();
 
@@ -152,22 +226,26 @@ class Framework {
         copy.scale.set(size, size, size);
         copy.visible = true;
 
-        let i=0
-        for(let j=0; j<scene.children.length; j++) {
-            if(scene.children[j].name.includes(name+"_copy")) {
-                i++;
+        if(counter === 0){
+            let i=0
+            for(let j=0; j<scene.children.length; j++) {
+                if(scene.children[j].name.includes(name+"_copy")) {
+                    i++;
+                }
+            }
+            copy.name = name + "_copy" + i;
+        }
+        else{
+            copy.name = name + "_copy" + counter;
+            if(scene.getObjectByName(copy.name) != undefined) {
+                console.log("copy name : " + copy.name +  " already exists");
+                return;
             }
         }
-        copy.name = name + "_copy" + i;
         scene.add(copy);
-
         console.log("copy created from : " + name + " \nwith name : " + copy.name);
-        
-        // await new Promise(r => setTimeout(r, timeToWait));
         let added = false;
         while(!added){
-            // console.log("waiting for copy to be added, pending copy : " + this.numberPendingCopies);
-
             for(let j = 0; j < scene.children.length; j++){
                 if(scene.children[j].name === copy.name){
                     added = true;
@@ -177,17 +255,16 @@ class Framework {
             }
             if(!added){await new Promise(r => setTimeout(r, 250));}
         }
-
         if(this.numberPendingCopies === 0){
             this.pendingCopies = false;
         }
-        
         return copy;
     }
 
     /**
      * Deletes a copy of a model in the scene with the specified name.
-     * @param {*} name  The name of the model to delete
+     * @param {String} name  The name of the model to delete
+     * @returns {Boolean} - Returns true if the copy was deleted, false otherwise.
      */
     async delete_copy(name){
         while(this.pendingCopies || this.pendingLoads){
@@ -197,11 +274,13 @@ class Framework {
         let scene = window.scene;
         scene.remove(scene.getObjectByName(name));
         console.log("copy deleted : " + name);
+        return scene.getObjectByName(name) === undefined
     }
 
     /**
      * Deletes all copies of a model in the scene with the specified name with the original model.
      * @param {*} name  The name of the model to delete
+     * @returns {Boolean} - Returns true if the copies were deleted, false otherwise.
      */
     async delete_model(name){
         while(this.pendingCopies || this.pendingLoads){
@@ -229,6 +308,8 @@ class Framework {
                 alldeleted = true;
             }
         }
+        console.log("model deleted : " + name);
+        return scene.getObjectByName(name) === undefined
     }
 
     /**
@@ -253,19 +334,71 @@ class Framework {
      * The box is centered at the origin (0, 0, 0) and has dimensions specified by the 'dimensions' object.
      * To access to the top layer of the table, use the name you initilized the table with and .children[0].
      * 
-     * @param {Array<THREE.Texture>} textures - An array of textures to apply to the box faces.
-     * @param {Framework} fw - The Framework object used to access the createScene method.
-     * @param {Object} dimensions - An object containing the width, and depth of the table.
+     * @param {Integer} width - The width of the table.
+     * @param {Integer} depth - The depth of the table.
+     * @param {Integer} YoffSet - The Y offset of the table.
+     * @param {Integer} widthSpace - The width of the space between the table and the wall.
+     * @param {Integer} heightSpace - The height of the space between the table and the ceiling.
+     * @param {string} floor - The path to the texture image file for the floor. By default, it is a wood floor.
+     * @param {string} wall - The path to the texture image file for the walls. By default, it is a brick wall.
+     * @param {string} ceiling - The path to the texture image file for the ceiling. By default, it is a wood ceiling.
      * @returns {THREE.Mesh} - The created box mesh object.
      */
-    addScene(textures, fw, {width, depth}){
+    addSimpleSceneWithTable(width, depth, YoffSet = -10,widthSpace = 250 , heightSpace = 250 ,  floor = "framework/textures/wood_floor.jpg",wall = "framework/textures/wall.jpg", ceiling = "framework/textures/roof.jpg"){
         const cs = new createScene();
         const scene = window.scene;
-        let dimensions= {x : 250, y: 250};
-        cs.createBox(scene, textures, fw, dimensions);
-        const table = cs.createTable(scene, fw, {width, depth});
+        let dimensions= {x : widthSpace, y: heightSpace};
+        var textures = [floor, wall, ceiling];
+        cs.createBox(scene, textures, this, dimensions, YoffSet);
+        const table = cs.createTable(scene, this, {width, depth});
         return table;
     }
+
+    /**
+     * Add a scene with a box geometry and apply textures to its faces. The floor is at YoffSet beginning at (0,0,0).
+     * @param {Integer} width - The width of the box. 
+     * @param {Integer} height - The height of the box.
+     * @param {Integer} YoffSet - The Y offset of the box.
+     * @param {String} floor - The path to the texture image file for the floor. By default, it is a wood floor. 
+     * @param {String} wall - The path to the texture image file for the walls. By default, it is a brick wall.
+     * @param {String} ceiling - The path to the texture image file for the ceiling. By default, it is a wood ceiling. 
+     */
+    addSimpleSceneWithoutTable(width = 300, height = 250, YoffSet = -10, floor = "framework/textures/wood_floor.jpg",wall = "framework/textures/wall.jpg", ceiling = "framework/textures/roof.jpg"){
+        const cs = new createScene();
+        const scene = window.scene;
+        let dimensions= {x : width, y: height};
+        var textures = [floor, wall, ceiling];
+        cs.createBox(scene, textures, this, dimensions, YoffSet);
+    }
+
+    /**Function to add a scene from an existing json file
+     * @param {String} path - The path to the json file
+     */
+    async addSceneFromJson(path){
+        const loader = new THREE.ObjectLoader();
+        const scene = window.scene;
+        var camera;
+        await new Promise((resolve, reject) => {
+            loader.load(path, function (obj) {
+            scene.add(obj);
+            console.log("Scene was added from json file");
+            if(obj.getObjectByProperty("type", "PerspectiveCamera") != undefined){
+                camera = obj.getObjectByProperty("type", "PerspectiveCamera");
+            }
+            else if(obj.getObjectByProperty("type", "OrthographicCamera") != undefined){
+                camera = obj.getObjectByProperty("type", "OrthographicCamera");
+            }
+            resolve();
+            }, undefined, reject);
+        });
+        if(camera != undefined){
+        this.mainParameters.camera = camera;}
+        // this.mainParameters.scene = loadedScene.getObjectByName("scene");
+
+
+    }
+
+    /**Function to check if we intersect */
 
 // ---------------------- Navbar functions ----------------------
 
@@ -276,6 +409,7 @@ class Framework {
      * @param {Function} onclickFunction - The function to execute when the button is clicked.
      * @param {boolean} [hover=true] - A boolean to enable or disable hover effects on the button. Defaults to true.
      * @param {Array<string>} [classesOfTheButton=["a"]] - An array of classes to apply to the button element.
+     * @returns {HTMLElement} - The created button element.
      */
     addButtonToNavbar(textButton = "click me", onclickFunction = () => alert("click"),hover = true, classesOfTheButton = ["a"]){
         const Banner = this.CTABannerParameter.Banner;
@@ -288,6 +422,8 @@ class Framework {
         }
         
         Banner.style_navbar_children(navbar);
+        var buttonToChange = document.getElementById("navbar0").children[document.getElementById("navbar0").children.length - 1];
+        return buttonToChange;
     }
 
     /**
@@ -296,6 +432,7 @@ class Framework {
      * 
      * @param {string} textButton - The text to display on the dropdown button.
      * @param {Array<{text: string, onClick: Function}>} dropdownList - An array of dropdown items.
+     * @returns {HTMLElement} - The created dropdown button element.
      */
     addDropdownToNavbar(textButton = "DropDown", dropdownList = [{ text: "Parameters", onClick: () => alert("Hello!") }]){
         const Banner = this.CTABannerParameter.Banner;
@@ -313,6 +450,46 @@ class Framework {
         Banner.style_dropdown_content();
         Banner.style_dropdown_content_a();
         Banner.style_dropdown_content_parameters();  
+
+        var buttonToChange = document.getElementById("navbar0").children[document.getElementById("navbar0").children.length - 1];
+        return buttonToChange;
+    }
+
+    /**
+     * Change the text which is displayed on the button at the specified index in the navbar.
+     * @param {Integer} buttonNumber The button which text will be changed. Value between 1 and +infinity
+     * @param {String} newText The text which will replace the current text of the button
+     */
+    changeTextOfButton(buttonNumber, newText){
+        var buttonToChange = document.getElementById("navbar0").children[buttonNumber];
+        buttonToChange.textContent = newText;
+    }
+
+    /**
+     * Change the text which is displayed on the dropdown button at the specified index in the navbar.
+     * @param {Integer} dropdownNumber The dropdown which text will be changed. Value between 1 and +infinity
+     * @param {Integer} dropBoxToChange The dropbox which text will be changed. Value between 0 and the number of button in the drop down.
+     * @param {String} newText The text which will replace the current text of the dropdown
+     */
+    changeTextOfDropdown(dropdownNumber,dropBoxToChange, newText){
+        var dropDown = document.getElementById("navbar0").children[dropdownNumber];
+        if(dropDown.children[1].length <= dropBoxToChange){
+            console.log("The button is out of range");
+            return;
+        }
+        else{
+            if(dropBoxToChange == 0) {
+                var dropBox = dropDown.children[dropBoxToChange];
+                dropBox.textContent = newText;
+            }
+            else{
+                var dropBox = dropDown.children[1].children[dropBoxToChange-1];
+                dropBox.textContent = newText;
+            }
+        }
+
+
+        
     }
 
     /**
@@ -330,8 +507,8 @@ class Framework {
 // ---------------------- Private functions ----------------------
 
     /**
-     * Private function to initialize the scene, camera, renderer, and cameraOrbital.
-     * @returns {Object} - Returns an object containing the scene, camera, renderer, and cameraOrbital.
+     * Private function to initialize the scene, camera and renderer.
+     * @returns {Object} - Returns an object containing the scene, camera and renderer.
      */
     #init(){
         console.log('init');
@@ -347,7 +524,7 @@ class Framework {
         const cameraOrbital = new OrbitControls(camera, renderer.domElement);
         cameraOrbital.update();
 
-        return {"scene": scene, "camera": camera, "renderer": renderer, "cameraOrbital": cameraOrbital};
+        return {"scene": scene, "camera": camera, "renderer": renderer};
 
     }
 
@@ -361,6 +538,7 @@ class Framework {
         console.log('resize');
         renderer.setSize(window.innerWidth, window.innerHeight - document.getElementById("navbar0").offsetHeight);
         camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
         let navbar = document.getElementById('navbar0');
         navbar = navbar.style.width = window.innerWidth + 'px';
         camera.updateProjectionMatrix();
@@ -373,7 +551,7 @@ class Framework {
      * @param {*} cameraDistanceThreshold  The maximum distance at which to check for occlusion.
      * @param {*} raycaster  The raycaster used for detecting intersections between objects.
      * @param {*} direction  A reusable vector to specify the direction of the raycasting.
-     * @returns 
+     * @returns {boolean} - Returns true if the object is fully occluded, false otherwise.
      */
     #isObjectFullyOccluded(object, camera, cameraDistanceThreshold, raycaster, direction) {
         const scene = window.scene;

@@ -6,11 +6,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "setup": "npm run install_three && npm run setupDirectory && npm run addStyle && npm run move",
     "install_three": "npm install three",
-    "setupDirectory": "mkdir src\\css src\\js src\\models src\\textures src\\framework",
-    "addStyle": " (echo body { & type tab.txt & echo background-color: white; & type tab.txt & echo margin : 0; & echo })> src\\css\\style.css",
-    "move": "move framework.js src\\framework\\framework.js && move CTABanner.js src\\framework\\CTABanner.js && move createScene.js src\\framework\\createScene.js && move table.js src\\framework\\table.js && move roof.jpg src\\textures\\roof.jpg && move wall.jpg src\\textures\\wall.jpg && move wood_floor.jpg src\\textures\\wood_floor.jpg && move main.js src\\js\\main.js",
-    "initialState": "move src\\framework\\framework.js framework.js && move src\\framework\\CTABanner.js CTABanner.js && move src\\framework\\createScene.js createScene.js && move src\\framework\\table.js table.js && move src\\textures\\roof.jpg roof.jpg && move src\\textures\\wall.jpg wall.jpg && move src\\textures\\wood_floor.jpg wood_floor.jpg && move src\\js\\main.js main.js && npm run delete",
-    "delete": "rmdir /s /q src && rmdir /s /q node_modules && del package-lock.json"
+    "setupDirectory": "mkdir src\\css src\\js src\\models src\\textures framework\\css framework\\js framework\\textures",
+    "addStyle": " (echo body { & type tab.txt & echo background-color: white; & type tab.txt & echo margin : 0; & echo })> framework\\css\\style.css",
+    "move": "move framework.js framework\\js\\framework.js && move CTABanner.js framework\\js\\CTABanner.js && move createScene.js framework\\js\\createScene.js && move table.js framework\\js\\table.js && move roof.jpg framework\\textures\\roof.jpg && move wall.jpg framework\\textures\\wall.jpg && move wood_floor.jpg framework\\textures\\wood_floor.jpg && move main.js src\\js\\main.js",
+    "initialState": "move framework\\js\\framework.js framework.js && move framework\\js\\CTABanner.js CTABanner.js && move framework\\js\\createScene.js createScene.js && move framework\\js\\table.js table.js && move framework\\textures\\roof.jpg roof.jpg && move framework\\textures\\wall.jpg wall.jpg && move framework\\textures\\wood_floor.jpg wood_floor.jpg && move src\\js\\main.js main.js && npm run delete && npm run updateDoc",
+    "delete": "rmdir /s /q src && rmdir /s /q node_modules && rmdir /s /q framework && del package-lock.json",
+    "updateDoc": "documentation build framework.js -f md -o DOCUMENTATION.md",
+    "moveDocumentation": "move DOCUMENTATION.md framework\\DOCUMENTATION.md && move .gitignore framework\\.gitignore && move CHANGELOG.md framework\\CHANGELOG.md && move README.md framework\\README.md && move tab.txt framework\\tab.txt && move package.json framework\\package.json",
+    "deploy": "npm run setupDirectory && npm run addStyle && npm run move && npm run install_three && npm run moveDocumentation  "
   },
   "keywords": [
     "three.js",
