@@ -10,6 +10,8 @@
 - `loadTexture(path, {repeatHorizontal, repeatVertical, repeat} = {})` : `repeatHorizontal`, `repeatVertical` and `repeat` have been made optional.
 - `addSimpleSceneWithTable({width, depth, YoffSet, widthSpace, heightSpace, floor, wall, ceiling} = {})` : every parameters have been made optional.
 - `addSimpleSceneWithoutTable({width, height, YoffSet, floor, wall, ceiling} = {})` : every parameters have been made optional.
+- `addButtonToNavbar({textButton = "click me", onclickFunction = () => alert("click"),hover = true, classesOfTheButton = ["a"]} = {})` : `textButton`, `onclickFunction` and `classesOfTheButton` have been made optional.
+- `addDropdownToNavbar({textButton , dropdownList} = {})` : `textButton` and `dropdownList` have been made optional.
 
 ### Removed
 - For method like `loadModel`, `create_copy`, `delete_model`, the restriction of putting `await` before the call is removed

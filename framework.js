@@ -185,18 +185,25 @@ class Framework {
      * @param {string} name - The name to assign to the loaded model.
      * @param {number} size - The scale factor to apply to the model after loading.
      * @param {number} timeToWait - The delay (in milliseconds) to wait after loading the model.
+     * @param {boolean} visible - A boolean to set the visibility of the model after loading.
+     * @param {Object} position - The position to set the model after loading.
+     * @param {Object} rotation - The rotation to set the model after loading.
      * @returns {THREE.Object3D} - The loaded model object.
      */
-    async loadModel(path, name, {size, timeToWait, visible} = {}) {
+    async loadModel(path, name, {size, timeToWait, visible, position, rotation} = {}) {
         let defaultParams = {
             size : 1,
             timeToWait : 500,
-            visible : false
+            visible : false,
+            position : {x: 0, y: 0, z: 0},
+            rotation : {x: 0, y: 0, z: 0}
         }
 
         if(size){defaultParams.size = size;}
         if(timeToWait){defaultParams.timeToWait = timeToWait;}
         if(visible){defaultParams.visible = visible;}
+        if(position){defaultParams.position = position;}
+        if(rotation){defaultParams.rotation = rotation;}
 
         const loader = new GLTFLoader();
         let scene = window.scene;
@@ -207,7 +214,8 @@ class Framework {
                 gltf.scene.name = name;
                 gltf.scene.userData = {size: defaultParams.size};
                 scene.add(gltf.scene);
-                gltf.scene.position.set(0, 0, 0);
+                gltf.scene.position.set(defaultParams.position.x, defaultParams.position.y, defaultParams.position.z);
+                gltf.scene.rotation.set(defaultParams.rotation.x, defaultParams.rotation.y, defaultParams.rotation.z);
                 gltf.scene.visible = defaultParams.visible;
                 console.log("Model uploaded: " + name);
                 resolve(gltf.scene);
@@ -227,9 +235,11 @@ class Framework {
      * @param {number} [size=1] - The scale factor to apply to the copied model.
      * @param {number} [counter=0] - It can add a number to append to the copied model name. If nothing is given, it will resume its own naming.
      * @param {number} [timeToWait=100] - The delay (in milliseconds) to wait after creating the copy.
+     * @param {Object} [position={x: 0, y: 0, z: 0}] - The position to set the copied model.
+     * @param {Object} [rotation={x: 0, y: 0, z: 0}] - The rotation to set the copied model.
      * @returns {THREE.Object3D} - The created copy object.
      */
-    async create_copy(name, {size, counter, timeToWait, position} = {}){
+    async create_copy(name, {size, counter, timeToWait, position, rotation} = {}){
         this.pendingCopies = true;
         this.numberPendingCopies++;
 
@@ -237,25 +247,26 @@ class Framework {
         let copy;
         while (!copy) {
             copy = scene.getObjectByName(name)?.clone();
-            if (!copy) await new Promise(r => setTimeout(r, 50));
+            if (!copy) await new Promise(r => setTimeout(r, 25));
         }
 
         let defaultParams = {
             size : scene.getObjectByName(name).userData.size,
             counter : 0,
             timeToWait : 200,
-            position : {x: 0, y: 0, z: 0}
+            position : {x: 0, y: 0, z: 0},
+            rotation : {x: 0, y: 0, z: 0}
         }
 
         if(size){defaultParams.size = size;}
         if(counter){defaultParams.counter = counter;}
         if(timeToWait){defaultParams.timeToWait = timeToWait;}
         if(position){defaultParams.position = position;}
-
-        
+        if(rotation){defaultParams.rotation = rotation;}
 
         copy.position.set(defaultParams.position.x, defaultParams.position.y, defaultParams.position.z);
         copy.scale.set(defaultParams.size, defaultParams.size, defaultParams.size);
+        copy.rotation.set(defaultParams.rotation.x, defaultParams.rotation.y, defaultParams.rotation.z);
         copy.visible = true;
 
         if(defaultParams.counter === 0){
@@ -340,6 +351,8 @@ class Framework {
      * The texture is set to repeat in both the S and T directions by default.
      * 
      * @param {string} path - The path to the texture image file.
+     * @param {number} [repeatHorizontal=1] - The number of times to repeat the texture in the horizontal direction.
+     * @param {number} [repeatVertical=1] - The number of times to repeat the texture in the vertical direction.
      * @param {number} [repeat=1] - The number of times to repeat the texture in both directions.
      * @returns {THREE.Texture} - The loaded texture object.
      */
@@ -515,19 +528,27 @@ class Framework {
      * @param {Array<{text: string, onClick: Function}>} dropdownList - An array of dropdown items.
      * @returns {HTMLElement} - The created dropdown button element.
      */
-    addDropdownToNavbar(textButton = "DropDown", dropdownList = [{ text: "Parameters", onClick: () => alert("Hello!") }]){
+    addDropdownToNavbar({textButton , dropdownList} = {}){
+        let defaultParams = {
+            textButton : "DropDown",
+            dropdownList : [{ text: "Parameters", onClick: () => alert("Hello!") }]
+        };
+
+        if(textButton){defaultParams.textButton = textButton;}
+        if(dropdownList){defaultParams.dropdownList = dropdownList;}
+
         const Banner = this.CTABannerParameter.Banner;
         const navbar = this.CTABannerParameter.navbar;
         const container = this.CTABannerParameter.container;
 
-        Banner.create_dropdown({ parentId: "navbar0", buttonText: textButton, menuId: textButton });
-        Banner.create_dropdown_list(textButton, dropdownList);
+        Banner.create_dropdown({ parentId: "navbar0", buttonText: defaultParams.textButton, menuId: defaultParams.textButton });
+        Banner.create_dropdown_list(defaultParams.textButton, defaultParams.dropdownList);
 
         Banner.style_any();
-        Banner.style_hover(textButton);
+        Banner.style_hover(defaultParams.textButton);
         Banner.style_navbar_children(navbar);
-        Banner.style_dropdown(textButton);
-        Banner.style_dropbtn(textButton);
+        Banner.style_dropdown(defaultParams.textButton);
+        Banner.style_dropbtn(defaultParams.textButton);
         Banner.style_dropdown_content();
         Banner.style_dropdown_content_a();
         Banner.style_dropdown_content_parameters();  
