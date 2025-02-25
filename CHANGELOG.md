@@ -1,3 +1,18 @@
+## [v1.2.5]
+### Added
+- BannerStyle.css
+
+### Changed
+- link BannerStyle.css to the index.html.
+
+### Removed
+
+### Deprecated
+
+### Fixed
+
+# --------------------------------------------------------------------
+
 ## [v1.2.0]
 ### Added
 - Add default parameters to every compatible function.
