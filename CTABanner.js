@@ -206,6 +206,7 @@ class CTABanner{
     } else {
       container.appendChild(button);
     }
+    this.style_navbar_children(container);
   }
   
 

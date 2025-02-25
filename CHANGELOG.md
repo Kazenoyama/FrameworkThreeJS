@@ -4,6 +4,7 @@
 
 ### Changed
 - link BannerStyle.css to the index.html.
+- package.json has new function to create a way to have either a framework with only the css or the framework with the possibility to have a 3D environnement.
 
 ### Removed
 
