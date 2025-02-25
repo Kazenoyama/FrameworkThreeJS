@@ -31,22 +31,33 @@ class Framework {
     }
 
     /**
-     * Enables automatic resizing of the Three.js renderer and camera when the browser window is resized.
-     * By default, when calling this function, it enabled the automatic resizing of the window.
+     * Function to enable or disable the resizing and centered of the application.
+     * It helps to keep all object at there place and with the right size when the window is resized.
      *
      * @param {THREE.WebGLRenderer} renderer - The renderer responsible for rendering the scene.
      * @param {Window} window - The browser window containing the Three.js canvas.
      * @param {THREE.PerspectiveCamera} camera - The camera used to view the scene, typically a PerspectiveCamera.
-     * @param {boolean} [enabled=true] - A boolean to enable or disable automatic resizing. Defaults to true.
+     * @param {boolean} enabled - A boolean to enable or disable the resizing. Defaults to true.
      */
-    onResize(renderer, window, camera, enabled = true) {
-        if (enabled === false) {
+    onResize({renderer, window, camera, enabled} = {}){
+        let params = {
+            renderer : this.mainParameters.renderer, 
+            window : this.window, 
+            camera : this.mainParameters.camera,
+            enabled : true
+        };
+        if(renderer){params.renderer = renderer;}
+        if(window){params.window = window;}
+        if(camera){params.camera = camera;}
+        if(enabled === false){params.enabled = false;}
+
+        if (params.enabled === false) {
             console.log('onResize disabled');
-            window.removeEventListener('resize', this.boundResize); // Use bound resize here
+            params.window.removeEventListener('resize', this.boundResize); // Use bound resize here
         } else {
             console.log('onResize enabled');
-            this.boundResize = this.#resize.bind(this, renderer, window, camera); // Bind resize with parameters
-            window.addEventListener('resize', this.boundResize); // Add the bound resize listener
+            this.boundResize = this.#resize.bind(this, params.renderer, params.window, params.camera); // Bind resize with parameters
+            params.window.addEventListener('resize', this.boundResize); // Add the bound resize listener
         }
     }
  
@@ -73,18 +84,28 @@ class Framework {
     }
  
     /**
-     * Attach a light to an object in the scene with a specified color and intensity.
+     * Attach a light to an object in the scene with the specified color and intensity.
      * The light is positioned above the object, slightly offset in the y-direction.
-     * 
+     * @param {THREE.Object3D} object - The object to which the light will be attached.
      * @param {string} color - The color of the light, specified as a hexadecimal string.
      * @param {number} intensity - The intensity of the light, typically between 0 and 1.
-     * @param {THREE.Object3D} object - The object to which the light will be attached.
      * @returns {THREE.DirectionalLight} - The created light object.
      */
-    attachLight(color,intensity ,object){
+    attachLight(object, {color , intensity, name} = {}){
+        let defaultParams = {
+            color : '#ffffff',
+            intensity : 1,
+            name : "light" + object.name
+        };
+
+        if(color){defaultParams.color = color;}
+        if(intensity){defaultParams.intensity = intensity;}
+        if(name){defaultParams.name = name;}
+
         const scene = window.scene;
-        const directionalLight = new THREE.DirectionalLight(color, intensity);
+        const directionalLight = new THREE.DirectionalLight(defaultParams.color, defaultParams.intensity);
         directionalLight.position.set(object.position.x, object.position.y + object.scale.y + 2, object.position.z);
+        directionalLight.name = defaultParams.name;
         scene.add(directionalLight);
         return directionalLight;
     }
@@ -163,42 +184,43 @@ class Framework {
      * @param {string} path - The path to the GLTF model file.
      * @param {string} name - The name to assign to the loaded model.
      * @param {number} size - The scale factor to apply to the model after loading.
-     * @param {number} [timeToWait=500] - The delay (in milliseconds) to wait after loading the model.
+     * @param {number} timeToWait - The delay (in milliseconds) to wait after loading the model.
+     * @param {boolean} visible - A boolean to set the visibility of the model after loading.
+     * @param {Object} position - The position to set the model after loading.
+     * @param {Object} rotation - The rotation to set the model after loading.
      * @returns {THREE.Object3D} - The loaded model object.
      */
-    async loadModel(path, name, size, timeToWait = 500) {
+    async loadModel(path, name, {size, timeToWait, visible, position, rotation} = {}) {
+        let defaultParams = {
+            size : 1,
+            timeToWait : 500,
+            visible : false,
+            position : {x: 0, y: 0, z: 0},
+            rotation : {x: 0, y: 0, z: 0}
+        }
+
+        if(size){defaultParams.size = size;}
+        if(timeToWait){defaultParams.timeToWait = timeToWait;}
+        if(visible){defaultParams.visible = visible;}
+        if(position){defaultParams.position = position;}
+        if(rotation){defaultParams.rotation = rotation;}
+
         const loader = new GLTFLoader();
         let scene = window.scene;
-        this.pendingLoads = true;
-        this.numberPendingLoads++;
     
         let model3D = await new Promise((resolve, reject) => {
             loader.load(path, (gltf) => {
-                gltf.scene.scale.set(size, size, size);
+                gltf.scene.scale.set(defaultParams.size, defaultParams.size, defaultParams.size);
                 gltf.scene.name = name;
+                gltf.scene.userData = {size: defaultParams.size};
                 scene.add(gltf.scene);
-                gltf.scene.position.set(0, 0, 0);
-                gltf.scene.visible = false;
+                gltf.scene.position.set(defaultParams.position.x, defaultParams.position.y, defaultParams.position.z);
+                gltf.scene.rotation.set(defaultParams.rotation.x, defaultParams.rotation.y, defaultParams.rotation.z);
+                gltf.scene.visible = defaultParams.visible;
                 console.log("Model uploaded: " + name);
                 resolve(gltf.scene);
             }, undefined, reject);
         });
-
-        let added = false;
-        while (!added) {
-            for (let j = 0; j < scene.children.length; j++) {
-                if (scene.children[j].name === name) {
-                    added = true;
-                    this.numberPendingLoads--;
-                    break;
-                }
-            }
-            if (!added) await new Promise((r) => setTimeout(r, 250));
-        }
-    
-        if (this.numberPendingLoads === 0) {
-            this.pendingLoads = false;
-        }
     
         return model3D;
     }
@@ -213,20 +235,41 @@ class Framework {
      * @param {number} [size=1] - The scale factor to apply to the copied model.
      * @param {number} [counter=0] - It can add a number to append to the copied model name. If nothing is given, it will resume its own naming.
      * @param {number} [timeToWait=100] - The delay (in milliseconds) to wait after creating the copy.
+     * @param {Object} [position={x: 0, y: 0, z: 0}] - The position to set the copied model.
+     * @param {Object} [rotation={x: 0, y: 0, z: 0}] - The rotation to set the copied model.
      * @returns {THREE.Object3D} - The created copy object.
      */
-    async create_copy(name, size = 1, counter = 0, timeToWait=100) {
-        let scene = window.scene;
-        const copy = scene.getObjectByName(name).clone();
-
+    async create_copy(name, {size, counter, timeToWait, position, rotation} = {}){
         this.pendingCopies = true;
         this.numberPendingCopies++;
 
-        copy.position.set(0, 0, 0);
-        copy.scale.set(size, size, size);
+        let scene = window.scene;
+        let copy;
+        while (!copy) {
+            copy = scene.getObjectByName(name)?.clone();
+            if (!copy) await new Promise(r => setTimeout(r, 25));
+        }
+
+        let defaultParams = {
+            size : scene.getObjectByName(name).userData.size,
+            counter : 0,
+            timeToWait : 200,
+            position : {x: 0, y: 0, z: 0},
+            rotation : {x: 0, y: 0, z: 0}
+        }
+
+        if(size){defaultParams.size = size;}
+        if(counter){defaultParams.counter = counter;}
+        if(timeToWait){defaultParams.timeToWait = timeToWait;}
+        if(position){defaultParams.position = position;}
+        if(rotation){defaultParams.rotation = rotation;}
+
+        copy.position.set(defaultParams.position.x, defaultParams.position.y, defaultParams.position.z);
+        copy.scale.set(defaultParams.size, defaultParams.size, defaultParams.size);
+        copy.rotation.set(defaultParams.rotation.x, defaultParams.rotation.y, defaultParams.rotation.z);
         copy.visible = true;
 
-        if(counter === 0){
+        if(defaultParams.counter === 0){
             let i=0
             for(let j=0; j<scene.children.length; j++) {
                 if(scene.children[j].name.includes(name+"_copy")) {
@@ -244,17 +287,8 @@ class Framework {
         }
         scene.add(copy);
         console.log("copy created from : " + name + " \nwith name : " + copy.name);
-        let added = false;
-        while(!added){
-            for(let j = 0; j < scene.children.length; j++){
-                if(scene.children[j].name === copy.name){
-                    added = true;
-                    this.numberPendingCopies--;
-                    break;
-                }
-            }
-            if(!added){await new Promise(r => setTimeout(r, 250));}
-        }
+        
+        this.numberPendingCopies--;
         if(this.numberPendingCopies === 0){
             this.pendingCopies = false;
         }
@@ -267,7 +301,7 @@ class Framework {
      * @returns {Boolean} - Returns true if the copy was deleted, false otherwise.
      */
     async delete_copy(name){
-        while(this.pendingCopies || this.pendingLoads){
+        while(this.pendingCopies){
             console.log("waiting for pending copies or loads");
             await new Promise(r => setTimeout(r, 250));
         }
@@ -317,15 +351,30 @@ class Framework {
      * The texture is set to repeat in both the S and T directions by default.
      * 
      * @param {string} path - The path to the texture image file.
+     * @param {number} [repeatHorizontal=1] - The number of times to repeat the texture in the horizontal direction.
+     * @param {number} [repeatVertical=1] - The number of times to repeat the texture in the vertical direction.
      * @param {number} [repeat=1] - The number of times to repeat the texture in both directions.
      * @returns {THREE.Texture} - The loaded texture object.
      */
-    loadTexture(path, repeat = 1){
+    loadTexture(path, {repeatHorizontal, repeatVertical, repeat} = {}){
+        let defaultParams = { 
+            repeat : 1,
+            repeatHorizontal : 1,
+            repeatVertical : 1
+        };
+
+        if(repeat){
+            defaultParams.repeat = repeat,
+            defaultParams.repeatHorizontal = repeat,
+            defaultParams.repeatVertical = repeat
+            ;}
+        if(repeatHorizontal){defaultParams.repeatHorizontal = repeatHorizontal;}
+        if(repeatVertical){defaultParams.repeatVertical = repeatVertical;}
         const textureLoader = new THREE.TextureLoader();
         const texture = textureLoader.load(path);
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(repeat, repeat);
+        texture.repeat.set(defaultParams.repeatHorizontal, defaultParams.repeatVertical);
         return texture; 
     }
 
@@ -344,13 +393,34 @@ class Framework {
      * @param {string} ceiling - The path to the texture image file for the ceiling. By default, it is a wood ceiling.
      * @returns {THREE.Mesh} - The created box mesh object.
      */
-    addSimpleSceneWithTable(width, depth, YoffSet = -10,widthSpace = 250 , heightSpace = 250 ,  floor = "framework/textures/wood_floor.jpg",wall = "framework/textures/wall.jpg", ceiling = "framework/textures/roof.jpg"){
+    addSimpleSceneWithTable({width, depth, YoffSet, widthSpace, heightSpace, floor, wall, ceiling} = {}){
+        
+        let defaultParams = {
+            width : 50,
+            depth : 50,
+            YoffSet : -10,
+            widthSpace : 250,
+            heightSpace : 250,
+            floor : "./framework/textures/wood_floor.jpg",
+            wall : "./framework/textures/wall.jpg",
+            ceiling : "./framework/textures/roof.jpg"
+        }
+
+        if(width){defaultParams.width = width;}
+        if(depth){defaultParams.depth = depth;}
+        if(YoffSet){defaultParams.YoffSet = YoffSet;}
+        if(widthSpace){defaultParams.widthSpace = widthSpace;}
+        if(heightSpace){defaultParams.heightSpace = heightSpace;}
+        if(floor){defaultParams.floor = floor;}
+        if(wall){defaultParams.wall = wall;}
+        if(ceiling){defaultParams.ceiling = ceiling;}
+        
         const cs = new createScene();
         const scene = window.scene;
-        let dimensions= {x : widthSpace, y: heightSpace};
-        var textures = [floor, wall, ceiling];
-        cs.createBox(scene, textures, this, dimensions, YoffSet);
-        const table = cs.createTable(scene, this, {width, depth});
+        let dimensions= {x : defaultParams.widthSpace, y: defaultParams.heightSpace};
+        var textures = [defaultParams.floor, defaultParams.wall, defaultParams.ceiling];
+        cs.createBox(scene, textures, this, dimensions, defaultParams.YoffSet);
+        const table = cs.createTable(scene, this, {width : defaultParams.width, depth : defaultParams.depth});
         return table;
     }
 
@@ -363,12 +433,29 @@ class Framework {
      * @param {String} wall - The path to the texture image file for the walls. By default, it is a brick wall.
      * @param {String} ceiling - The path to the texture image file for the ceiling. By default, it is a wood ceiling. 
      */
-    addSimpleSceneWithoutTable(width = 300, height = 250, YoffSet = -10, floor = "framework/textures/wood_floor.jpg",wall = "framework/textures/wall.jpg", ceiling = "framework/textures/roof.jpg"){
+    addSimpleSceneWithoutTable({width, height, YoffSet, floor, wall, ceiling} = {}){
+
+        let defaultParams = {
+            width : 250,
+            height : 250,
+            YoffSet : -10,
+            floor : "./framework/textures/wood_floor.jpg",
+            wall : "./framework/textures/wall.jpg",
+            ceiling : "./framework/textures/roof.jpg"
+        }
+
+        if(width){defaultParams.width = width;}
+        if(height){defaultParams.height = height;}
+        if(YoffSet){defaultParams.YoffSet = YoffSet;}
+        if(floor){defaultParams.floor = floor;}
+        if(wall){defaultParams.wall = wall;}
+        if(ceiling){defaultParams.ceiling = ceiling;}
+
         const cs = new createScene();
         const scene = window.scene;
-        let dimensions= {x : width, y: height};
-        var textures = [floor, wall, ceiling];
-        cs.createBox(scene, textures, this, dimensions, YoffSet);
+        let dimensions= {x : defaultParams.width, y: defaultParams.height};
+        var textures = [defaultParams.floor, defaultParams.wall, defaultParams.ceiling];
+        cs.createBox(scene, textures, this, dimensions, defaultParams.YoffSet);
     }
 
     /**Function to add a scene from an existing json file
@@ -393,12 +480,7 @@ class Framework {
         });
         if(camera != undefined){
         this.mainParameters.camera = camera;}
-        // this.mainParameters.scene = loadedScene.getObjectByName("scene");
-
-
     }
-
-    /**Function to check if we intersect */
 
 // ---------------------- Navbar functions ----------------------
 
@@ -411,14 +493,26 @@ class Framework {
      * @param {Array<string>} [classesOfTheButton=["a"]] - An array of classes to apply to the button element.
      * @returns {HTMLElement} - The created button element.
      */
-    addButtonToNavbar(textButton = "click me", onclickFunction = () => alert("click"),hover = true, classesOfTheButton = ["a"]){
+    addButtonToNavbar({textButton = "click me", onclickFunction = () => alert("click"),hover = true, classesOfTheButton = ["a"]} = {}){
+        let defaultParams = {
+            textButton : "click me",
+            onclickFunction : () => alert("click"),
+            hover : true,
+            classesOfTheButton : ["a"]
+        };
+
+        if(textButton){defaultParams.textButton = textButton;}
+        if(onclickFunction){defaultParams.onclickFunction = onclickFunction;}
+        if(hover){defaultParams.hover = hover;}
+        if(classesOfTheButton){defaultParams.classesOfTheButton = classesOfTheButton;}
+
         const Banner = this.CTABannerParameter.Banner;
         const navbar = this.CTABannerParameter.navbar;
         const container = this.CTABannerParameter.container;
-        Banner.create_button(navbar, { text: textButton, onClick: onclickFunction, classes: classesOfTheButton });
+        Banner.create_button(navbar, { text: defaultParams.textButton, onClick: defaultParams.onclickFunction, classes: defaultParams.classesOfTheButton });
         Banner.style_any();
         if (hover == true) {
-            Banner.style_hover(textButton);
+            Banner.style_hover(defaultParams.textButton);
         }
         
         Banner.style_navbar_children(navbar);
@@ -434,19 +528,27 @@ class Framework {
      * @param {Array<{text: string, onClick: Function}>} dropdownList - An array of dropdown items.
      * @returns {HTMLElement} - The created dropdown button element.
      */
-    addDropdownToNavbar(textButton = "DropDown", dropdownList = [{ text: "Parameters", onClick: () => alert("Hello!") }]){
+    addDropdownToNavbar({textButton , dropdownList} = {}){
+        let defaultParams = {
+            textButton : "DropDown",
+            dropdownList : [{ text: "Parameters", onClick: () => alert("Hello!") }]
+        };
+
+        if(textButton){defaultParams.textButton = textButton;}
+        if(dropdownList){defaultParams.dropdownList = dropdownList;}
+
         const Banner = this.CTABannerParameter.Banner;
         const navbar = this.CTABannerParameter.navbar;
         const container = this.CTABannerParameter.container;
 
-        Banner.create_dropdown({ parentId: "navbar0", buttonText: textButton, menuId: textButton });
-        Banner.create_dropdown_list(textButton, dropdownList);
+        Banner.create_dropdown({ parentId: "navbar0", buttonText: defaultParams.textButton, menuId: defaultParams.textButton });
+        Banner.create_dropdown_list(defaultParams.textButton, defaultParams.dropdownList);
 
         Banner.style_any();
-        Banner.style_hover(textButton);
+        Banner.style_hover(defaultParams.textButton);
         Banner.style_navbar_children(navbar);
-        Banner.style_dropdown(textButton);
-        Banner.style_dropbtn(textButton);
+        Banner.style_dropdown(defaultParams.textButton);
+        Banner.style_dropbtn(defaultParams.textButton);
         Banner.style_dropdown_content();
         Banner.style_dropdown_content_a();
         Banner.style_dropdown_content_parameters();  
@@ -523,6 +625,8 @@ class Framework {
         camera.position.y = 50;
         const cameraOrbital = new OrbitControls(camera, renderer.domElement);
         cameraOrbital.update();
+
+        this.window = window;
 
         return {"scene": scene, "camera": camera, "renderer": renderer};
 

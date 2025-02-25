@@ -30,13 +30,13 @@ class createScene {
     }
 
     createBox(scene, textures, fw, dimensions, YoffSet){
-        const floor_texture = fw.loadTexture(textures[0],10);
+        const floor_texture = fw.loadTexture(textures[0], {repeat : 6});
         const ground = this.createPlane(dimensions.x, dimensions.y, floor_texture);
         ground.rotation.x = Math.PI / 2;
         ground.position.y = YoffSet;
         scene.add(ground);
 
-        const wall_texture = fw.loadTexture(textures[1], 2);
+        const wall_texture = fw.loadTexture(textures[1], {repeat : 2});
         const wall1 = this.createPlane(dimensions.x,dimensions.y, wall_texture, "wall");
         wall1.position.z = ground.position.z - ground.geometry.parameters.width / 2;
         wall1.position.y = ground.position.y + wall1.geometry.parameters.height / 2;
@@ -59,7 +59,7 @@ class createScene {
         wall4.rotation.y = Math.PI / 2;
         scene.add(wall4);
 
-        const ceiling_texture = fw.loadTexture(textures[2], 6);
+        const ceiling_texture = fw.loadTexture(textures[2], {repeat : 6});
         const ceiling = this.createPlane(dimensions.x,dimensions.y, ceiling_texture);
         ceiling.rotation.x = Math.PI / 2;
         ceiling.position.y = ground.position.y + wall1.geometry.parameters.height;
@@ -69,7 +69,7 @@ class createScene {
     createTable(scene, fw, {width, depth}){
         let table = new Table(width,depth);
         scene.add(table.getTable());
-        fw.attachLight('white', 1, table.getTable());
+        fw.attachLight( table.getTable(),{color : 'white', intensity :  1, name : "tableLight"});
         return table.getTable();
     }
 }
