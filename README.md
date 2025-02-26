@@ -10,27 +10,26 @@ Before you begin, ensure you have the following installed:
 - **Node.js**
 - **npm** (Node Package Manager)
 - **npx** (Node Package Executor)
+- **vite**
 
 ## Getting Started
 
-To initialize a project, you can use the `PackageSetup` branch to pull the base structure of a Three.js application. Follow these steps:
+To initialize a project, you can use the `main` branch to pull the base structure of a Three.js application. Follow these steps:
 
 1. **Clone the repository** (replace `https://github.com/Kazenoyama/FrameworkThreeJS` with the actual URL):
     ```bash
     git clone https://github.com/Kazenoyama/FrameworkThreeJS
     ```
-
-2. **Checkout the PackageSetup branch**:
-    ```bash
-    git checkout PackageSetup
-    ```
-
-3. **Run the setup command** to install the necessary dependencies and create the project structure:
+2. **Run the setup command** to install the necessary dependencies and create the project structure:
+To only use the graphic chart and the navigation bar use this command :
     ```bash
     npm run setup
     ```
-
-4. **Start the development server** using Vite:
+To add the part with 3D implementation, use this command :
+    ```bash
+    npm run setup3D
+    ```
+3. **Start the development server** using Vite:
     ```bash
     npx vite
     ```
@@ -65,3 +64,4 @@ If you need to make further adjustments or configurations, consider the followin
 ## Documentation
 - [Changelog](CHANGELOG.md)
 - [Documentation](DOCUMENTATION.md)
+- [License](LICENSE)
