@@ -1,6 +1,14 @@
 
 class CTABanner{
 
+  constructor() {
+      this.createHTMLStructure();
+      this.navbar = this.getNavbar();
+      var buttonAbout = this.create_button({text : "About"})
+      var buttonRules = this.create_button({text : "Rules"})
+      this.aboutRules = {About : buttonAbout, Rules : buttonRules};
+  }
+
   getNavbar() {
     return document.getElementById("navbar0");
   }
@@ -105,7 +113,7 @@ class CTABanner{
   }
 
   // Crée un menu déroulant générique
-  create_dropdown({ parentId, buttonText, menuId }) {
+  create_dropdown({ parentId = "navbar0", buttonText, menuId }) {
     const parent = document.getElementById(parentId);
     if (!parent) {
       console.error(`Parent element with id ${parentId} not found.`);
@@ -185,7 +193,8 @@ class CTABanner{
   }
 
   // Fonction pour créer et insérer un bouton dans un conteneur   // attention le onclick
-  create_button(container, { text = "Click me!", onClick = () => alert("Button clicked!"), position = "before", referenceElement = null, classes = [] }) {
+  create_button({ text = "Click me!", onClick = () => alert("Button clicked!"), position = "before", referenceElement = null, classes = [] }) {
+    var container = this.navbar;
     const button = document.createElement("button");
     button.textContent = text;
   
@@ -207,6 +216,7 @@ class CTABanner{
       container.appendChild(button);
     }
     this.style_navbar_children(container);
+    return button;
   }
   
 

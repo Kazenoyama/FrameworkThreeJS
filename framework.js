@@ -20,11 +20,8 @@ class Framework {
         console.log('Framework constructor');
         
         const Banner = new CTABanner();
-        Banner.createHTMLStructure();
-        const navbar = Banner.getNavbar();
-        Banner.style_navbar();
-        const container = Banner.getContainer();
-        Banner.style_container0(container);
+        var navbar = Banner.getNavbar();
+        var container = Banner.getContainer();
         
         this.CTABannerParameter = {"Banner": Banner,"navbar": navbar, "container": container};
         this.mainParameters = this.#init();
@@ -509,13 +506,8 @@ class Framework {
         const Banner = this.CTABannerParameter.Banner;
         const navbar = this.CTABannerParameter.navbar;
         const container = this.CTABannerParameter.container;
-        Banner.create_button(navbar, { text: defaultParams.textButton, onClick: defaultParams.onclickFunction, classes: defaultParams.classesOfTheButton });
-        Banner.style_any();
-        if (hover == true) {
-            Banner.style_hover(defaultParams.textButton);
-        }
+        Banner.create_button({ text: defaultParams.textButton, onClick: defaultParams.onclickFunction, classes: defaultParams.classesOfTheButton });
         
-        Banner.style_navbar_children(navbar);
         var buttonToChange = document.getElementById("navbar0").children[document.getElementById("navbar0").children.length - 1];
         return buttonToChange;
     }
@@ -541,17 +533,8 @@ class Framework {
         const navbar = this.CTABannerParameter.navbar;
         const container = this.CTABannerParameter.container;
 
-        Banner.create_dropdown({ parentId: "navbar0", buttonText: defaultParams.textButton, menuId: defaultParams.textButton });
-        Banner.create_dropdown_list(defaultParams.textButton, defaultParams.dropdownList);
-
-        Banner.style_any();
-        Banner.style_hover(defaultParams.textButton);
-        Banner.style_navbar_children(navbar);
-        Banner.style_dropdown(defaultParams.textButton);
-        Banner.style_dropbtn(defaultParams.textButton);
-        Banner.style_dropdown_content();
-        Banner.style_dropdown_content_a();
-        Banner.style_dropdown_content_parameters();  
+        Banner.create_dropdown({buttonText: defaultParams.textButton, menuId: defaultParams.textButton });
+        Banner.create_dropdown_list(defaultParams.textButton, defaultParams.dropdownList);  
 
         var buttonToChange = document.getElementById("navbar0").children[document.getElementById("navbar0").children.length - 1];
         return buttonToChange;
