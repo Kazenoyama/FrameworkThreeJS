@@ -448,11 +448,11 @@ class Framework {
         if(wall){defaultParams.wall = wall;}
         if(ceiling){defaultParams.ceiling = ceiling;}
 
-        // const cs = new createScene();
-        // const scene = window.scene;
-        // let dimensions= {x : defaultParams.width, y: defaultParams.height};
-        // var textures = [defaultParams.floor, defaultParams.wall, defaultParams.ceiling];
-        // cs.createBox(scene, textures, this, dimensions, defaultParams.YoffSet);
+        const cs = new createScene();
+        const scene = window.scene;
+        let dimensions= {x : defaultParams.width, y: defaultParams.height};
+        var textures = [defaultParams.floor, defaultParams.wall, defaultParams.ceiling];
+        cs.createBox(scene, textures, this, dimensions, defaultParams.YoffSet);
     }
 
     /**Function to add a scene from an existing json file
@@ -588,14 +588,6 @@ class Framework {
      * @returns {number} - The height of the browser window in pixels.
      */
     getWindowHeight(){return window.innerHeight - document.getElementById("navbar0").offsetHeight;}
-
-
-  
-
-// ---------------------- modal functions ----------------------
-
-
-
 
 // ---------------------- Private functions ----------------------
 
