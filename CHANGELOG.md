@@ -1,3 +1,19 @@
+## [v1.2.7]
+### Added
+- modal.js
+
+### Changed
+- main.js have been updated, users now have a preset for both the 2D and 3D.
+- CTABanner.js have been updated, so that the drag function now work for our modal.
+- package.json have been updated , so that know modal.js is moving with the rest of the js file
+
+### Removed
+
+### Deprecated
+
+### Fixed
+
+# --------------------------------------------------------------------
 ## [v1.2.6]
 ### Added
 - DOCUMENTATION_BANNER.md

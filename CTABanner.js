@@ -68,19 +68,23 @@ class CTABanner{
   isDragging = false;
   offsetX;
   offsetY;
-  modal;
+  currentModal;
   
   /**
    * Initiates dragging of a modal element.
    * @param {MouseEvent} event - The mouse event that triggered the drag.
    */
-  startDrag(event) {
+  startDrag(event, modalId = "parametersModal") {
     this.isDragging = true;
-    this.modal = document.getElementById("parametersModal");
+    this.currentModal = document.getElementById(modalId);
+    if (!this.currentModal) {
+      console.error(`Modal with ID ${modalId} not found.`);
+      return;
+    }
 
     // Calculer l'offset par rapport à la souris
-    this.offsetX = event.clientX - this.modal.getBoundingClientRect().left;
-    this.offsetY = event.clientY - this.modal.getBoundingClientRect().top;
+    this.offsetX = event.clientX - this.currentModal.getBoundingClientRect().left;
+    this.offsetY = event.clientY - this.currentModal.getBoundingClientRect().top;
 
     // Écouter les événements de déplacement et d'arrêt
     document.addEventListener("mousemove", this.drag.bind(this));
@@ -92,11 +96,12 @@ class CTABanner{
    * @param {MouseEvent} event - The mouse event with current cursor position.
    */
   drag(event) {
-    if (!this.isDragging) return;
+    if (!this.isDragging || !this.currentModal) return;
 
-    this.modal = document.getElementById("parametersModal");
-    this.modal.style.left = `${event.clientX - this.offsetX}px`;
-    this.modal.style.top = `${event.clientY - this.offsetY}px`;
+   
+    this.currentModal.style.left = `${event.clientX - this.offsetX}px`;
+    this.currentModal.style.top = `${event.clientY - this.offsetY}px`;
+    this.currentModal.style.right = "auto";
   }
 
   /**

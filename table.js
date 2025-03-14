@@ -106,3 +106,4 @@ export default class Table {
           return this.table;
         }
 }
+
