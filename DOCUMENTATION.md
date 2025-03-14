@@ -42,8 +42,55 @@
     *   [Parameters][38]
 *   [isObjectFullyOccluded][39]
     *   [Parameters][40]
-*   [createTable][41]
-    *   [Parameters][42]
+*   [getNavbar][41]
+*   [getCanvas][42]
+*   [getContainer][43]
+*   [Deroulant][44]
+*   [openModal][45]
+    *   [Parameters][46]
+*   [closeModal][47]
+    *   [Parameters][48]
+*   [startDrag][49]
+    *   [Parameters][50]
+*   [drag][51]
+    *   [Parameters][52]
+*   [stopDrag][53]
+*   [getModal\_content][54]
+    *   [Parameters][55]
+*   [create\_modal][56]
+    *   [Parameters][57]
+*   [create\_dropdown][58]
+    *   [Parameters][59]
+*   [create\_dropdown\_list][60]
+    *   [Parameters][61]
+*   [Open\_dropdown][62]
+    *   [Parameters][63]
+*   [toggleDropdown][64]
+    *   [Parameters][65]
+*   [create\_button][66]
+    *   [Parameters][67]
+*   [createHTMLStructure][68]
+*   [style\_navbar\_children][69]
+    *   [Parameters][70]
+*   [style\_modal][71]
+    *   [Parameters][72]
+*   [style\_body\_html][73]
+    *   [Parameters][74]
+*   [style\_container0][75]
+    *   [Parameters][76]
+*   [style\_any][77]
+*   [style\_navbar][78]
+*   [style\_dropdown][79]
+    *   [Parameters][80]
+*   [style\_dropbtn][81]
+    *   [Parameters][82]
+*   [style\_hover][83]
+*   [style\_dropdown\_content][84]
+*   [style\_dropdown\_content\_a][85]
+*   [style\_dropdown\_content\_parameters][86]
+*   [style\_modal\_content][87]
+*   [style\_close][88]
+*   [style\_modal\_content\_button][89]
 
 ## constructor
 
@@ -57,16 +104,16 @@ It helps to keep all object at there place and with the right size when the wind
 
 ### Parameters
 
-*   `$0` **[Object][43]**  (optional, default `{}`)
+*   `$0` **[Object][90]**  (optional, default `{}`)
 
     *   `$0.renderer` &#x20;
     *   `$0.window` &#x20;
     *   `$0.camera` &#x20;
     *   `$0.enabled` &#x20;
 *   `renderer` **THREE.WebGLRenderer** The renderer responsible for rendering the scene.
-*   `window` **[Window][44]** The browser window containing the Three.js canvas.
+*   `window` **[Window][91]** The browser window containing the Three.js canvas.
 *   `camera` **THREE.PerspectiveCamera** The camera used to view the scene, typically a PerspectiveCamera.
-*   `enabled` **[boolean][45]** A boolean to enable or disable the resizing. Defaults to true.
+*   `enabled` **[boolean][92]** A boolean to enable or disable the resizing. Defaults to true.
 
 ## updateOcclusionVisibility
 
@@ -77,7 +124,7 @@ Only objects of type THREE.Mesh will be considered for occlusion visibility.
 ### Parameters
 
 *   `camera` **THREE.Camera** The camera position, from which the raycasting will start.
-*   `cameraDistanceThreshold` **[number][46]** The maximum distance at which to check for occlusion.
+*   `cameraDistanceThreshold` **[number][93]** The maximum distance at which to check for occlusion.
     Objects farther than this threshold will be hidden automatically.
 *   `raycaster` **THREE.Raycaster** The raycaster used for detecting intersections between objects.
 *   `direction` **THREE.Vector3** A reusable vector to specify the direction of the raycasting.
@@ -90,13 +137,13 @@ The light is positioned above the object, slightly offset in the y-direction.
 ### Parameters
 
 *   `object` **THREE.Object3D** The object to which the light will be attached.
-*   `$1` **[Object][43]**  (optional, default `{}`)
+*   `$1` **[Object][90]**  (optional, default `{}`)
 
     *   `$1.color` &#x20;
     *   `$1.intensity` &#x20;
     *   `$1.name` &#x20;
-*   `color` **[string][47]** The color of the light, specified as a hexadecimal string.
-*   `intensity` **[number][46]** The intensity of the light, typically between 0 and 1.
+*   `color` **[string][94]** The color of the light, specified as a hexadecimal string.
+*   `intensity` **[number][93]** The intensity of the light, typically between 0 and 1.
 
 Returns **THREE.DirectionalLight** The created light object.
 
@@ -104,7 +151,7 @@ Returns **THREE.DirectionalLight** The created light object.
 
 Begin the loading screen when we want to wait for model to be loaded.
 
-Returns **[HTMLElement][48]** The created loading screen element.
+Returns **[HTMLElement][95]** The created loading screen element.
 
 ## removeLoadingScreen
 
@@ -117,20 +164,20 @@ The model is set to invisible after loading. To get back the model, use .then() 
 
 ### Parameters
 
-*   `path` **[string][47]** The path to the GLTF model file.
-*   `name` **[string][47]** The name to assign to the loaded model.
-*   `$2` **[Object][43]**  (optional, default `{}`)
+*   `path` **[string][94]** The path to the GLTF model file.
+*   `name` **[string][94]** The name to assign to the loaded model.
+*   `$2` **[Object][90]**  (optional, default `{}`)
 
     *   `$2.size` &#x20;
     *   `$2.timeToWait` &#x20;
     *   `$2.visible` &#x20;
     *   `$2.position` &#x20;
     *   `$2.rotation` &#x20;
-*   `size` **[number][46]** The scale factor to apply to the model after loading.
-*   `timeToWait` **[number][46]** The delay (in milliseconds) to wait after loading the model.
-*   `visible` **[boolean][45]** A boolean to set the visibility of the model after loading.
-*   `position` **[Object][43]** The position to set the model after loading.
-*   `rotation` **[Object][43]** The rotation to set the model after loading.
+*   `size` **[number][93]** The scale factor to apply to the model after loading.
+*   `timeToWait` **[number][93]** The delay (in milliseconds) to wait after loading the model.
+*   `visible` **[boolean][92]** A boolean to set the visibility of the model after loading.
+*   `position` **[Object][90]** The position to set the model after loading.
+*   `rotation` **[Object][90]** The rotation to set the model after loading.
 
 Returns **THREE.Object3D** The loaded model object.
 
@@ -142,19 +189,19 @@ The name of the copy is generated by appending "\_copy" followed by an increment
 
 ### Parameters
 
-*   `name` **[string][47]** The name of the model to copy.
-*   `$1` **[Object][43]**  (optional, default `{}`)
+*   `name` **[string][94]** The name of the model to copy.
+*   `$1` **[Object][90]**  (optional, default `{}`)
 
     *   `$1.size` &#x20;
     *   `$1.counter` &#x20;
     *   `$1.timeToWait` &#x20;
     *   `$1.position` &#x20;
     *   `$1.rotation` &#x20;
-*   `size` **[number][46]** The scale factor to apply to the copied model. (optional, default `1`)
-*   `counter` **[number][46]** It can add a number to append to the copied model name. If nothing is given, it will resume its own naming. (optional, default `0`)
-*   `timeToWait` **[number][46]** The delay (in milliseconds) to wait after creating the copy. (optional, default `100`)
-*   `position` **[Object][43]** The position to set the copied model. (optional, default `{x:0,y:0,z:0}`)
-*   `rotation` **[Object][43]** The rotation to set the copied model. (optional, default `{x:0,y:0,z:0}`)
+*   `size` **[number][93]** The scale factor to apply to the copied model. (optional, default `1`)
+*   `counter` **[number][93]** It can add a number to append to the copied model name. If nothing is given, it will resume its own naming. (optional, default `0`)
+*   `timeToWait` **[number][93]** The delay (in milliseconds) to wait after creating the copy. (optional, default `100`)
+*   `position` **[Object][90]** The position to set the copied model. (optional, default `{x:0,y:0,z:0}`)
+*   `rotation` **[Object][90]** The rotation to set the copied model. (optional, default `{x:0,y:0,z:0}`)
 
 Returns **THREE.Object3D** The created copy object.
 
@@ -164,9 +211,9 @@ Deletes a copy of a model in the scene with the specified name.
 
 ### Parameters
 
-*   `name` **[String][47]** The name of the model to delete
+*   `name` **[String][94]** The name of the model to delete
 
-Returns **[Boolean][45]** Returns true if the copy was deleted, false otherwise.
+Returns **[Boolean][92]** Returns true if the copy was deleted, false otherwise.
 
 ## delete\_model
 
@@ -176,7 +223,7 @@ Deletes all copies of a model in the scene with the specified name with the orig
 
 *   `name` **any** The name of the model to delete
 
-Returns **[Boolean][45]** Returns true if the copies were deleted, false otherwise.
+Returns **[Boolean][92]** Returns true if the copies were deleted, false otherwise.
 
 ## loadTexture
 
@@ -185,15 +232,15 @@ The texture is set to repeat in both the S and T directions by default.
 
 ### Parameters
 
-*   `path` **[string][47]** The path to the texture image file.
-*   `$1` **[Object][43]**  (optional, default `{}`)
+*   `path` **[string][94]** The path to the texture image file.
+*   `$1` **[Object][90]**  (optional, default `{}`)
 
     *   `$1.repeatHorizontal` &#x20;
     *   `$1.repeatVertical` &#x20;
     *   `$1.repeat` &#x20;
-*   `repeatHorizontal` **[number][46]** The number of times to repeat the texture in the horizontal direction. (optional, default `1`)
-*   `repeatVertical` **[number][46]** The number of times to repeat the texture in the vertical direction. (optional, default `1`)
-*   `repeat` **[number][46]** The number of times to repeat the texture in both directions. (optional, default `1`)
+*   `repeatHorizontal` **[number][93]** The number of times to repeat the texture in the horizontal direction. (optional, default `1`)
+*   `repeatVertical` **[number][93]** The number of times to repeat the texture in the vertical direction. (optional, default `1`)
+*   `repeat` **[number][93]** The number of times to repeat the texture in both directions. (optional, default `1`)
 
 Returns **THREE.Texture** The loaded texture object.
 
@@ -205,7 +252,7 @@ To access to the top layer of the table, use the name you initilized the table w
 
 ### Parameters
 
-*   `$0` **[Object][43]**  (optional, default `{}`)
+*   `$0` **[Object][90]**  (optional, default `{}`)
 
     *   `$0.width` &#x20;
     *   `$0.depth` &#x20;
@@ -220,9 +267,9 @@ To access to the top layer of the table, use the name you initilized the table w
 *   `YoffSet` **Integer** The Y offset of the table.
 *   `widthSpace` **Integer** The width of the space between the table and the wall.
 *   `heightSpace` **Integer** The height of the space between the table and the ceiling.
-*   `floor` **[string][47]** The path to the texture image file for the floor. By default, it is a wood floor.
-*   `wall` **[string][47]** The path to the texture image file for the walls. By default, it is a brick wall.
-*   `ceiling` **[string][47]** The path to the texture image file for the ceiling. By default, it is a wood ceiling.
+*   `floor` **[string][94]** The path to the texture image file for the floor. By default, it is a wood floor.
+*   `wall` **[string][94]** The path to the texture image file for the walls. By default, it is a brick wall.
+*   `ceiling` **[string][94]** The path to the texture image file for the ceiling. By default, it is a wood ceiling.
 
 Returns **THREE.Mesh** The created box mesh object.
 
@@ -232,7 +279,7 @@ Add a scene with a box geometry and apply textures to its faces. The floor is at
 
 ### Parameters
 
-*   `$0` **[Object][43]**  (optional, default `{}`)
+*   `$0` **[Object][90]**  (optional, default `{}`)
 
     *   `$0.width` &#x20;
     *   `$0.height` &#x20;
@@ -243,9 +290,9 @@ Add a scene with a box geometry and apply textures to its faces. The floor is at
 *   `width` **Integer** The width of the box.
 *   `height` **Integer** The height of the box.
 *   `YoffSet` **Integer** The Y offset of the box.
-*   `floor` **[String][47]** The path to the texture image file for the floor. By default, it is a wood floor.
-*   `wall` **[String][47]** The path to the texture image file for the walls. By default, it is a brick wall.
-*   `ceiling` **[String][47]** The path to the texture image file for the ceiling. By default, it is a wood ceiling.
+*   `floor` **[String][94]** The path to the texture image file for the floor. By default, it is a wood floor.
+*   `wall` **[String][94]** The path to the texture image file for the walls. By default, it is a brick wall.
+*   `ceiling` **[String][94]** The path to the texture image file for the ceiling. By default, it is a wood ceiling.
 
 ## addSceneFromJson
 
@@ -253,7 +300,7 @@ Function to add a scene from an existing json file
 
 ### Parameters
 
-*   `path` **[String][47]** The path to the json file
+*   `path` **[String][94]** The path to the json file
 
 ## addButtonToNavbar
 
@@ -261,18 +308,18 @@ Add a button to the navbar with the specified text and onclick function.
 
 ### Parameters
 
-*   `$0` **[Object][43]**  (optional, default `{}`)
+*   `$0` **[Object][90]**  (optional, default `{}`)
 
     *   `$0.textButton`   (optional, default `"click me"`)
     *   `$0.onclickFunction`   (optional, default `()=>alert("click")`)
     *   `$0.hover`   (optional, default `true`)
     *   `$0.classesOfTheButton`   (optional, default `["a"]`)
-*   `textButton` **[string][47]** The text to display on the button.
-*   `onclickFunction` **[Function][49]** The function to execute when the button is clicked.
-*   `hover` **[boolean][45]** A boolean to enable or disable hover effects on the button. Defaults to true. (optional, default `true`)
-*   `classesOfTheButton` **[Array][50]<[string][47]>** An array of classes to apply to the button element. (optional, default `["a"]`)
+*   `textButton` **[string][94]** The text to display on the button.
+*   `onclickFunction` **[Function][96]** The function to execute when the button is clicked.
+*   `hover` **[boolean][92]** A boolean to enable or disable hover effects on the button. Defaults to true. (optional, default `true`)
+*   `classesOfTheButton` **[Array][97]<[string][94]>** An array of classes to apply to the button element. (optional, default `["a"]`)
 
-Returns **[HTMLElement][48]** The created button element.
+Returns **[HTMLElement][95]** The created button element.
 
 ## addDropdownToNavbar
 
@@ -281,14 +328,14 @@ Each dropdown item is an object with a 'text' property and an 'onClick' function
 
 ### Parameters
 
-*   `$0` **[Object][43]**  (optional, default `{}`)
+*   `$0` **[Object][90]**  (optional, default `{}`)
 
     *   `$0.textButton` &#x20;
     *   `$0.dropdownList` &#x20;
-*   `textButton` **[string][47]** The text to display on the dropdown button.
-*   `dropdownList` **[Array][50]<{text: [string][47], onClick: [Function][49]}>** An array of dropdown items.
+*   `textButton` **[string][94]** The text to display on the dropdown button.
+*   `dropdownList` **[Array][97]<{text: [string][94], onClick: [Function][96]}>** An array of dropdown items.
 
-Returns **[HTMLElement][48]** The created dropdown button element.
+Returns **[HTMLElement][95]** The created dropdown button element.
 
 ## changeTextOfButton
 
@@ -297,7 +344,7 @@ Change the text which is displayed on the button at the specified index in the n
 ### Parameters
 
 *   `buttonNumber` **Integer** The button which text will be changed. Value between 1 and +infinity
-*   `newText` **[String][47]** The text which will replace the current text of the button
+*   `newText` **[String][94]** The text which will replace the current text of the button
 
 ## changeTextOfDropdown
 
@@ -307,25 +354,25 @@ Change the text which is displayed on the dropdown button at the specified index
 
 *   `dropdownNumber` **Integer** The dropdown which text will be changed. Value between 1 and +infinity
 *   `dropBoxToChange` **Integer** The dropbox which text will be changed. Value between 0 and the number of button in the drop down.
-*   `newText` **[String][47]** The text which will replace the current text of the dropdown
+*   `newText` **[String][94]** The text which will replace the current text of the dropdown
 
 ## getWindowWidth
 
 Get the width of the browser window.
 
-Returns **[number][46]** The width of the browser window in pixels.
+Returns **[number][93]** The width of the browser window in pixels.
 
 ## getWindowHeight
 
 Get the height of the browser window.
 
-Returns **[number][46]** The height of the browser window in pixels.
+Returns **[number][93]** The height of the browser window in pixels.
 
 ## init
 
 Private function to initialize the scene, camera and renderer.
 
-Returns **[Object][43]** Returns an object containing the scene, camera and renderer.
+Returns **[Object][90]** Returns an object containing the scene, camera and renderer.
 
 ## resize
 
@@ -349,19 +396,230 @@ Private function to check if an object is fully occluded by other objects in the
 *   `raycaster` **any** The raycaster used for detecting intersections between objects.
 *   `direction` **any** A reusable vector to specify the direction of the raycasting.
 
-Returns **[boolean][45]** Returns true if the object is fully occluded, false otherwise.
+Returns **[boolean][92]** Returns true if the object is fully occluded, false otherwise.
 
-## createTable
+## getNavbar
 
-Create the table
-Create each part of the table to add them to a same group. It will be easier to move the table.
+Returns the navigation bar element.
+
+Returns **[HTMLElement][95]** The navbar DOM element.
+
+## getCanvas
+
+Returns the canvas element.
+
+Returns **[HTMLElement][95]** The canvas DOM element.
+
+## getContainer
+
+Returns the container element.
+
+Returns **[HTMLElement][95]** The container DOM element.
+
+## Deroulant
+
+Toggles the visibility of the dropdown menu.
+
+## openModal
+
+Opens a modal dialog with the specified ID.
 
 ### Parameters
 
-*   `w` &#x20;
-*   `d` &#x20;
+*   `modalId` **[string][94]** The ID of the modal to open.
 
-Returns **THREE.Group** The table
+## closeModal
+
+Closes a modal dialog with the specified ID.
+
+### Parameters
+
+*   `modalId` **[string][94]** The ID of the modal to close.
+
+## startDrag
+
+Initiates dragging of a modal element.
+
+### Parameters
+
+*   `event` **[MouseEvent][98]** The mouse event that triggered the drag.
+
+## drag
+
+Updates the position of the modal during dragging.
+
+### Parameters
+
+*   `event` **[MouseEvent][98]** The mouse event with current cursor position.
+
+## stopDrag
+
+Stops the dragging operation for the modal.
+
+## getModal\_content
+
+Gets the content element of a modal with the specified ID.
+
+### Parameters
+
+*   `modalId` **[string][94]** The ID of the modal whose content is requested.
+
+Returns **[HTMLElement][95]** The modal content DOM element.
+
+## create\_modal
+
+Creates a modal dialog with the specified ID.
+
+### Parameters
+
+*   `modalId` **[string][94]** The ID to assign to the created modal.
+
+## create\_dropdown
+
+Creates a dropdown menu in the navbar.
+
+### Parameters
+
+*   `options` **[Object][90]** Configuration options for the dropdown.
+
+    *   `options.parentId` **[string][94]** ID of the parent element. (optional, default `"navbar0"`)
+    *   `options.buttonText` **[string][94]** Text to display on the dropdown button.
+    *   `options.menuId` **[string][94]** ID for the dropdown menu.
+
+## create\_dropdown\_list
+
+Adds items to a dropdown menu.
+
+### Parameters
+
+*   `menuId` **[string][94]** The ID of the dropdown menu.
+*   `items` **[Array][97]<[Object][90]>** Array of items to add to the dropdown.
+
+    *   `items[].text` **[string][94]** Text for the dropdown item.
+    *   `items[].href` **[string][94]?** Optional href attribute for the item.
+    *   `items[].onClick` **[Function][96]?** Optional click handler for the item.
+
+## Open\_dropdown
+
+Sets up a global click handler for dropdown menus and modals.
+Closes dropdowns and modals when clicking outside them.
+
+### Parameters
+
+*   `window` **[Window][91]** The window object to attach the click handler to.
+
+## toggleDropdown
+
+Toggles the visibility of a dropdown menu.
+
+### Parameters
+
+*   `menuId` **[string][94]** The ID of the dropdown menu to toggle.
+
+## create\_button
+
+Creates and inserts a button into the navbar.
+
+### Parameters
+
+*   `options` **[Object][90]** Button configuration options.
+
+    *   `options.text` **[string][94]** Text to display on the button. (optional, default `"Click me!"`)
+    *   `options.onClick` **[Function][96]?** Function to execute when the button is clicked. (optional, default `()=>alert("Button clicked!")`)
+    *   `options.position` **[string][94]** Position relative to referenceElement. (optional, default `"before"`)
+    *   `options.referenceElement` **[HTMLElement][95]** Reference element for positioning. (optional, default `null`)
+    *   `options.classes` **[Array][97]<[string][94]>** CSS classes to apply to the button. (optional, default `[]`)
+
+Returns **[HTMLElement][95]** The created button element.
+
+## createHTMLStructure
+
+Creates the basic HTML structure for the banner.
+Includes a container, navbar, and logo.
+
+## style\_navbar\_children
+
+Applies styles to navbar child elements.
+
+### Parameters
+
+*   `navbar` **[HTMLElement][95]** The navbar element to style.
+
+## style\_modal
+
+Applies styles to a modal element.
+
+### Parameters
+
+*   `element` **[HTMLElement][95]** The modal element to style.
+
+## style\_body\_html
+
+Applies styles to HTML and body elements.
+
+### Parameters
+
+*   `element` **[HTMLElement][95]** The element to style.
+
+## style\_container0
+
+Applies styles to the main container element.
+
+### Parameters
+
+*   `element` **[HTMLElement][95]** The container element to style.
+
+## style\_any
+
+Applies reset styles to all elements in the document.
+
+## style\_navbar
+
+Applies styles to the navbar element.
+
+## style\_dropdown
+
+Applies styles to a dropdown element.
+
+### Parameters
+
+*   `elementOrId` **([string][94] | [HTMLElement][95])** The dropdown element or its ID.
+
+## style\_dropbtn
+
+Applies styles to a dropdown button element.
+
+### Parameters
+
+*   `elementOrId` **([string][94] | [HTMLElement][95])** The button element or its ID.
+
+## style\_hover
+
+Adds hover effect styles to navbar links and buttons.
+
+## style\_dropdown\_content
+
+Applies styles to dropdown content containers.
+
+## style\_dropdown\_content\_a
+
+Applies styles to links within dropdown content.
+
+## style\_dropdown\_content\_parameters
+
+Applies styles to parameters dropdown content.
+
+## style\_modal\_content
+
+Applies styles to modal content elements.
+
+## style\_close
+
+Applies styles to modal close buttons.
+
+## style\_modal\_content\_button
+
+Applies styles to buttons within modal content.
 
 [1]: #constructor
 
@@ -443,22 +701,118 @@ Returns **THREE.Group** The table
 
 [40]: #parameters-16
 
-[41]: #createtable
+[41]: #getnavbar
 
-[42]: #parameters-17
+[42]: #getcanvas
 
-[43]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[43]: #getcontainer
 
-[44]: https://developer.mozilla.org/docs/Web/API/Window
+[44]: #deroulant
 
-[45]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[45]: #openmodal
 
-[46]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[46]: #parameters-17
 
-[47]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[47]: #closemodal
 
-[48]: https://developer.mozilla.org/docs/Web/HTML/Element
+[48]: #parameters-18
 
-[49]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[49]: #startdrag
 
-[50]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[50]: #parameters-19
+
+[51]: #drag
+
+[52]: #parameters-20
+
+[53]: #stopdrag
+
+[54]: #getmodal_content
+
+[55]: #parameters-21
+
+[56]: #create_modal
+
+[57]: #parameters-22
+
+[58]: #create_dropdown
+
+[59]: #parameters-23
+
+[60]: #create_dropdown_list
+
+[61]: #parameters-24
+
+[62]: #open_dropdown
+
+[63]: #parameters-25
+
+[64]: #toggledropdown
+
+[65]: #parameters-26
+
+[66]: #create_button
+
+[67]: #parameters-27
+
+[68]: #createhtmlstructure
+
+[69]: #style_navbar_children
+
+[70]: #parameters-28
+
+[71]: #style_modal
+
+[72]: #parameters-29
+
+[73]: #style_body_html
+
+[74]: #parameters-30
+
+[75]: #style_container0
+
+[76]: #parameters-31
+
+[77]: #style_any
+
+[78]: #style_navbar
+
+[79]: #style_dropdown
+
+[80]: #parameters-32
+
+[81]: #style_dropbtn
+
+[82]: #parameters-33
+
+[83]: #style_hover
+
+[84]: #style_dropdown_content
+
+[85]: #style_dropdown_content_a
+
+[86]: #style_dropdown_content_parameters
+
+[87]: #style_modal_content
+
+[88]: #style_close
+
+[89]: #style_modal_content_button
+
+[90]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+
+[91]: https://developer.mozilla.org/docs/Web/API/Window
+
+[92]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+
+[93]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[94]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+
+[95]: https://developer.mozilla.org/docs/Web/HTML/Element
+
+[96]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+
+[97]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+
+[98]: https://developer.mozilla.org/docs/Web/API/MouseEvent

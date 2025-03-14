@@ -1,13 +1,13 @@
-
-
 ## [v1.2.6]
 ### Added
-- modal.js
+- DOCUMENTATION_BANNER.md
 
 ### Changed
--
+- package.json has been updated. Now when run updateDoc update the doc for our CTABanner.js file
+- the comments for the CTABanner.js file has been updated
 
 ### Removed
+- The previous comments of the CTABanner.js file has been replaced
 
 ### Deprecated
 
