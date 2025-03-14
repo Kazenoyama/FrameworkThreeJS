@@ -9,10 +9,10 @@
 
     "setupDirectory" :  "mkdir src\\css src\\js src\\models src\\textures framework\\css framework\\js framework\\textures",
     "addStyle": " (echo body { & type tab.txt & echo background-color: white; & type tab.txt & echo margin : 0; & echo })> framework\\css\\style.css",
-    "move": "move framework.js framework\\js\\framework.js && move CTABanner.js framework\\js\\CTABanner.js && move createScene.js framework\\js\\createScene.js && move table.js framework\\js\\table.js && move roof.jpg framework\\textures\\roof.jpg && move wall.jpg framework\\textures\\wall.jpg && move wood_floor.jpg framework\\textures\\wood_floor.jpg && move main.js src\\js\\main.js && move BannerStyle.css framework\\css\\BannerStyle.css",
+    "move": "move framework.js framework\\js\\framework.js && move CTABanner.js framework\\js\\CTABanner.js && move modal.js framework\\js\\modal.js && move createScene.js framework\\js\\createScene.js && move table.js framework\\js\\table.js && move roof.jpg framework\\textures\\roof.jpg && move wall.jpg framework\\textures\\wall.jpg && move wood_floor.jpg framework\\textures\\wood_floor.jpg && move main.js src\\js\\main.js && move BannerStyle.css framework\\css\\BannerStyle.css",
     "remove3D": "echo '' > framework\\js\\framework.js && echo '' > framework\\js\\createScene.js && echo '' > framework\\js\\table.js",
 
-    "initialState": "move framework\\js\\framework.js framework.js && move framework\\js\\CTABanner.js CTABanner.js && move framework\\js\\createScene.js createScene.js && move framework\\js\\table.js table.js && move framework\\textures\\roof.jpg roof.jpg && move framework\\textures\\wall.jpg wall.jpg && move framework\\textures\\wood_floor.jpg wood_floor.jpg && move src\\js\\main.js main.js && move framework\\css\\BannerStyle.css && npm run delete && npm run updateDoc",
+    "initialState": "move framework\\js\\framework.js framework.js && move framework\\js\\CTABanner.js CTABanner.js &&move framework\\js\\modal.js modal.js && move framework\\js\\createScene.js createScene.js && move framework\\js\\table.js table.js && move framework\\textures\\roof.jpg roof.jpg && move framework\\textures\\wall.jpg wall.jpg && move framework\\textures\\wood_floor.jpg wood_floor.jpg && move src\\js\\main.js main.js && move framework\\css\\BannerStyle.css && npm run delete && npm run updateDoc",
     "delete": "rmdir /s /q src && rmdir /s /q node_modules && rmdir /s /q framework && del package-lock.json",
     "updateDoc": "documentation build framework.js -f md -o DOCUMENTATION.md",
     
@@ -25,7 +25,7 @@
     "web",
     "application"
   ],
-  "author": "Kishan Turpin <kishan.turpin@gmail.com>, Dylan Malaussena",
+  "author": "Kishan Turpin <kishan.turpin@gmail.com>, Dylan Malaussena <dylan.malaussena@hotmail.fr>",
   "license": "ISC",
   "description": "This is a Three.js framework for creating 3D web application for TerraNumerica.",
   "dependencies": {

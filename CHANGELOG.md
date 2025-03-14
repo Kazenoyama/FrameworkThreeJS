@@ -1,3 +1,19 @@
+
+
+## [v1.2.6]
+### Added
+- modal.js
+
+### Changed
+-
+
+### Removed
+
+### Deprecated
+
+### Fixed
+
+# --------------------------------------------------------------------
 ## [v1.2.5]
 ### Added
 - BannerStyle.css
