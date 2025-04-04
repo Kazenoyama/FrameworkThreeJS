@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import createScene from './createScene';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import CTABanner from './CTABanner';
+import Modal from './modal';
 
 class Framework {
     CTABannerParameter;         // Contains the following keys: Banner, navbar, container
@@ -20,11 +21,8 @@ class Framework {
         console.log('Framework constructor');
         
         const Banner = new CTABanner();
-        Banner.createHTMLStructure();
-        const navbar = Banner.getNavbar();
-        Banner.style_navbar();
-        const container = Banner.getContainer();
-        Banner.style_container0(container);
+        var navbar = Banner.getNavbar();
+        var container = Banner.getContainer();
         
         this.CTABannerParameter = {"Banner": Banner,"navbar": navbar, "container": container};
         this.mainParameters = this.#init();
@@ -509,13 +507,8 @@ class Framework {
         const Banner = this.CTABannerParameter.Banner;
         const navbar = this.CTABannerParameter.navbar;
         const container = this.CTABannerParameter.container;
-        Banner.create_button(navbar, { text: defaultParams.textButton, onClick: defaultParams.onclickFunction, classes: defaultParams.classesOfTheButton });
-        Banner.style_any();
-        if (hover == true) {
-            Banner.style_hover(defaultParams.textButton);
-        }
+        Banner.create_button({ text: defaultParams.textButton, onClick: defaultParams.onclickFunction, classes: defaultParams.classesOfTheButton });
         
-        Banner.style_navbar_children(navbar);
         var buttonToChange = document.getElementById("navbar0").children[document.getElementById("navbar0").children.length - 1];
         return buttonToChange;
     }
@@ -541,17 +534,8 @@ class Framework {
         const navbar = this.CTABannerParameter.navbar;
         const container = this.CTABannerParameter.container;
 
-        Banner.create_dropdown({ parentId: "navbar0", buttonText: defaultParams.textButton, menuId: defaultParams.textButton });
-        Banner.create_dropdown_list(defaultParams.textButton, defaultParams.dropdownList);
-
-        Banner.style_any();
-        Banner.style_hover(defaultParams.textButton);
-        Banner.style_navbar_children(navbar);
-        Banner.style_dropdown(defaultParams.textButton);
-        Banner.style_dropbtn(defaultParams.textButton);
-        Banner.style_dropdown_content();
-        Banner.style_dropdown_content_a();
-        Banner.style_dropdown_content_parameters();  
+        Banner.create_dropdown({buttonText: defaultParams.textButton, menuId: defaultParams.textButton });
+        Banner.create_dropdown_list(defaultParams.textButton, defaultParams.dropdownList);  
 
         var buttonToChange = document.getElementById("navbar0").children[document.getElementById("navbar0").children.length - 1];
         return buttonToChange;
@@ -606,6 +590,169 @@ class Framework {
      */
     getWindowHeight(){return window.innerHeight - document.getElementById("navbar0").offsetHeight;}
 
+//---------------------- Modal functions ----------------------
+/**
+ * Creates a customizable modal window for controls, parameters, and user interaction.
+ * The modal can be dragged, styled with different themes, and populated with various UI elements.
+ * 
+ * @param {Object} [options={}] - Configuration options for the modal
+ * @param {string} [options.title="Parameters"] - The title displayed in the modal header
+ * @param {boolean} [options.draggable=true] - Whether the modal can be moved by dragging
+ * @param {boolean} [options.showCloseButton=true] - Whether to show a close button in the modal
+ * @param {Object} [options.position] - Initial position of the modal
+ * @param {number} [options.position.right=10] - Distance from right edge as percentage
+ * @param {number} [options.position.top=10] - Distance from top edge as percentage
+ * @param {string} [options.width="300px"] - Width of the modal (CSS value)
+ * @param {boolean} [options.visible=true] - Whether the modal is initially visible
+ * @param {string} [options.id="controlPanel"] - Unique ID for the modal element
+ * @param {string} [options.theme="light"] - Color theme ("light" or "dark")
+ * @returns {Object} An object containing methods to interact with the modal
+ */
+getPermanentModal({title, draggable, showCloseButton, position, width, visible, id, theme} = {}){
+    const md = new Modal(this.CTABannerParameter.Banner);
+    const ModalControls = md.getPermanentModal({title:title, draggable:draggable, showCloseButton:showCloseButton, position:position, width:width, visible:visible, id:id, theme:theme});
+    return {
+    /**
+     * Adds a button to the modal with customizable styling and behavior.
+     * 
+     * @param {string} text - Text displayed on the button
+     * @param {Function} onClick - Function to execute when the button is clicked
+     * @param {Object} [options={}] - Button styling options
+     * @param {string} [options.width="80%"] - Width of the button (CSS value)
+     * @param {string} [options.color="#4CAF50"] - Background color of the button
+     * @param {string} [options.textColor="white"] - Text color of the button
+     * @param {string} [options.hoverColor="#45a049"] - Background color when hovering
+     * @returns {HTMLElement} The created button element
+     */
+    AddButtonToModal: (text, onClick, options = {}) => {
+        ModalControls.addButton(text, onClick, options);
+    },
+    /**
+     * Adds a slider input to the modal for selecting numeric values.
+     * 
+     * @param {string} label - Text label for the slider
+     * @param {number} min - Minimum value of the slider
+     * @param {number} max - Maximum value of the slider
+     * @param {number} value - Initial value of the slider
+     * @param {Function} onChange - Function called when the slider value changes
+     * @param {Object} [options={}] - Additional configuration options
+     * @param {number} [options.step=1] - Step increment for the slider
+     * @param {Function} [options.formatValue] - Function to format the displayed value
+     * @returns {Object} Object containing the slider, valueDisplay, and container elements
+     */
+    AddSliderToModal: (label, min, max, value, onChange, options = {}) => {
+        ModalControls.addSlider(label, min, max, value, onChange, options);
+    },
+    /**
+     * Adds a checkbox input to the modal.
+     * 
+     * @param {string} label - Text label for the checkbox
+     * @param {boolean} checked - Initial checked state of the checkbox
+     * @param {Function} onChange - Function called when the checkbox state changes
+     * @returns {Object} Object containing the checkbox and container elements
+     */
+    AddCheckboxToModal: (label, checked, onChange) => {
+        ModalControls.addCheckbox(label, checked, onChange);
+    },
+    /**
+     * Adds a dropdown select input to the modal.
+     * 
+     * @param {string} label - Text label for the dropdown
+     * @param {Array<Object>} options - Array of options for the dropdown
+     * @param {string} options[].value - Value of each option
+     * @param {string} [options[].label] - Display text for each option (defaults to value if not provided)
+     * @param {string} selectedValue - Initially selected value
+     * @param {Function} onChange - Function called when the selected option changes
+     * @returns {Object} Object containing the select and container elements
+     */
+    AddDropDownToModal: (label, options, selectedValue, onChange) => {
+        ModalControls.addDropDown(label, options, selectedValue, onChange);
+    },
+    /**
+     * Adds a color picker input to the modal.
+     * 
+     * @param {string} label - Text label for the color picker
+     * @param {string} initialColor - Initial color value in hexadecimal format (e.g., "#FF0000")
+     * @param {Function} onChange - Function called when the selected color changes
+     * @returns {Object} Object containing the colorPicker, valueDisplay, and container elements
+     */
+    AddColorPickerToModal: (label, initialColor, onChange) => {
+        ModalControls.addColorPicker(label, initialColor, onChange);
+    },
+    /**
+     * Adds a horizontal line separator to the modal.
+     * 
+     * @returns {HTMLElement} The created separator element
+     */
+    AddSeparatorToModal: () => {
+        ModalControls.addSeparator();
+    },
+    /**
+     * Adds a text label to the modal with customizable styling.
+     * 
+     * @param {string} text - Text content of the label
+     * @param {Object} [options={}] - Styling options for the label
+     * @param {string} [options.align="left"] - Text alignment ("left", "center", or "right")
+     * @param {boolean} [options.bold=false] - Whether to display the text in bold
+     * @param {string} [options.fontSize="inherit"] - Font size (CSS value)
+     * @param {string} [options.color="inherit"] - Text color
+     * @returns {HTMLElement} The created label element
+     */
+    AddLabelToModal: (text, options = {}) => {
+        ModalControls.addLabel(text, options);
+    },
+    /**
+     * Clears all content from the modal form container.
+     */
+    ClearFormModal: () => {
+        md.clear();
+    },
+     /**
+ * Toggles the collapsed state of the modal with a smooth animation.
+ * When collapsed, only the header is visible; when expanded, all content is shown.
+ * 
+ * @returns {void}
+ * @example
+ * // Get a modal instance first
+ * const modal = fw.getPermanentModal({title: "Settings"});
+ * // Then toggle its collapsed state
+ * modal.ToggleCollapseModal();
+ */
+ToggleCollapseModal: () => {
+    ModalControls.toggleCollapse();
+},
+
+/**
+ * Collapses the modal to show only the header with a smooth animation.
+ * If the modal is already collapsed, this method has no effect.
+ * 
+ * @returns {void}
+ * @example
+ * // Get a modal instance first
+ * const modal = fw.getPermanentModal({title: "Settings"});
+ * // Then collapse it
+ * modal.CollapseModal();
+ */
+CollapseModal: () => {
+    ModalControls.collapse();
+},
+
+/**
+ * Expands the modal to show all content with a smooth animation.
+ * If the modal is already expanded, this method has no effect.
+ * 
+ * @returns {void}
+ * @example
+ * // Get a modal instance first
+ * const modal = fw.getPermanentModal({title: "Settings"});
+ * // Then expand it
+ * modal.ExpandModal();
+ */
+ExpandModal: () => {
+    ModalControls.expand();
+}
+}
+}
 // ---------------------- Private functions ----------------------
 
     /**
