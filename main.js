@@ -3,7 +3,7 @@
 // import modal from '../../framework/js/modal.js';
 // import CTABanner from '../../framework/js/CTABanner';
 // const ctaBanner = new CTABanner();
-// ctaBanner.create_button("Button 1", () => alert("Hello World"));
+// ctaBanner.create_button("Rules", () => alert("Hello World"));
 // const md = new modal(ctaBanner);
 // md.getPermanentModal({
 //     title: "titre",
@@ -21,6 +21,7 @@
 import Framework from '../../framework/js/framework.js';
 
 const fw = new Framework();
+fw.addButtonToNavbar({textButton : "Rules",onclickFunction: () => alert("Hello World")});
 const modal1 = fw.getPermanentModal({
     title: "titre",
     position: { top: 10, right: 10 },

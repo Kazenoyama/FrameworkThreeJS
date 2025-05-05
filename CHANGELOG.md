@@ -11,6 +11,7 @@
         const products = cs.createProducts(scene, this,{width :8,depth : 10,height: 5});
         const tips = cs.Show_tips();
         return table && cupboard && products;
+- added an exemple on how to create a button for the navbar for the 3D setup
 ### Changed
 - The style of the banner and of the modal have been changed to better match the style of terra numerica.
 - the title of the hmtl page has been changed.
@@ -19,6 +20,8 @@
 - 
 
 ### Removed
+- Remove the creation of the button : "Rules" and "About" when you create the CTA Banner,
+user weren't able to edit them.
 
 ### Deprecated
 

@@ -4,9 +4,7 @@ class CTABanner{
       this.createHTMLStructure();
       this.navbar = this.getNavbar();
       this.create_favicon();
-      var buttonAbout = this.create_button({text : "About"})
-      var buttonRules = this.create_button({text : "Rules"})
-      this.aboutRules = {About : buttonAbout, Rules : buttonRules};
+  
   }
 
   /**
