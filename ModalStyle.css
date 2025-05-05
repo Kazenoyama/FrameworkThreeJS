@@ -85,9 +85,17 @@
     background-color: inherit;
   }
   
+  .modal-button:hover {
+    background-color: #f9bb12 !important;
+  }
+  
   .modal-button-dark {
     color: white;
     background-color: inherit;
+  }
+  
+  .modal-button-dark:hover {
+    background-color: #f9bb12 !important;
   }
   
   /* Form Controls */

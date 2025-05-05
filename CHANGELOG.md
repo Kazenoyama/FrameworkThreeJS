@@ -23,6 +23,7 @@
 ### Deprecated
 
 ### Fixed
+- fixed the hover effect of the button for the modal ( was green ) meant to be yellow.
 
 # --------------------------------------------------------------------
 

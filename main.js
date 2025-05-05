@@ -31,6 +31,8 @@ const modal1 = fw.getPermanentModal({
 //rajouer un bouton dans le modal avec la méthode addButton
 modal1.AddButtonToModal("Button 1", () => alert("Hello World"));
 
+
+
 const scene = fw.mainParameters.scene;
 const renderer = fw.mainParameters.renderer;
 const camera = fw.mainParameters.camera;
