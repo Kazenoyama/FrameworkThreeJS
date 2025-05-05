@@ -284,13 +284,13 @@ class Modal {
                 
                 // Add hover effects
                 button.addEventListener("mouseover", () => {
-                    button.style.backgroundColor = options.hoverColor || "#45a049";
+                    button.style.backgroundColor = "#f9bb12";
                     
                     
                 });
                 
                 button.addEventListener("mouseout", () => {
-                    button.style.backgroundColor = options.color || "#4CAF50";
+                    button.style.backgroundColor = "inherit";
                 });
                 
                 formContainer.appendChild(button);
