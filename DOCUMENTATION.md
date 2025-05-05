@@ -27,23 +27,53 @@
     *   [Parameters][23]
 *   [addSceneFromJson][24]
     *   [Parameters][25]
-*   [addButtonToNavbar][26]
+*   [addInteractiveCupboard][26]
     *   [Parameters][27]
-*   [addDropdownToNavbar][28]
+*   [setupProductInteractions][28]
     *   [Parameters][29]
-*   [changeTextOfButton][30]
+*   [update][30]
     *   [Parameters][31]
-*   [changeTextOfDropdown][32]
-    *   [Parameters][33]
-*   [getWindowWidth][34]
-*   [getWindowHeight][35]
-*   [init][36]
-*   [resize][37]
-    *   [Parameters][38]
-*   [isObjectFullyOccluded][39]
-    *   [Parameters][40]
-*   [createTable][41]
-    *   [Parameters][42]
+*   [createTooltip][32]
+*   [updateProductInteractions][33]
+    *   [Parameters][34]
+*   [Show\_tips][35]
+*   [addButtonToNavbar][36]
+    *   [Parameters][37]
+*   [addDropdownToNavbar][38]
+    *   [Parameters][39]
+*   [changeTextOfButton][40]
+    *   [Parameters][41]
+*   [changeTextOfDropdown][42]
+    *   [Parameters][43]
+*   [getWindowWidth][44]
+*   [getWindowHeight][45]
+*   [getPermanentModal][46]
+    *   [Parameters][47]
+*   [AddButtonToModal][48]
+    *   [Parameters][49]
+*   [AddSliderToModal][50]
+    *   [Parameters][51]
+*   [AddCheckboxToModal][52]
+    *   [Parameters][53]
+*   [AddDropDownToModal][54]
+    *   [Parameters][55]
+*   [AddColorPickerToModal][56]
+    *   [Parameters][57]
+*   [AddSeparatorToModal][58]
+*   [AddLabelToModal][59]
+    *   [Parameters][60]
+*   [ClearFormModal][61]
+*   [ToggleCollapseModal][62]
+    *   [Examples][63]
+*   [CollapseModal][64]
+    *   [Examples][65]
+*   [ExpandModal][66]
+    *   [Examples][67]
+*   [init][68]
+*   [resize][69]
+    *   [Parameters][70]
+*   [isObjectFullyOccluded][71]
+    *   [Parameters][72]
 
 ## constructor
 
@@ -57,16 +87,16 @@ It helps to keep all object at there place and with the right size when the wind
 
 ### Parameters
 
-*   `$0` **[Object][43]**  (optional, default `{}`)
+*   `$0` **[Object][73]**  (optional, default `{}`)
 
     *   `$0.renderer` &#x20;
     *   `$0.window` &#x20;
     *   `$0.camera` &#x20;
     *   `$0.enabled` &#x20;
 *   `renderer` **THREE.WebGLRenderer** The renderer responsible for rendering the scene.
-*   `window` **[Window][44]** The browser window containing the Three.js canvas.
+*   `window` **[Window][74]** The browser window containing the Three.js canvas.
 *   `camera` **THREE.PerspectiveCamera** The camera used to view the scene, typically a PerspectiveCamera.
-*   `enabled` **[boolean][45]** A boolean to enable or disable the resizing. Defaults to true.
+*   `enabled` **[boolean][75]** A boolean to enable or disable the resizing. Defaults to true.
 
 ## updateOcclusionVisibility
 
@@ -77,7 +107,7 @@ Only objects of type THREE.Mesh will be considered for occlusion visibility.
 ### Parameters
 
 *   `camera` **THREE.Camera** The camera position, from which the raycasting will start.
-*   `cameraDistanceThreshold` **[number][46]** The maximum distance at which to check for occlusion.
+*   `cameraDistanceThreshold` **[number][76]** The maximum distance at which to check for occlusion.
     Objects farther than this threshold will be hidden automatically.
 *   `raycaster` **THREE.Raycaster** The raycaster used for detecting intersections between objects.
 *   `direction` **THREE.Vector3** A reusable vector to specify the direction of the raycasting.
@@ -90,13 +120,13 @@ The light is positioned above the object, slightly offset in the y-direction.
 ### Parameters
 
 *   `object` **THREE.Object3D** The object to which the light will be attached.
-*   `$1` **[Object][43]**  (optional, default `{}`)
+*   `$1` **[Object][73]**  (optional, default `{}`)
 
     *   `$1.color` &#x20;
     *   `$1.intensity` &#x20;
     *   `$1.name` &#x20;
-*   `color` **[string][47]** The color of the light, specified as a hexadecimal string.
-*   `intensity` **[number][46]** The intensity of the light, typically between 0 and 1.
+*   `color` **[string][77]** The color of the light, specified as a hexadecimal string.
+*   `intensity` **[number][76]** The intensity of the light, typically between 0 and 1.
 
 Returns **THREE.DirectionalLight** The created light object.
 
@@ -104,7 +134,7 @@ Returns **THREE.DirectionalLight** The created light object.
 
 Begin the loading screen when we want to wait for model to be loaded.
 
-Returns **[HTMLElement][48]** The created loading screen element.
+Returns **[HTMLElement][78]** The created loading screen element.
 
 ## removeLoadingScreen
 
@@ -117,20 +147,20 @@ The model is set to invisible after loading. To get back the model, use .then() 
 
 ### Parameters
 
-*   `path` **[string][47]** The path to the GLTF model file.
-*   `name` **[string][47]** The name to assign to the loaded model.
-*   `$2` **[Object][43]**  (optional, default `{}`)
+*   `path` **[string][77]** The path to the GLTF model file.
+*   `name` **[string][77]** The name to assign to the loaded model.
+*   `$2` **[Object][73]**  (optional, default `{}`)
 
     *   `$2.size` &#x20;
     *   `$2.timeToWait` &#x20;
     *   `$2.visible` &#x20;
     *   `$2.position` &#x20;
     *   `$2.rotation` &#x20;
-*   `size` **[number][46]** The scale factor to apply to the model after loading.
-*   `timeToWait` **[number][46]** The delay (in milliseconds) to wait after loading the model.
-*   `visible` **[boolean][45]** A boolean to set the visibility of the model after loading.
-*   `position` **[Object][43]** The position to set the model after loading.
-*   `rotation` **[Object][43]** The rotation to set the model after loading.
+*   `size` **[number][76]** The scale factor to apply to the model after loading.
+*   `timeToWait` **[number][76]** The delay (in milliseconds) to wait after loading the model.
+*   `visible` **[boolean][75]** A boolean to set the visibility of the model after loading.
+*   `position` **[Object][73]** The position to set the model after loading.
+*   `rotation` **[Object][73]** The rotation to set the model after loading.
 
 Returns **THREE.Object3D** The loaded model object.
 
@@ -142,19 +172,19 @@ The name of the copy is generated by appending "\_copy" followed by an increment
 
 ### Parameters
 
-*   `name` **[string][47]** The name of the model to copy.
-*   `$1` **[Object][43]**  (optional, default `{}`)
+*   `name` **[string][77]** The name of the model to copy.
+*   `$1` **[Object][73]**  (optional, default `{}`)
 
     *   `$1.size` &#x20;
     *   `$1.counter` &#x20;
     *   `$1.timeToWait` &#x20;
     *   `$1.position` &#x20;
     *   `$1.rotation` &#x20;
-*   `size` **[number][46]** The scale factor to apply to the copied model. (optional, default `1`)
-*   `counter` **[number][46]** It can add a number to append to the copied model name. If nothing is given, it will resume its own naming. (optional, default `0`)
-*   `timeToWait` **[number][46]** The delay (in milliseconds) to wait after creating the copy. (optional, default `100`)
-*   `position` **[Object][43]** The position to set the copied model. (optional, default `{x:0,y:0,z:0}`)
-*   `rotation` **[Object][43]** The rotation to set the copied model. (optional, default `{x:0,y:0,z:0}`)
+*   `size` **[number][76]** The scale factor to apply to the copied model. (optional, default `1`)
+*   `counter` **[number][76]** It can add a number to append to the copied model name. If nothing is given, it will resume its own naming. (optional, default `0`)
+*   `timeToWait` **[number][76]** The delay (in milliseconds) to wait after creating the copy. (optional, default `100`)
+*   `position` **[Object][73]** The position to set the copied model. (optional, default `{x:0,y:0,z:0}`)
+*   `rotation` **[Object][73]** The rotation to set the copied model. (optional, default `{x:0,y:0,z:0}`)
 
 Returns **THREE.Object3D** The created copy object.
 
@@ -164,9 +194,9 @@ Deletes a copy of a model in the scene with the specified name.
 
 ### Parameters
 
-*   `name` **[String][47]** The name of the model to delete
+*   `name` **[String][77]** The name of the model to delete
 
-Returns **[Boolean][45]** Returns true if the copy was deleted, false otherwise.
+Returns **[Boolean][75]** Returns true if the copy was deleted, false otherwise.
 
 ## delete\_model
 
@@ -176,7 +206,7 @@ Deletes all copies of a model in the scene with the specified name with the orig
 
 *   `name` **any** The name of the model to delete
 
-Returns **[Boolean][45]** Returns true if the copies were deleted, false otherwise.
+Returns **[Boolean][75]** Returns true if the copies were deleted, false otherwise.
 
 ## loadTexture
 
@@ -185,15 +215,15 @@ The texture is set to repeat in both the S and T directions by default.
 
 ### Parameters
 
-*   `path` **[string][47]** The path to the texture image file.
-*   `$1` **[Object][43]**  (optional, default `{}`)
+*   `path` **[string][77]** The path to the texture image file.
+*   `$1` **[Object][73]**  (optional, default `{}`)
 
     *   `$1.repeatHorizontal` &#x20;
     *   `$1.repeatVertical` &#x20;
     *   `$1.repeat` &#x20;
-*   `repeatHorizontal` **[number][46]** The number of times to repeat the texture in the horizontal direction. (optional, default `1`)
-*   `repeatVertical` **[number][46]** The number of times to repeat the texture in the vertical direction. (optional, default `1`)
-*   `repeat` **[number][46]** The number of times to repeat the texture in both directions. (optional, default `1`)
+*   `repeatHorizontal` **[number][76]** The number of times to repeat the texture in the horizontal direction. (optional, default `1`)
+*   `repeatVertical` **[number][76]** The number of times to repeat the texture in the vertical direction. (optional, default `1`)
+*   `repeat` **[number][76]** The number of times to repeat the texture in both directions. (optional, default `1`)
 
 Returns **THREE.Texture** The loaded texture object.
 
@@ -205,7 +235,7 @@ To access to the top layer of the table, use the name you initilized the table w
 
 ### Parameters
 
-*   `$0` **[Object][43]**  (optional, default `{}`)
+*   `$0` **[Object][73]**  (optional, default `{}`)
 
     *   `$0.width` &#x20;
     *   `$0.depth` &#x20;
@@ -220,9 +250,9 @@ To access to the top layer of the table, use the name you initilized the table w
 *   `YoffSet` **Integer** The Y offset of the table.
 *   `widthSpace` **Integer** The width of the space between the table and the wall.
 *   `heightSpace` **Integer** The height of the space between the table and the ceiling.
-*   `floor` **[string][47]** The path to the texture image file for the floor. By default, it is a wood floor.
-*   `wall` **[string][47]** The path to the texture image file for the walls. By default, it is a brick wall.
-*   `ceiling` **[string][47]** The path to the texture image file for the ceiling. By default, it is a wood ceiling.
+*   `floor` **[string][77]** The path to the texture image file for the floor. By default, it is a wood floor.
+*   `wall` **[string][77]** The path to the texture image file for the walls. By default, it is a brick wall.
+*   `ceiling` **[string][77]** The path to the texture image file for the ceiling. By default, it is a wood ceiling.
 
 Returns **THREE.Mesh** The created box mesh object.
 
@@ -232,7 +262,7 @@ Add a scene with a box geometry and apply textures to its faces. The floor is at
 
 ### Parameters
 
-*   `$0` **[Object][43]**  (optional, default `{}`)
+*   `$0` **[Object][73]**  (optional, default `{}`)
 
     *   `$0.width` &#x20;
     *   `$0.height` &#x20;
@@ -243,9 +273,9 @@ Add a scene with a box geometry and apply textures to its faces. The floor is at
 *   `width` **Integer** The width of the box.
 *   `height` **Integer** The height of the box.
 *   `YoffSet` **Integer** The Y offset of the box.
-*   `floor` **[String][47]** The path to the texture image file for the floor. By default, it is a wood floor.
-*   `wall` **[String][47]** The path to the texture image file for the walls. By default, it is a brick wall.
-*   `ceiling` **[String][47]** The path to the texture image file for the ceiling. By default, it is a wood ceiling.
+*   `floor` **[String][77]** The path to the texture image file for the floor. By default, it is a wood floor.
+*   `wall` **[String][77]** The path to the texture image file for the walls. By default, it is a brick wall.
+*   `ceiling` **[String][77]** The path to the texture image file for the ceiling. By default, it is a wood ceiling.
 
 ## addSceneFromJson
 
@@ -253,7 +283,61 @@ Function to add a scene from an existing json file
 
 ### Parameters
 
-*   `path` **[String][47]** The path to the json file
+*   `path` **[String][77]** The path to the json file
+
+## addInteractiveCupboard
+
+Creates an interactive cupboard/cabinet with product display capabilities.
+This cupboard will be added to the scene and can be interacted with.
+
+### Parameters
+
+*   `options` **[Object][73]** Configuration options (optional, default `{}`)
+
+    *   `options.width` **[number][76]** Width of the cupboard (optional, default `80`)
+    *   `options.depth` **[number][76]** Depth of the cupboard (optional, default `100`)
+    *   `options.height` **[number][76]** Height of the cupboard (optional, default `10`)
+
+Returns **[Object][73]** The created cupboard object
+
+## setupProductInteractions
+
+Sets up interactive capabilities for product viewing in the cupboard.
+Initializes raycasting and event listeners for hover and click interactions.
+
+### Parameters
+
+*   `cupboard` **[Object][73]** The cupboard object to add interaction to
+
+## update
+
+Updates interactive elements and raycasting in the scene.
+Should be called in the animation loop to keep interactions current.
+
+### Parameters
+
+*   `camera` **THREE.Camera** The camera used for raycasting and interaction
+
+## createTooltip
+
+Creates a tooltip element for displaying information about hovered products.
+The tooltip appears near the cursor when hovering over interactive elements.
+
+## updateProductInteractions
+
+Updates product interactions by performing raycasting from the camera.
+Handles hover states and tooltip visibility based on cursor position.
+
+### Parameters
+
+*   `camera` **THREE.Camera** The camera to use for raycasting
+
+## Show\_tips
+
+Creates tips/tooltips for interactive elements in the scene.
+Sets up event listeners for hovering and clicking on interactive objects.
+
+Returns **[HTMLElement][78]** The created tooltip element
 
 ## addButtonToNavbar
 
@@ -261,18 +345,18 @@ Add a button to the navbar with the specified text and onclick function.
 
 ### Parameters
 
-*   `$0` **[Object][43]**  (optional, default `{}`)
+*   `$0` **[Object][73]**  (optional, default `{}`)
 
     *   `$0.textButton`   (optional, default `"click me"`)
     *   `$0.onclickFunction`   (optional, default `()=>alert("click")`)
     *   `$0.hover`   (optional, default `true`)
     *   `$0.classesOfTheButton`   (optional, default `["a"]`)
-*   `textButton` **[string][47]** The text to display on the button.
-*   `onclickFunction` **[Function][49]** The function to execute when the button is clicked.
-*   `hover` **[boolean][45]** A boolean to enable or disable hover effects on the button. Defaults to true. (optional, default `true`)
-*   `classesOfTheButton` **[Array][50]<[string][47]>** An array of classes to apply to the button element. (optional, default `["a"]`)
+*   `textButton` **[string][77]** The text to display on the button.
+*   `onclickFunction` **[Function][79]** The function to execute when the button is clicked.
+*   `hover` **[boolean][75]** A boolean to enable or disable hover effects on the button. Defaults to true. (optional, default `true`)
+*   `classesOfTheButton` **[Array][80]<[string][77]>** An array of classes to apply to the button element. (optional, default `["a"]`)
 
-Returns **[HTMLElement][48]** The created button element.
+Returns **[HTMLElement][78]** The created button element.
 
 ## addDropdownToNavbar
 
@@ -281,14 +365,14 @@ Each dropdown item is an object with a 'text' property and an 'onClick' function
 
 ### Parameters
 
-*   `$0` **[Object][43]**  (optional, default `{}`)
+*   `$0` **[Object][73]**  (optional, default `{}`)
 
     *   `$0.textButton` &#x20;
     *   `$0.dropdownList` &#x20;
-*   `textButton` **[string][47]** The text to display on the dropdown button.
-*   `dropdownList` **[Array][50]<{text: [string][47], onClick: [Function][49]}>** An array of dropdown items.
+*   `textButton` **[string][77]** The text to display on the dropdown button.
+*   `dropdownList` **[Array][80]<{text: [string][77], onClick: [Function][79]}>** An array of dropdown items.
 
-Returns **[HTMLElement][48]** The created dropdown button element.
+Returns **[HTMLElement][78]** The created dropdown button element.
 
 ## changeTextOfButton
 
@@ -297,7 +381,7 @@ Change the text which is displayed on the button at the specified index in the n
 ### Parameters
 
 *   `buttonNumber` **Integer** The button which text will be changed. Value between 1 and +infinity
-*   `newText` **[String][47]** The text which will replace the current text of the button
+*   `newText` **[String][77]** The text which will replace the current text of the button
 
 ## changeTextOfDropdown
 
@@ -307,25 +391,197 @@ Change the text which is displayed on the dropdown button at the specified index
 
 *   `dropdownNumber` **Integer** The dropdown which text will be changed. Value between 1 and +infinity
 *   `dropBoxToChange` **Integer** The dropbox which text will be changed. Value between 0 and the number of button in the drop down.
-*   `newText` **[String][47]** The text which will replace the current text of the dropdown
+*   `newText` **[String][77]** The text which will replace the current text of the dropdown
 
 ## getWindowWidth
 
 Get the width of the browser window.
 
-Returns **[number][46]** The width of the browser window in pixels.
+Returns **[number][76]** The width of the browser window in pixels.
 
 ## getWindowHeight
 
 Get the height of the browser window.
 
-Returns **[number][46]** The height of the browser window in pixels.
+Returns **[number][76]** The height of the browser window in pixels.
+
+## getPermanentModal
+
+Creates a customizable modal window for controls, parameters, and user interaction.
+The modal can be dragged, styled with different themes, and populated with various UI elements.
+
+### Parameters
+
+*   `options` **[Object][73]** Configuration options for the modal (optional, default `{}`)
+
+    *   `options.title` **[string][77]** The title displayed in the modal header (optional, default `"Parameters"`)
+    *   `options.draggable` **[boolean][75]** Whether the modal can be moved by dragging (optional, default `true`)
+    *   `options.showCloseButton` **[boolean][75]** Whether to show a close button in the modal (optional, default `true`)
+    *   `options.position` **[Object][73]?** Initial position of the modal
+
+        *   `options.position.right` **[number][76]** Distance from right edge as percentage (optional, default `10`)
+        *   `options.position.top` **[number][76]** Distance from top edge as percentage (optional, default `10`)
+    *   `options.width` **[string][77]** Width of the modal (CSS value) (optional, default `"300px"`)
+    *   `options.visible` **[boolean][75]** Whether the modal is initially visible (optional, default `true`)
+    *   `options.id` **[string][77]** Unique ID for the modal element (optional, default `"controlPanel"`)
+    *   `options.theme` **[string][77]** Color theme ("light" or "dark") (optional, default `"light"`)
+
+Returns **[Object][73]** An object containing methods to interact with the modal
+
+## AddButtonToModal
+
+Adds a button to the modal with customizable styling and behavior.
+
+### Parameters
+
+*   `text` **[string][77]** Text displayed on the button
+*   `onClick` **[Function][79]** Function to execute when the button is clicked
+*   `options` **[Object][73]** Button styling options (optional, default `{}`)
+
+    *   `options.width` **[string][77]** Width of the button (CSS value) (optional, default `"80%"`)
+    *   `options.color` **[string][77]** Background color of the button (optional, default `"#4CAF50"`)
+    *   `options.textColor` **[string][77]** Text color of the button (optional, default `"white"`)
+    *   `options.hoverColor` **[string][77]** Background color when hovering (optional, default `"#45a049"`)
+
+Returns **[HTMLElement][78]** The created button element
+
+## AddSliderToModal
+
+Adds a slider input to the modal for selecting numeric values.
+
+### Parameters
+
+*   `label` **[string][77]** Text label for the slider
+*   `min` **[number][76]** Minimum value of the slider
+*   `max` **[number][76]** Maximum value of the slider
+*   `value` **[number][76]** Initial value of the slider
+*   `onChange` **[Function][79]** Function called when the slider value changes
+*   `options` **[Object][73]** Additional configuration options (optional, default `{}`)
+
+    *   `options.step` **[number][76]** Step increment for the slider (optional, default `1`)
+    *   `options.formatValue` **[Function][79]?** Function to format the displayed value
+
+Returns **[Object][73]** Object containing the slider, valueDisplay, and container elements
+
+## AddCheckboxToModal
+
+Adds a checkbox input to the modal.
+
+### Parameters
+
+*   `label` **[string][77]** Text label for the checkbox
+*   `checked` **[boolean][75]** Initial checked state of the checkbox
+*   `onChange` **[Function][79]** Function called when the checkbox state changes
+
+Returns **[Object][73]** Object containing the checkbox and container elements
+
+## AddDropDownToModal
+
+Adds a dropdown select input to the modal.
+
+### Parameters
+
+*   `label` **[string][77]** Text label for the dropdown
+*   `options` **[Array][80]<[Object][73]>** Array of options for the dropdown
+
+    *   `options[].value` **[string][77]** Value of each option
+    *   `options[].label` **[string][77]?** Display text for each option (defaults to value if not provided)
+*   `selectedValue` **[string][77]** Initially selected value
+*   `onChange` **[Function][79]** Function called when the selected option changes
+
+Returns **[Object][73]** Object containing the select and container elements
+
+## AddColorPickerToModal
+
+Adds a color picker input to the modal.
+
+### Parameters
+
+*   `label` **[string][77]** Text label for the color picker
+*   `initialColor` **[string][77]** Initial color value in hexadecimal format (e.g., "#FF0000")
+*   `onChange` **[Function][79]** Function called when the selected color changes
+
+Returns **[Object][73]** Object containing the colorPicker, valueDisplay, and container elements
+
+## AddSeparatorToModal
+
+Adds a horizontal line separator to the modal.
+
+Returns **[HTMLElement][78]** The created separator element
+
+## AddLabelToModal
+
+Adds a text label to the modal with customizable styling.
+
+### Parameters
+
+*   `text` **[string][77]** Text content of the label
+*   `options` **[Object][73]** Styling options for the label (optional, default `{}`)
+
+    *   `options.align` **[string][77]** Text alignment ("left", "center", or "right") (optional, default `"left"`)
+    *   `options.bold` **[boolean][75]** Whether to display the text in bold (optional, default `false`)
+    *   `options.fontSize` **[string][77]** Font size (CSS value) (optional, default `"inherit"`)
+    *   `options.color` **[string][77]** Text color (optional, default `"inherit"`)
+
+Returns **[HTMLElement][78]** The created label element
+
+## ClearFormModal
+
+Clears all content from the modal form container.
+
+## ToggleCollapseModal
+
+Toggles the collapsed state of the modal with a smooth animation.
+When collapsed, only the header is visible; when expanded, all content is shown.
+
+### Examples
+
+```javascript
+// Get a modal instance first
+const modal = fw.getPermanentModal({title: "Settings"});
+// Then toggle its collapsed state
+modal.ToggleCollapseModal();
+```
+
+Returns **void**&#x20;
+
+## CollapseModal
+
+Collapses the modal to show only the header with a smooth animation.
+If the modal is already collapsed, this method has no effect.
+
+### Examples
+
+```javascript
+// Get a modal instance first
+const modal = fw.getPermanentModal({title: "Settings"});
+// Then collapse it
+modal.CollapseModal();
+```
+
+Returns **void**&#x20;
+
+## ExpandModal
+
+Expands the modal to show all content with a smooth animation.
+If the modal is already expanded, this method has no effect.
+
+### Examples
+
+```javascript
+// Get a modal instance first
+const modal = fw.getPermanentModal({title: "Settings"});
+// Then expand it
+modal.ExpandModal();
+```
+
+Returns **void**&#x20;
 
 ## init
 
 Private function to initialize the scene, camera and renderer.
 
-Returns **[Object][43]** Returns an object containing the scene, camera and renderer.
+Returns **[Object][73]** Returns an object containing the scene, camera and renderer.
 
 ## resize
 
@@ -349,19 +605,7 @@ Private function to check if an object is fully occluded by other objects in the
 *   `raycaster` **any** The raycaster used for detecting intersections between objects.
 *   `direction` **any** A reusable vector to specify the direction of the raycasting.
 
-Returns **[boolean][45]** Returns true if the object is fully occluded, false otherwise.
-
-## createTable
-
-Create the table
-Create each part of the table to add them to a same group. It will be easier to move the table.
-
-### Parameters
-
-*   `w` &#x20;
-*   `d` &#x20;
-
-Returns **THREE.Group** The table
+Returns **[boolean][75]** Returns true if the object is fully occluded, false otherwise.
 
 [1]: #constructor
 
@@ -413,52 +657,112 @@ Returns **THREE.Group** The table
 
 [25]: #parameters-10
 
-[26]: #addbuttontonavbar
+[26]: #addinteractivecupboard
 
 [27]: #parameters-11
 
-[28]: #adddropdowntonavbar
+[28]: #setupproductinteractions
 
 [29]: #parameters-12
 
-[30]: #changetextofbutton
+[30]: #update
 
 [31]: #parameters-13
 
-[32]: #changetextofdropdown
+[32]: #createtooltip
 
-[33]: #parameters-14
+[33]: #updateproductinteractions
 
-[34]: #getwindowwidth
+[34]: #parameters-14
 
-[35]: #getwindowheight
+[35]: #show_tips
 
-[36]: #init
+[36]: #addbuttontonavbar
 
-[37]: #resize
+[37]: #parameters-15
 
-[38]: #parameters-15
+[38]: #adddropdowntonavbar
 
-[39]: #isobjectfullyoccluded
+[39]: #parameters-16
 
-[40]: #parameters-16
+[40]: #changetextofbutton
 
-[41]: #createtable
+[41]: #parameters-17
 
-[42]: #parameters-17
+[42]: #changetextofdropdown
 
-[43]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[43]: #parameters-18
 
-[44]: https://developer.mozilla.org/docs/Web/API/Window
+[44]: #getwindowwidth
 
-[45]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[45]: #getwindowheight
 
-[46]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[46]: #getpermanentmodal
 
-[47]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[47]: #parameters-19
 
-[48]: https://developer.mozilla.org/docs/Web/HTML/Element
+[48]: #addbuttontomodal
 
-[49]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[49]: #parameters-20
 
-[50]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[50]: #addslidertomodal
+
+[51]: #parameters-21
+
+[52]: #addcheckboxtomodal
+
+[53]: #parameters-22
+
+[54]: #adddropdowntomodal
+
+[55]: #parameters-23
+
+[56]: #addcolorpickertomodal
+
+[57]: #parameters-24
+
+[58]: #addseparatortomodal
+
+[59]: #addlabeltomodal
+
+[60]: #parameters-25
+
+[61]: #clearformmodal
+
+[62]: #togglecollapsemodal
+
+[63]: #examples
+
+[64]: #collapsemodal
+
+[65]: #examples-1
+
+[66]: #expandmodal
+
+[67]: #examples-2
+
+[68]: #init
+
+[69]: #resize
+
+[70]: #parameters-26
+
+[71]: #isobjectfullyoccluded
+
+[72]: #parameters-27
+
+[73]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+
+[74]: https://developer.mozilla.org/docs/Web/API/Window
+
+[75]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+
+[76]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[77]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+
+[78]: https://developer.mozilla.org/docs/Web/HTML/Element
+
+[79]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+
+[80]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array

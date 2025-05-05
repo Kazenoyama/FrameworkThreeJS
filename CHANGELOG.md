@@ -1,3 +1,104 @@
+## [v1.2.9]
+### Added
+- added a function create_favicon in the CTABanner file, to add a favicon for our webpage.
+- added a new file name armoire.js that create a cupboard that will hold our new elements name products.
+- added a new file name products.js that create a box that when click on it we will be redirected to another games of TerraNumerica.
+- added news function in framework.js : addInteractiveCupboard , setupProductInteractions ,  update , createTooltip , Show_tips.
+- added the function createProducts in the file createScene.
+- added this line in the main.js file,  in the function animate : fw.update(camera);
+- added 4 line code in the function  addSimpleSceneWithTable in the file framework.js:
+         const cupboard = this.addInteractiveCupboard({width :80,depth : 100,height: 10});
+        const products = cs.createProducts(scene, this,{width :8,depth : 10,height: 5});
+        const tips = cs.Show_tips();
+        return table && cupboard && products;
+### Changed
+- The style of the banner and of the modal have been changed to better match the style of terra numerica.
+- the title of the hmtl page has been changed.
+- Change the title of the page instead of "document" we have "FrameworkTerraNumerica".
+- the intensity of the light from createScene has been changed from 1 to 2.
+- 
+
+### Removed
+
+### Deprecated
+
+### Fixed
+
+# --------------------------------------------------------------------
+
+
+## [v1.2.8]
+### Added
+- the file DOCUMENTATION_MODAL.md has been added.
+- the file ModalStyle.css has been added.
+
+### Changed
+- Framework.js has been updated, The user can now use the framework to create a modal for their  3D use. (view docs)
+- package.json has been updated, the updateDoc && MoveDocumentation has been updated to include the new documentation, move and InitialState have been updated to include the file ModalStyle.css.
+- main.js has been updated, it now use the framework to create the modal for the 3D part.
+- DOCUMENTATION.md has been updated, now contain the documentation for the modal.
+- Modal.js has been updated, the comments has been changed so that we now have comprehensive JSDoc comments to all methods.
+- Modal.js now included an Animated collapsible instead of just closing the modal.
+- Some style of elements have been changed.
+- link ModalStyle.css to ModalStyle.js.
+- the package.json have been further modified to be more robusted.
+### Removed
+
+### Deprecated
+
+### Fixed
+
+
+# --------------------------------------------------------------------
+
+## [v1.2.7]
+### Added
+- modal.js
+
+### Changed
+- main.js have been updated, users now have a preset for both the 2D and 3D.
+- CTABanner.js have been updated, so that the drag function now work for our modal.
+- package.json have been updated , so that know modal.js is moving with the rest of the js file
+
+### Removed
+
+### Deprecated
+
+### Fixed
+
+# --------------------------------------------------------------------
+## [v1.2.6]
+### Added
+- DOCUMENTATION_BANNER.md
+
+### Changed
+- package.json has been updated. Now when run updateDoc update the doc for our CTABanner.js file
+- the comments for the CTABanner.js file has been updated
+
+### Removed
+- The previous comments of the CTABanner.js file has been replaced
+
+### Deprecated
+
+### Fixed
+
+# --------------------------------------------------------------------
+## [v1.2.5]
+### Added
+- BannerStyle.css
+
+### Changed
+- link BannerStyle.css to the index.html.
+- package.json has new function to create a way to have either a framework with only the css or the framework with the possibility to have a 3D environnement.
+
+### Removed
+
+### Deprecated
+
+### Fixed
+
+# --------------------------------------------------------------------
+
 ## [v1.2.0]
 ### Added
 - Add default parameters to every compatible function.

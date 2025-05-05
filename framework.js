@@ -3,6 +3,10 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import createScene from './createScene';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import CTABanner from './CTABanner';
+import Modal from './modal';
+import { Products } from './products';
+import armoire from './armoire';
+
 
 class Framework {
     CTABannerParameter;         // Contains the following keys: Banner, navbar, container
@@ -20,14 +24,12 @@ class Framework {
         console.log('Framework constructor');
         
         const Banner = new CTABanner();
-        Banner.createHTMLStructure();
-        const navbar = Banner.getNavbar();
-        Banner.style_navbar();
-        const container = Banner.getContainer();
-        Banner.style_container0(container);
+        var navbar = Banner.getNavbar();
+        var container = Banner.getContainer();
         
         this.CTABannerParameter = {"Banner": Banner,"navbar": navbar, "container": container};
         this.mainParameters = this.#init();
+        
     }
 
     /**
@@ -421,7 +423,11 @@ class Framework {
         var textures = [defaultParams.floor, defaultParams.wall, defaultParams.ceiling];
         cs.createBox(scene, textures, this, dimensions, defaultParams.YoffSet);
         const table = cs.createTable(scene, this, {width : defaultParams.width, depth : defaultParams.depth});
-        return table;
+        
+        const cupboard = this.addInteractiveCupboard({width :80,depth : 100,height: 10});
+        
+        const tips = cs.Show_tips();
+        return table && cupboard;
     }
 
     /**
@@ -482,6 +488,190 @@ class Framework {
         this.mainParameters.camera = camera;}
     }
 
+    /**
+     * Creates an interactive cupboard/cabinet with product display capabilities.
+     * This cupboard will be added to the scene and can be interacted with.
+     *
+     * @param {Object} [options={}] - Configuration options
+     * @param {number} [options.width=80] - Width of the cupboard
+     * @param {number} [options.depth=100] - Depth of the cupboard
+     * @param {number} [options.height=10] - Height of the cupboard
+     * @returns {Object} The created cupboard object
+     */
+    addInteractiveCupboard({width, depth, height}) {
+        // Import dynamique des modules nécessaires
+        import('./armoire.js').then(({ default: Armoire }) => {
+                // Créer l'armoire
+                const cupboard = new Armoire(width, depth, height);
+                this.mainParameters.scene.add(cupboard.getCupboard());
+                // Configurer l'interactivité
+                this.setupProductInteractions(cupboard);
+                return cupboard;
+        });
+    }
+
+    /**
+     * Sets up interactive capabilities for product viewing in the cupboard.
+     * Initializes raycasting and event listeners for hover and click interactions.
+     * 
+     * @param {Object} cupboard - The cupboard object to add interaction to
+     */
+    setupProductInteractions(cupboard) {
+        // Initialiser le raycaster s'il n'existe pas déjà
+        this.productRaycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
+        this.hoveredProduct = null;
+        this.cupboard = cupboard;
+        
+        // Créer le tooltip
+        this.createTooltip();
+        
+        // Configurer les écouteurs d'événements
+        window.addEventListener('mousemove', (event) => {
+            // Calculate mouse position in normalized device coordinates
+            this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            // Update tooltip position
+            if (this.tooltip) {
+                this.tooltip.style.left = event.clientX + 15 + 'px';
+                this.tooltip.style.top = event.clientY + 15 + 'px';
+            }
+        });
+    
+        // Listen for clicks to navigate to game URLs
+        window.addEventListener('click', () => {
+            if (this.hoveredProduct) {
+                const url = this.hoveredProduct.userData.url;
+                if (url) {
+                    window.open(url, '_blank');
+                }
+            }
+        });
+    }
+
+    /**
+     * Updates interactive elements and raycasting in the scene.
+     * Should be called in the animation loop to keep interactions current.
+     *
+     * @param {THREE.Camera} camera - The camera used for raycasting and interaction
+     */
+    update(camera) {
+        // Mettre à jour les interactions avec les produits
+        this.updateProductInteractions(camera);
+       
+    }
+
+    /**
+     * Creates a tooltip element for displaying information about hovered products.
+     * The tooltip appears near the cursor when hovering over interactive elements.
+     */
+    createTooltip() {
+        this.tooltip = document.createElement('div');
+        this.tooltip.style.position = 'absolute';
+        this.tooltip.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        this.tooltip.style.color = 'white';
+        this.tooltip.style.padding = '8px 12px';
+        this.tooltip.style.borderRadius = '5px';
+        this.tooltip.style.fontSize = '16px';
+        this.tooltip.style.fontWeight = 'bold';
+        this.tooltip.style.display = 'none';
+        this.tooltip.style.pointerEvents = 'none';
+        this.tooltip.style.zIndex = '9999';
+        document.body.appendChild(this.tooltip);
+    }
+
+    /**
+     * Updates product interactions by performing raycasting from the camera.
+     * Handles hover states and tooltip visibility based on cursor position.
+     *
+     * @param {THREE.Camera} camera - The camera to use for raycasting
+     */
+    updateProductInteractions(camera) {
+        if (!this.cupboard || !camera || !this.productRaycaster || !this.mouse) {
+            return;
+        }
+        
+        // Update the picking ray with the camera and mouse position
+        this.productRaycaster.setFromCamera(this.mouse, camera);
+        
+        try {
+            // Get all product meshes
+            const products = this.cupboard.getProducts().getAllProductMeshes();
+            
+            if (!products || products.length === 0) {
+                return;
+            }
+            
+            // Calculate objects intersecting the picking ray
+            const intersects = this.productRaycaster.intersectObjects(products);
+            
+            // Reset hover state
+            if (this.hoveredProduct) {
+                this.hoveredProduct.material.emissive.setHex(0x000000);
+                this.hoveredProduct = null;
+                if (this.tooltip) this.tooltip.style.display = 'none';
+            }
+             // Set new hover state
+        if (intersects.length > 0) {
+            this.hoveredProduct = intersects[0].object;
+            this.hoveredProduct.material.emissive.setHex(0x222222);
+            
+            // Show tooltip with game name
+            if (this.tooltip) {
+                this.tooltip.textContent = this.hoveredProduct.name;
+                this.tooltip.style.display = 'block';
+            }
+        }
+    } catch (error) {
+        console.error("Error in updateProductInteractions:", error);
+    }
+}
+
+    /**
+     * Creates tips/tooltips for interactive elements in the scene.
+     * Sets up event listeners for hovering and clicking on interactive objects.
+     * 
+     * @returns {HTMLElement} The created tooltip element
+     */
+    Show_tips(){
+        // Create tooltip element for displaying game names
+        const tooltip = document.createElement('div');
+        tooltip.style.position = 'absolute';
+        tooltip.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        tooltip.style.color = 'white';
+        tooltip.style.padding = '5px 10px';
+        tooltip.style.borderRadius = '5px';
+        tooltip.style.fontSize = '14px';
+        tooltip.style.display = 'none';
+        tooltip.style.pointerEvents = 'none';
+        document.body.appendChild(tooltip);
+    
+        // Listen for mouse moves to detect hovering
+        window.addEventListener('mousemove', (event) => {
+            // Calculate mouse position in normalized device coordinates
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            // Update tooltip position
+            tooltip.style.left = event.clientX + 15 + 'px';
+            tooltip.style.top = event.clientY + 15 + 'px';
+        });
+    
+        // Listen for clicks to navigate to game URLs
+        window.addEventListener('click', () => {
+            if (hoveredProduct) {
+                const url = hoveredProduct.userData.url;
+                window.open(url, '_blank');
+            }
+        });
+    
+       
+        
+    }
+
+
+
 // ---------------------- Navbar functions ----------------------
 
     /**
@@ -509,13 +699,8 @@ class Framework {
         const Banner = this.CTABannerParameter.Banner;
         const navbar = this.CTABannerParameter.navbar;
         const container = this.CTABannerParameter.container;
-        Banner.create_button(navbar, { text: defaultParams.textButton, onClick: defaultParams.onclickFunction, classes: defaultParams.classesOfTheButton });
-        Banner.style_any();
-        if (hover == true) {
-            Banner.style_hover(defaultParams.textButton);
-        }
+        Banner.create_button({ text: defaultParams.textButton, onClick: defaultParams.onclickFunction, classes: defaultParams.classesOfTheButton });
         
-        Banner.style_navbar_children(navbar);
         var buttonToChange = document.getElementById("navbar0").children[document.getElementById("navbar0").children.length - 1];
         return buttonToChange;
     }
@@ -541,17 +726,8 @@ class Framework {
         const navbar = this.CTABannerParameter.navbar;
         const container = this.CTABannerParameter.container;
 
-        Banner.create_dropdown({ parentId: "navbar0", buttonText: defaultParams.textButton, menuId: defaultParams.textButton });
-        Banner.create_dropdown_list(defaultParams.textButton, defaultParams.dropdownList);
-
-        Banner.style_any();
-        Banner.style_hover(defaultParams.textButton);
-        Banner.style_navbar_children(navbar);
-        Banner.style_dropdown(defaultParams.textButton);
-        Banner.style_dropbtn(defaultParams.textButton);
-        Banner.style_dropdown_content();
-        Banner.style_dropdown_content_a();
-        Banner.style_dropdown_content_parameters();  
+        Banner.create_dropdown({buttonText: defaultParams.textButton, menuId: defaultParams.textButton });
+        Banner.create_dropdown_list(defaultParams.textButton, defaultParams.dropdownList);  
 
         var buttonToChange = document.getElementById("navbar0").children[document.getElementById("navbar0").children.length - 1];
         return buttonToChange;
@@ -606,6 +782,169 @@ class Framework {
      */
     getWindowHeight(){return window.innerHeight - document.getElementById("navbar0").offsetHeight;}
 
+//---------------------- Modal functions ----------------------
+/**
+ * Creates a customizable modal window for controls, parameters, and user interaction.
+ * The modal can be dragged, styled with different themes, and populated with various UI elements.
+ * 
+ * @param {Object} [options={}] - Configuration options for the modal
+ * @param {string} [options.title="Parameters"] - The title displayed in the modal header
+ * @param {boolean} [options.draggable=true] - Whether the modal can be moved by dragging
+ * @param {boolean} [options.showCloseButton=true] - Whether to show a close button in the modal
+ * @param {Object} [options.position] - Initial position of the modal
+ * @param {number} [options.position.right=10] - Distance from right edge as percentage
+ * @param {number} [options.position.top=10] - Distance from top edge as percentage
+ * @param {string} [options.width="300px"] - Width of the modal (CSS value)
+ * @param {boolean} [options.visible=true] - Whether the modal is initially visible
+ * @param {string} [options.id="controlPanel"] - Unique ID for the modal element
+ * @param {string} [options.theme="light"] - Color theme ("light" or "dark")
+ * @returns {Object} An object containing methods to interact with the modal
+ */
+getPermanentModal({title, draggable, showCloseButton, position, width, visible, id, theme} = {}){
+    const md = new Modal(this.CTABannerParameter.Banner);
+    const ModalControls = md.getPermanentModal({title:title, draggable:draggable, showCloseButton:showCloseButton, position:position, width:width, visible:visible, id:id, theme:theme});
+    return {
+    /**
+     * Adds a button to the modal with customizable styling and behavior.
+     * 
+     * @param {string} text - Text displayed on the button
+     * @param {Function} onClick - Function to execute when the button is clicked
+     * @param {Object} [options={}] - Button styling options
+     * @param {string} [options.width="80%"] - Width of the button (CSS value)
+     * @param {string} [options.color="#4CAF50"] - Background color of the button
+     * @param {string} [options.textColor="white"] - Text color of the button
+     * @param {string} [options.hoverColor="#45a049"] - Background color when hovering
+     * @returns {HTMLElement} The created button element
+     */
+    AddButtonToModal: (text, onClick, options = {}) => {
+        ModalControls.addButton(text, onClick, options);
+    },
+    /**
+     * Adds a slider input to the modal for selecting numeric values.
+     * 
+     * @param {string} label - Text label for the slider
+     * @param {number} min - Minimum value of the slider
+     * @param {number} max - Maximum value of the slider
+     * @param {number} value - Initial value of the slider
+     * @param {Function} onChange - Function called when the slider value changes
+     * @param {Object} [options={}] - Additional configuration options
+     * @param {number} [options.step=1] - Step increment for the slider
+     * @param {Function} [options.formatValue] - Function to format the displayed value
+     * @returns {Object} Object containing the slider, valueDisplay, and container elements
+     */
+    AddSliderToModal: (label, min, max, value, onChange, options = {}) => {
+        ModalControls.addSlider(label, min, max, value, onChange, options);
+    },
+    /**
+     * Adds a checkbox input to the modal.
+     * 
+     * @param {string} label - Text label for the checkbox
+     * @param {boolean} checked - Initial checked state of the checkbox
+     * @param {Function} onChange - Function called when the checkbox state changes
+     * @returns {Object} Object containing the checkbox and container elements
+     */
+    AddCheckboxToModal: (label, checked, onChange) => {
+        ModalControls.addCheckbox(label, checked, onChange);
+    },
+    /**
+     * Adds a dropdown select input to the modal.
+     * 
+     * @param {string} label - Text label for the dropdown
+     * @param {Array<Object>} options - Array of options for the dropdown
+     * @param {string} options[].value - Value of each option
+     * @param {string} [options[].label] - Display text for each option (defaults to value if not provided)
+     * @param {string} selectedValue - Initially selected value
+     * @param {Function} onChange - Function called when the selected option changes
+     * @returns {Object} Object containing the select and container elements
+     */
+    AddDropDownToModal: (label, options, selectedValue, onChange) => {
+        ModalControls.addDropDown(label, options, selectedValue, onChange);
+    },
+    /**
+     * Adds a color picker input to the modal.
+     * 
+     * @param {string} label - Text label for the color picker
+     * @param {string} initialColor - Initial color value in hexadecimal format (e.g., "#FF0000")
+     * @param {Function} onChange - Function called when the selected color changes
+     * @returns {Object} Object containing the colorPicker, valueDisplay, and container elements
+     */
+    AddColorPickerToModal: (label, initialColor, onChange) => {
+        ModalControls.addColorPicker(label, initialColor, onChange);
+    },
+    /**
+     * Adds a horizontal line separator to the modal.
+     * 
+     * @returns {HTMLElement} The created separator element
+     */
+    AddSeparatorToModal: () => {
+        ModalControls.addSeparator();
+    },
+    /**
+     * Adds a text label to the modal with customizable styling.
+     * 
+     * @param {string} text - Text content of the label
+     * @param {Object} [options={}] - Styling options for the label
+     * @param {string} [options.align="left"] - Text alignment ("left", "center", or "right")
+     * @param {boolean} [options.bold=false] - Whether to display the text in bold
+     * @param {string} [options.fontSize="inherit"] - Font size (CSS value)
+     * @param {string} [options.color="inherit"] - Text color
+     * @returns {HTMLElement} The created label element
+     */
+    AddLabelToModal: (text, options = {}) => {
+        ModalControls.addLabel(text, options);
+    },
+    /**
+     * Clears all content from the modal form container.
+     */
+    ClearFormModal: () => {
+        md.clear();
+    },
+     /**
+ * Toggles the collapsed state of the modal with a smooth animation.
+ * When collapsed, only the header is visible; when expanded, all content is shown.
+ * 
+ * @returns {void}
+ * @example
+ * // Get a modal instance first
+ * const modal = fw.getPermanentModal({title: "Settings"});
+ * // Then toggle its collapsed state
+ * modal.ToggleCollapseModal();
+ */
+ToggleCollapseModal: () => {
+    ModalControls.toggleCollapse();
+},
+
+/**
+ * Collapses the modal to show only the header with a smooth animation.
+ * If the modal is already collapsed, this method has no effect.
+ * 
+ * @returns {void}
+ * @example
+ * // Get a modal instance first
+ * const modal = fw.getPermanentModal({title: "Settings"});
+ * // Then collapse it
+ * modal.CollapseModal();
+ */
+CollapseModal: () => {
+    ModalControls.collapse();
+},
+
+/**
+ * Expands the modal to show all content with a smooth animation.
+ * If the modal is already expanded, this method has no effect.
+ * 
+ * @returns {void}
+ * @example
+ * // Get a modal instance first
+ * const modal = fw.getPermanentModal({title: "Settings"});
+ * // Then expand it
+ * modal.ExpandModal();
+ */
+ExpandModal: () => {
+    ModalControls.expand();
+}
+}
+}
 // ---------------------- Private functions ----------------------
 
     /**
