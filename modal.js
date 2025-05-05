@@ -95,11 +95,14 @@ class Modal {
 
             const closeButton = modalContent.querySelector(".close");
         if (closeButton) {
+            closeButton.className = "close modal-close modal-close-expanded";
             closeButton.style.backgroundColor="transparent"; 
-            closeButton.innerHTML = '▲'; // Up arrow for collapse
+            
             closeButton.title = "Collapse";
             closeButton.style.fontSize = "16px";
             closeButton.style.fontWeight = "bold";
+            closeButton.textContent = '';
+            closeButton.innerHTML = '';
             
             // Track modal state
             modalContent.dataset.collapsed = "false";
@@ -138,8 +141,8 @@ class Modal {
             const titleElement = modalContent.querySelector("h2");
             if (titleElement) titleElement.style.borderBottom = "1px solid #555";
         } else {
-            modalContent.style.backgroundColor = "#fff";
-            modalContent.style.color = "#333";
+            modalContent.style.backgroundColor = "#24a1eb";
+            modalContent.style.color = "#fff";
         }
         
         // Improve modal content styling
@@ -183,6 +186,7 @@ class Modal {
         * @private
         */
         function toggleCollapse(content,button){
+            
             const formContainer = content.querySelector(".form-container");
             const isCollapsed = content.dataset.collapsed === "true";
             if (isCollapsed){
@@ -196,10 +200,9 @@ class Modal {
                 formContainer.style.opacity = 1;
                 formContainer.style.display = "flex";
                 content.style.overflow = "hidden";
-
-                
-                button.innerHTML = '▲';
+                button.className = "close modal-close modal-close-expanded"; 
                 button.title = "Collapse";
+                
                
 
                 setTimeout(() => {
@@ -220,7 +223,7 @@ class Modal {
             formContainer.style.opacity = "0";
             
             // Update button state
-            button.innerHTML = '▼';
+            button.className = "close modal-close modal-close-collapsed";
             button.title = "Expand";
             
             // Hide content after animation
@@ -259,6 +262,7 @@ class Modal {
                 button.style.display = "block";
                 button.style.padding = "10px";
                 button.style.margin = "10px auto";
+                ;
                 button.style.cursor = "pointer";
                 button.style.width = options.width || "80%";
                 if (theme === "dark") {
@@ -266,7 +270,7 @@ class Modal {
                     button.style.color = options.textColor || "white";
                 }
                 else {
-                    button.style.color = options.textColor || "#333";
+                    button.style.color = options.textColor || "#fff";
                     button.style.backgroundColor = "inherit" ;
                 }
 

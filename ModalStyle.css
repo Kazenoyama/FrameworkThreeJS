@@ -17,8 +17,8 @@
   
   /* Theme Styles */
   .modal-content-light {
-    background-color: #fff;
-    color: #333;
+    background-color: #24a1eb;
+    color: #fff
   }
   
   .modal-content-dark {
@@ -44,14 +44,15 @@
     font-weight: bold;
   }
   
-  .modal-close-expanded {
-    content: '▲';
+  .modal-close.modal-close-expanded::before {
+    content: '▲' !important; /* Le !important garantit la priorité */
+    color: #fff;
   }
   
-  .modal-close-collapsed {
-    content: '▼';
+  .modal-close.modal-close-collapsed::before {
+    content: '▼' !important;
+    color: #fff;
   }
-  
   /* Draggable Element */
   .modal-draggable {
     cursor: move;
@@ -76,10 +77,11 @@
     border: none;
     border-radius: 40px;
     transition: background-color 0.3s;
+    color: #fff;
   }
   
   .modal-button-light {
-    color: #333;
+    color: #fff;
     background-color: inherit;
   }
   
@@ -147,7 +149,7 @@
   }
   
   .modal-color-value {
-    font-family: monospace;
+    font-family: fantasy;
   }
   
   /* Separator */

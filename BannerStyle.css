@@ -1,6 +1,6 @@
 /* Navbar styles */
 #navbar0 {
-    background-color: #333;
+    background-color:  rgba(36,161,235,255);
     overflow: visible;
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
@@ -14,10 +14,12 @@
     padding: 14px 16px;
     text-decoration: none;
     background-color: transparent;
+    
 }
 
 #navbar0 .navbar a:hover {
-    background-color: red;
+    background-color: #f9bb12;
+    
 }
 
 /* Container styles */
@@ -64,7 +66,8 @@
 }
 
 .close:hover {
-    background-color: red;
+    background-color: #f9bb12;
+    transition: background-color 0.3s;
 }
 
 /* Dropdown menu styles */
@@ -84,20 +87,20 @@
     outline: none;
     color: white;
     padding: none;
-    background-color: #333;
+    background-color: rgba(36,161,235,255);
     font-family: inherit;
     margin: 0;
     text-align: center;
 }
 
 .dropbtn:hover {
-    background-color: red;
+    background-color: #f9bb12;
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #333;
+    background-color:color-mix(in hsl shorter hue, #24a1eb 100%, green 1%);
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
@@ -113,7 +116,7 @@
 }
 
 .dropdown-content a:hover {
-    background-color: red;
+    background-color: #f9bb12;
 }
 
 /* Dropdown specific styles for parameters */
@@ -124,18 +127,18 @@
     text-decoration: none;
     display: block;
     text-align: left;
-    background-color: #333;
+    background-color: #24a1eb;
     font-size: 16px;
     border: none;
     outline: none;
 }
 
 .dropdown-content .parameter:hover {
-    background-color: red;
+    background-color: #f9bb12;
 }
 
 .dropdown-content .parameter:focus {
-    background-color: red;
+    background-color: #f9bb12;
 }
 
 /* Modal content button styles */
@@ -148,12 +151,14 @@
 
 /* Button hover effect */
 button:hover {
-    background-color: red;
+    background-color: #f9bb12;
+    transition: background-color 0.3s;
 }
 
 /* Button focus effect */
 button:focus {
-    background-color: red;
+    background-color: #f9bb12;
+    
 }
 
 /* Button Style */
@@ -163,7 +168,7 @@ button.child {
     cursor: pointer;
     margin: 10px auto;
     display: block;
-    background-color: #333;
+    background-color: #24a1eb;
     color: white;
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
@@ -172,10 +177,11 @@ button.child {
 }
 
 button.child:hover {
-    background-color: red; /* Change color on hover */
+    background-color: #f9bb12; /* Change color on hover */
+    transition: background-color 0.5s;
 }
 
 button.child:focus {
-    background-color: red; /* Ensure color stays on focus */
+    background-color: #f9bb12; /* Ensure color stays on focus */
 }
         

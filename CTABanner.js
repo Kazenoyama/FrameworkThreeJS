@@ -3,6 +3,7 @@ class CTABanner{
   constructor() {
       this.createHTMLStructure();
       this.navbar = this.getNavbar();
+      this.create_favicon();
       var buttonAbout = this.create_button({text : "About"})
       var buttonRules = this.create_button({text : "Rules"})
       this.aboutRules = {About : buttonAbout, Rules : buttonRules};
@@ -333,6 +334,20 @@ class CTABanner{
     }
   }
 
+
+
+  /**
+   * Creates and appends a favicon link element to the document head.
+   * This favicon is used for the local page.
+    */
+
+  create_favicon() {
+    const link = document.createElement("link");
+    link.rel = "icon";
+    link.href = "https://terra-numerica.org/files/2020/10/cropped-favicon-rond.png";
+    document.head.appendChild(link);
+  }
+
   /**
    * Applies styles to a modal element.
    * @param {HTMLElement} element - The modal element to style.
@@ -397,9 +412,9 @@ class CTABanner{
    */
   style_navbar(){
     const navbar = document.getElementById("navbar0");
-    navbar.style.backgroundColor = "#333";
+    navbar.style.backgroundColor = "#24a1eb";
     navbar.style.overflow = "visible";
-    navbar.style.fontFamily ="Arial, Helvetica, sans-serif";
+    navbar.style.fontFamily ="Nunito,sans-serif";
     navbar.style.textAlign = "center";
   }
 
@@ -427,7 +442,7 @@ class CTABanner{
     element.style.outline = "none";
     element.style.color = "white";
     element.style.padding = "14px 16px";
-    element.style.backgroundColor = "#333";
+    element.style.backgroundColor = "#24a1eb";
     element.style.fontFamily = "inherit";
     element.style.margin = "0";
   }
@@ -456,7 +471,7 @@ class CTABanner{
     element.style.outline = "none";
     element.style.color = "white";
     element.style.padding = "none";
-    element.style.backgroundColor = "#333";
+    element.style.backgroundColor = "#24a1eb";
     element.style.fontFamily = "inherit";
     element.style.margin = "0";
     element.style.textAlign = "center";
@@ -469,7 +484,7 @@ class CTABanner{
     const navbarLinks = document.querySelectorAll(".navbar a:not(.no_hover)");
     navbarLinks.forEach(link => {
       link.addEventListener("mouseover", () => {
-        link.style.backgroundColor = "red";
+        link.style.backgroundColor = "#f9bb12";
       });
       link.addEventListener("mouseout", () => {
         link.style.backgroundColor ="inherit"; 
@@ -479,7 +494,7 @@ class CTABanner{
     dropdowns.forEach(dropdown => {
       const dropbtn = dropdown.querySelector(".dropbtn");
       dropdown.addEventListener("mouseover", () => {
-        if (dropbtn) dropbtn.style.backgroundColor = "red";
+        if (dropbtn) dropbtn.style.backgroundColor = "#f9bb12";
       });
       dropdown.addEventListener("mouseout", () => {
         if (dropbtn) dropbtn.style.backgroundColor = ""; 
@@ -488,13 +503,13 @@ class CTABanner{
     const allButtons = document.querySelectorAll("button", "  .dropdown-content");
     allButtons.forEach(button => {
       button.addEventListener("mouseover", () => {
-        button.style.backgroundColor = "red";
+        button.style.backgroundColor = "#f9bb12";
       });
       button.addEventListener("mouseout", () => {
         button.style.backgroundColor = "inherit"; 
       });
       button.addEventListener("focus", () => {
-        button.style.backgroundColor = "red";
+        button.style.backgroundColor = "#f9bb12";
       });
       button.addEventListener("blur", () => {
         button.style.backgroundColor = "inherit"; 
@@ -511,7 +526,7 @@ class CTABanner{
     dropdownContents.forEach(dropdown => {
       dropdown.style.display = 'none';
       dropdown.style.position = 'absolute';
-      dropdown.style.backgroundColor = '#333';
+      dropdown.style.backgroundColor = '#24a1eb';
       dropdown.style.minWidth = '160px';
       dropdown.style.boxShadow = '0px 8px 16px 0px rgba(0,0,0,0.2)';
       dropdown.style.zIndex = '1';
@@ -548,7 +563,7 @@ class CTABanner{
       button.style.textDecoration = 'none';
       button.style.display = 'block';
       button.style.textAlign = 'left';
-      button.style.backgroundColor = '#333';
+      button.style.backgroundColor = '#24a1eb';
       button.style.fontSize = '16px';
       button.style.border = 'none';
       button.style.outline = 'none';

@@ -32,43 +32,44 @@
 *   [createHTMLStructure][28]
 *   [style\_navbar\_children][29]
     *   [Parameters][30]
-*   [style\_modal][31]
-    *   [Parameters][32]
-*   [style\_body\_html][33]
-    *   [Parameters][34]
-*   [style\_container0][35]
-    *   [Parameters][36]
-*   [style\_any][37]
-*   [style\_navbar][38]
-*   [style\_dropdown][39]
-    *   [Parameters][40]
-*   [style\_dropbtn][41]
-    *   [Parameters][42]
-*   [style\_hover][43]
-*   [style\_dropdown\_content][44]
-*   [style\_dropdown\_content\_a][45]
-*   [style\_dropdown\_content\_parameters][46]
-*   [style\_modal\_content][47]
-*   [style\_close][48]
-*   [style\_modal\_content\_button][49]
+*   [create\_favicon][31]
+*   [style\_modal][32]
+    *   [Parameters][33]
+*   [style\_body\_html][34]
+    *   [Parameters][35]
+*   [style\_container0][36]
+    *   [Parameters][37]
+*   [style\_any][38]
+*   [style\_navbar][39]
+*   [style\_dropdown][40]
+    *   [Parameters][41]
+*   [style\_dropbtn][42]
+    *   [Parameters][43]
+*   [style\_hover][44]
+*   [style\_dropdown\_content][45]
+*   [style\_dropdown\_content\_a][46]
+*   [style\_dropdown\_content\_parameters][47]
+*   [style\_modal\_content][48]
+*   [style\_close][49]
+*   [style\_modal\_content\_button][50]
 
 ## getNavbar
 
 Returns the navigation bar element.
 
-Returns **[HTMLElement][50]** The navbar DOM element.
+Returns **[HTMLElement][51]** The navbar DOM element.
 
 ## getCanvas
 
 Returns the canvas element.
 
-Returns **[HTMLElement][50]** The canvas DOM element.
+Returns **[HTMLElement][51]** The canvas DOM element.
 
 ## getContainer
 
 Returns the container element.
 
-Returns **[HTMLElement][50]** The container DOM element.
+Returns **[HTMLElement][51]** The container DOM element.
 
 ## Deroulant
 
@@ -80,7 +81,7 @@ Opens a modal dialog with the specified ID.
 
 ### Parameters
 
-*   `modalId` **[string][51]** The ID of the modal to open.
+*   `modalId` **[string][52]** The ID of the modal to open.
 
 ## closeModal
 
@@ -88,7 +89,7 @@ Closes a modal dialog with the specified ID.
 
 ### Parameters
 
-*   `modalId` **[string][51]** The ID of the modal to close.
+*   `modalId` **[string][52]** The ID of the modal to close.
 
 ## startDrag
 
@@ -96,7 +97,7 @@ Initiates dragging of a modal element.
 
 ### Parameters
 
-*   `event` **[MouseEvent][52]** The mouse event that triggered the drag.
+*   `event` **[MouseEvent][53]** The mouse event that triggered the drag.
 *   `modalId`   (optional, default `"parametersModal"`)
 
 ## drag
@@ -105,7 +106,7 @@ Updates the position of the modal during dragging.
 
 ### Parameters
 
-*   `event` **[MouseEvent][52]** The mouse event with current cursor position.
+*   `event` **[MouseEvent][53]** The mouse event with current cursor position.
 
 ## stopDrag
 
@@ -117,9 +118,9 @@ Gets the content element of a modal with the specified ID.
 
 ### Parameters
 
-*   `modalId` **[string][51]** The ID of the modal whose content is requested.
+*   `modalId` **[string][52]** The ID of the modal whose content is requested.
 
-Returns **[HTMLElement][50]** The modal content DOM element.
+Returns **[HTMLElement][51]** The modal content DOM element.
 
 ## create\_modal
 
@@ -127,7 +128,7 @@ Creates a modal dialog with the specified ID.
 
 ### Parameters
 
-*   `modalId` **[string][51]** The ID to assign to the created modal.
+*   `modalId` **[string][52]** The ID to assign to the created modal.
 
 ## create\_dropdown
 
@@ -135,11 +136,11 @@ Creates a dropdown menu in the navbar.
 
 ### Parameters
 
-*   `options` **[Object][53]** Configuration options for the dropdown.
+*   `options` **[Object][54]** Configuration options for the dropdown.
 
-    *   `options.parentId` **[string][51]** ID of the parent element. (optional, default `"navbar0"`)
-    *   `options.buttonText` **[string][51]** Text to display on the dropdown button.
-    *   `options.menuId` **[string][51]** ID for the dropdown menu.
+    *   `options.parentId` **[string][52]** ID of the parent element. (optional, default `"navbar0"`)
+    *   `options.buttonText` **[string][52]** Text to display on the dropdown button.
+    *   `options.menuId` **[string][52]** ID for the dropdown menu.
 
 ## create\_dropdown\_list
 
@@ -147,12 +148,12 @@ Adds items to a dropdown menu.
 
 ### Parameters
 
-*   `menuId` **[string][51]** The ID of the dropdown menu.
-*   `items` **[Array][54]<[Object][53]>** Array of items to add to the dropdown.
+*   `menuId` **[string][52]** The ID of the dropdown menu.
+*   `items` **[Array][55]<[Object][54]>** Array of items to add to the dropdown.
 
-    *   `items[].text` **[string][51]** Text for the dropdown item.
-    *   `items[].href` **[string][51]?** Optional href attribute for the item.
-    *   `items[].onClick` **[Function][55]?** Optional click handler for the item.
+    *   `items[].text` **[string][52]** Text for the dropdown item.
+    *   `items[].href` **[string][52]?** Optional href attribute for the item.
+    *   `items[].onClick` **[Function][56]?** Optional click handler for the item.
 
 ## Open\_dropdown
 
@@ -161,7 +162,7 @@ Closes dropdowns and modals when clicking outside them.
 
 ### Parameters
 
-*   `window` **[Window][56]** The window object to attach the click handler to.
+*   `window` **[Window][57]** The window object to attach the click handler to.
 
 ## toggleDropdown
 
@@ -169,7 +170,7 @@ Toggles the visibility of a dropdown menu.
 
 ### Parameters
 
-*   `menuId` **[string][51]** The ID of the dropdown menu to toggle.
+*   `menuId` **[string][52]** The ID of the dropdown menu to toggle.
 
 ## create\_button
 
@@ -177,15 +178,15 @@ Creates and inserts a button into the navbar.
 
 ### Parameters
 
-*   `options` **[Object][53]** Button configuration options.
+*   `options` **[Object][54]** Button configuration options.
 
-    *   `options.text` **[string][51]** Text to display on the button. (optional, default `"Click me!"`)
-    *   `options.onClick` **[Function][55]?** Function to execute when the button is clicked. (optional, default `()=>alert("Button clicked!")`)
-    *   `options.position` **[string][51]** Position relative to referenceElement. (optional, default `"before"`)
-    *   `options.referenceElement` **[HTMLElement][50]** Reference element for positioning. (optional, default `null`)
-    *   `options.classes` **[Array][54]<[string][51]>** CSS classes to apply to the button. (optional, default `[]`)
+    *   `options.text` **[string][52]** Text to display on the button. (optional, default `"Click me!"`)
+    *   `options.onClick` **[Function][56]?** Function to execute when the button is clicked. (optional, default `()=>alert("Button clicked!")`)
+    *   `options.position` **[string][52]** Position relative to referenceElement. (optional, default `"before"`)
+    *   `options.referenceElement` **[HTMLElement][51]** Reference element for positioning. (optional, default `null`)
+    *   `options.classes` **[Array][55]<[string][52]>** CSS classes to apply to the button. (optional, default `[]`)
 
-Returns **[HTMLElement][50]** The created button element.
+Returns **[HTMLElement][51]** The created button element.
 
 ## createHTMLStructure
 
@@ -198,7 +199,12 @@ Applies styles to navbar child elements.
 
 ### Parameters
 
-*   `navbar` **[HTMLElement][50]** The navbar element to style.
+*   `navbar` **[HTMLElement][51]** The navbar element to style.
+
+## create\_favicon
+
+Creates and appends a favicon link element to the document head.
+This favicon is used for the local page.
 
 ## style\_modal
 
@@ -206,7 +212,7 @@ Applies styles to a modal element.
 
 ### Parameters
 
-*   `element` **[HTMLElement][50]** The modal element to style.
+*   `element` **[HTMLElement][51]** The modal element to style.
 
 ## style\_body\_html
 
@@ -214,7 +220,7 @@ Applies styles to HTML and body elements.
 
 ### Parameters
 
-*   `element` **[HTMLElement][50]** The element to style.
+*   `element` **[HTMLElement][51]** The element to style.
 
 ## style\_container0
 
@@ -222,7 +228,7 @@ Applies styles to the main container element.
 
 ### Parameters
 
-*   `element` **[HTMLElement][50]** The container element to style.
+*   `element` **[HTMLElement][51]** The container element to style.
 
 ## style\_any
 
@@ -238,7 +244,7 @@ Applies styles to a dropdown element.
 
 ### Parameters
 
-*   `elementOrId` **([string][51] | [HTMLElement][50])** The dropdown element or its ID.
+*   `elementOrId` **([string][52] | [HTMLElement][51])** The dropdown element or its ID.
 
 ## style\_dropbtn
 
@@ -246,7 +252,7 @@ Applies styles to a dropdown button element.
 
 ### Parameters
 
-*   `elementOrId` **([string][51] | [HTMLElement][50])** The button element or its ID.
+*   `elementOrId` **([string][52] | [HTMLElement][51])** The button element or its ID.
 
 ## style\_hover
 
@@ -336,54 +342,56 @@ Applies styles to buttons within modal content.
 
 [30]: #parameters-11
 
-[31]: #style_modal
+[31]: #create_favicon
 
-[32]: #parameters-12
+[32]: #style_modal
 
-[33]: #style_body_html
+[33]: #parameters-12
 
-[34]: #parameters-13
+[34]: #style_body_html
 
-[35]: #style_container0
+[35]: #parameters-13
 
-[36]: #parameters-14
+[36]: #style_container0
 
-[37]: #style_any
+[37]: #parameters-14
 
-[38]: #style_navbar
+[38]: #style_any
 
-[39]: #style_dropdown
+[39]: #style_navbar
 
-[40]: #parameters-15
+[40]: #style_dropdown
 
-[41]: #style_dropbtn
+[41]: #parameters-15
 
-[42]: #parameters-16
+[42]: #style_dropbtn
 
-[43]: #style_hover
+[43]: #parameters-16
 
-[44]: #style_dropdown_content
+[44]: #style_hover
 
-[45]: #style_dropdown_content_a
+[45]: #style_dropdown_content
 
-[46]: #style_dropdown_content_parameters
+[46]: #style_dropdown_content_a
 
-[47]: #style_modal_content
+[47]: #style_dropdown_content_parameters
 
-[48]: #style_close
+[48]: #style_modal_content
 
-[49]: #style_modal_content_button
+[49]: #style_close
 
-[50]: https://developer.mozilla.org/docs/Web/HTML/Element
+[50]: #style_modal_content_button
 
-[51]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[51]: https://developer.mozilla.org/docs/Web/HTML/Element
 
-[52]: https://developer.mozilla.org/docs/Web/API/MouseEvent
+[52]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[53]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[53]: https://developer.mozilla.org/docs/Web/API/MouseEvent
 
-[54]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[54]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[55]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[55]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[56]: https://developer.mozilla.org/docs/Web/API/Window
+[56]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+
+[57]: https://developer.mozilla.org/docs/Web/API/Window

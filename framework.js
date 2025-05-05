@@ -4,6 +4,9 @@ import createScene from './createScene';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import CTABanner from './CTABanner';
 import Modal from './modal';
+import { Products } from './products';
+import armoire from './armoire';
+
 
 class Framework {
     CTABannerParameter;         // Contains the following keys: Banner, navbar, container
@@ -26,6 +29,7 @@ class Framework {
         
         this.CTABannerParameter = {"Banner": Banner,"navbar": navbar, "container": container};
         this.mainParameters = this.#init();
+        
     }
 
     /**
@@ -419,7 +423,11 @@ class Framework {
         var textures = [defaultParams.floor, defaultParams.wall, defaultParams.ceiling];
         cs.createBox(scene, textures, this, dimensions, defaultParams.YoffSet);
         const table = cs.createTable(scene, this, {width : defaultParams.width, depth : defaultParams.depth});
-        return table;
+        
+        const cupboard = this.addInteractiveCupboard({width :80,depth : 100,height: 10});
+        
+        const tips = cs.Show_tips();
+        return table && cupboard;
     }
 
     /**
@@ -479,6 +487,190 @@ class Framework {
         if(camera != undefined){
         this.mainParameters.camera = camera;}
     }
+
+    /**
+     * Creates an interactive cupboard/cabinet with product display capabilities.
+     * This cupboard will be added to the scene and can be interacted with.
+     *
+     * @param {Object} [options={}] - Configuration options
+     * @param {number} [options.width=80] - Width of the cupboard
+     * @param {number} [options.depth=100] - Depth of the cupboard
+     * @param {number} [options.height=10] - Height of the cupboard
+     * @returns {Object} The created cupboard object
+     */
+    addInteractiveCupboard({width, depth, height}) {
+        // Import dynamique des modules nécessaires
+        import('./armoire.js').then(({ default: Armoire }) => {
+                // Créer l'armoire
+                const cupboard = new Armoire(width, depth, height);
+                this.mainParameters.scene.add(cupboard.getCupboard());
+                // Configurer l'interactivité
+                this.setupProductInteractions(cupboard);
+                return cupboard;
+        });
+    }
+
+    /**
+     * Sets up interactive capabilities for product viewing in the cupboard.
+     * Initializes raycasting and event listeners for hover and click interactions.
+     * 
+     * @param {Object} cupboard - The cupboard object to add interaction to
+     */
+    setupProductInteractions(cupboard) {
+        // Initialiser le raycaster s'il n'existe pas déjà
+        this.productRaycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
+        this.hoveredProduct = null;
+        this.cupboard = cupboard;
+        
+        // Créer le tooltip
+        this.createTooltip();
+        
+        // Configurer les écouteurs d'événements
+        window.addEventListener('mousemove', (event) => {
+            // Calculate mouse position in normalized device coordinates
+            this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            // Update tooltip position
+            if (this.tooltip) {
+                this.tooltip.style.left = event.clientX + 15 + 'px';
+                this.tooltip.style.top = event.clientY + 15 + 'px';
+            }
+        });
+    
+        // Listen for clicks to navigate to game URLs
+        window.addEventListener('click', () => {
+            if (this.hoveredProduct) {
+                const url = this.hoveredProduct.userData.url;
+                if (url) {
+                    window.open(url, '_blank');
+                }
+            }
+        });
+    }
+
+    /**
+     * Updates interactive elements and raycasting in the scene.
+     * Should be called in the animation loop to keep interactions current.
+     *
+     * @param {THREE.Camera} camera - The camera used for raycasting and interaction
+     */
+    update(camera) {
+        // Mettre à jour les interactions avec les produits
+        this.updateProductInteractions(camera);
+       
+    }
+
+    /**
+     * Creates a tooltip element for displaying information about hovered products.
+     * The tooltip appears near the cursor when hovering over interactive elements.
+     */
+    createTooltip() {
+        this.tooltip = document.createElement('div');
+        this.tooltip.style.position = 'absolute';
+        this.tooltip.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        this.tooltip.style.color = 'white';
+        this.tooltip.style.padding = '8px 12px';
+        this.tooltip.style.borderRadius = '5px';
+        this.tooltip.style.fontSize = '16px';
+        this.tooltip.style.fontWeight = 'bold';
+        this.tooltip.style.display = 'none';
+        this.tooltip.style.pointerEvents = 'none';
+        this.tooltip.style.zIndex = '9999';
+        document.body.appendChild(this.tooltip);
+    }
+
+    /**
+     * Updates product interactions by performing raycasting from the camera.
+     * Handles hover states and tooltip visibility based on cursor position.
+     *
+     * @param {THREE.Camera} camera - The camera to use for raycasting
+     */
+    updateProductInteractions(camera) {
+        if (!this.cupboard || !camera || !this.productRaycaster || !this.mouse) {
+            return;
+        }
+        
+        // Update the picking ray with the camera and mouse position
+        this.productRaycaster.setFromCamera(this.mouse, camera);
+        
+        try {
+            // Get all product meshes
+            const products = this.cupboard.getProducts().getAllProductMeshes();
+            
+            if (!products || products.length === 0) {
+                return;
+            }
+            
+            // Calculate objects intersecting the picking ray
+            const intersects = this.productRaycaster.intersectObjects(products);
+            
+            // Reset hover state
+            if (this.hoveredProduct) {
+                this.hoveredProduct.material.emissive.setHex(0x000000);
+                this.hoveredProduct = null;
+                if (this.tooltip) this.tooltip.style.display = 'none';
+            }
+             // Set new hover state
+        if (intersects.length > 0) {
+            this.hoveredProduct = intersects[0].object;
+            this.hoveredProduct.material.emissive.setHex(0x222222);
+            
+            // Show tooltip with game name
+            if (this.tooltip) {
+                this.tooltip.textContent = this.hoveredProduct.name;
+                this.tooltip.style.display = 'block';
+            }
+        }
+    } catch (error) {
+        console.error("Error in updateProductInteractions:", error);
+    }
+}
+
+    /**
+     * Creates tips/tooltips for interactive elements in the scene.
+     * Sets up event listeners for hovering and clicking on interactive objects.
+     * 
+     * @returns {HTMLElement} The created tooltip element
+     */
+    Show_tips(){
+        // Create tooltip element for displaying game names
+        const tooltip = document.createElement('div');
+        tooltip.style.position = 'absolute';
+        tooltip.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        tooltip.style.color = 'white';
+        tooltip.style.padding = '5px 10px';
+        tooltip.style.borderRadius = '5px';
+        tooltip.style.fontSize = '14px';
+        tooltip.style.display = 'none';
+        tooltip.style.pointerEvents = 'none';
+        document.body.appendChild(tooltip);
+    
+        // Listen for mouse moves to detect hovering
+        window.addEventListener('mousemove', (event) => {
+            // Calculate mouse position in normalized device coordinates
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            // Update tooltip position
+            tooltip.style.left = event.clientX + 15 + 'px';
+            tooltip.style.top = event.clientY + 15 + 'px';
+        });
+    
+        // Listen for clicks to navigate to game URLs
+        window.addEventListener('click', () => {
+            if (hoveredProduct) {
+                const url = hoveredProduct.userData.url;
+                window.open(url, '_blank');
+            }
+        });
+    
+       
+        
+    }
+
+
 
 // ---------------------- Navbar functions ----------------------
 

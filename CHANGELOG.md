@@ -1,3 +1,32 @@
+## [v1.2.9]
+### Added
+- added a function create_favicon in the CTABanner file, to add a favicon for our webpage.
+- added a new file name armoire.js that create a cupboard that will hold our new elements name products.
+- added a new file name products.js that create a box that when click on it we will be redirected to another games of TerraNumerica.
+- added news function in framework.js : addInteractiveCupboard , setupProductInteractions ,  update , createTooltip , Show_tips.
+- added the function createProducts in the file createScene.
+- added this line in the main.js file,  in the function animate : fw.update(camera);
+- added 4 line code in the function  addSimpleSceneWithTable in the file framework.js:
+         const cupboard = this.addInteractiveCupboard({width :80,depth : 100,height: 10});
+        const products = cs.createProducts(scene, this,{width :8,depth : 10,height: 5});
+        const tips = cs.Show_tips();
+        return table && cupboard && products;
+### Changed
+- The style of the banner and of the modal have been changed to better match the style of terra numerica.
+- the title of the hmtl page has been changed.
+- Change the title of the page instead of "document" we have "FrameworkTerraNumerica".
+- the intensity of the light from createScene has been changed from 1 to 2.
+- 
+
+### Removed
+
+### Deprecated
+
+### Fixed
+
+# --------------------------------------------------------------------
+
+
 ## [v1.2.8]
 ### Added
 - the file DOCUMENTATION_MODAL.md has been added.
